@@ -95,3 +95,38 @@ def test_missing_cost_is_a_hard_accounting_error() -> None:
             messages=[{"role": "user", "content": "Reply C"}],
             maximum_cost_usd="0.001",
         )
+
+
+def test_reasoning_requires_an_explicit_documented_exception() -> None:
+    client = OpenRouterClient("test-key", RunBudget("0.01"), transport=lambda *_: None)  # type: ignore[arg-type]
+
+    with pytest.raises(ValueError, match="documented non-main-battery exception"):
+        client.chat_completion(
+            model_id="openai/gpt-oss-120b",
+            messages=[{"role": "user", "content": "Reply C"}],
+            maximum_cost_usd="0.001",
+            parameters={"reasoning": {"effort": "low", "exclude": True}},
+        )
+
+
+def test_documented_reasoning_exception_is_sent_and_accounted() -> None:
+    requests: list[Request] = []
+
+    def transport(request: Request, _: float) -> HTTPResponse:
+        requests.append(request)
+        payload = json.loads(_fixture())
+        payload["usage"]["completion_tokens_details"]["reasoning_tokens"] = 2
+        return HTTPResponse(status=200, body=json.dumps(payload).encode("utf-8"), headers={})
+
+    client = OpenRouterClient("test-key", RunBudget("0.01"), transport=transport)
+    result = client.chat_completion(
+        model_id="openai/gpt-oss-120b",
+        messages=[{"role": "user", "content": "Reply C"}],
+        maximum_cost_usd="0.001",
+        parameters={"reasoning": {"effort": "low", "exclude": True}},
+        reasoning_exception="Phase 0 smoke only",
+    )
+
+    payload = json.loads(requests[0].data.decode("utf-8"))
+    assert payload["reasoning"] == {"effort": "low", "exclude": True}
+    assert result.reasoning_tokens == 2

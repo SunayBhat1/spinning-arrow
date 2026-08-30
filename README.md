@@ -33,6 +33,11 @@ The command refuses to run without a committed Git revision, an API key, and an 
 cap. A successful call writes a gzipped JSONL response under `data/raw/<run_id>/` and a matching
 manifest under `data/manifests/`. It never prints the key.
 
+The smoke call is unscored and is not a main-battery request. As of 2026-08-29,
+`openai/gpt-oss-120b` requires reasoning on OpenRouter, so this one format check uses low-effort
+reasoning and records that exception in its manifest. Main-battery calls continue to require
+`reasoning: {"enabled": false}`.
+
 ## Reproducibility and licenses
 
 Every eventual run is designed to commit its prompts, raw responses, usage and cost, and manifest.

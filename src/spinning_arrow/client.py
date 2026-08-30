@@ -168,7 +168,7 @@ class OpenRouterClient:
         maximum_cost_usd: Decimal | str | float,
         max_tokens: int = 8,
         parameters: Mapping[str, Any] | None = None,
-        allow_reasoning_tokens: bool = False,
+        reasoning_exception: str | None = None,
     ) -> CompletionResult:
         """Send one non-streaming completion and settle the pre-reserved maximum cost.
 
@@ -183,9 +183,15 @@ class OpenRouterClient:
             raise ValueError("max_tokens must be at least one")
         normalized_messages = _normalise_messages(messages)
         request_parameters = dict(parameters or {})
-        if request_parameters.get("reasoning") not in (None, {"enabled": False}):
-            raise ValueError("main-path requests must set reasoning.enabled to false")
-        request_parameters["reasoning"] = {"enabled": False}
+        reasoning = request_parameters.pop("reasoning", {"enabled": False})
+        if not isinstance(reasoning, Mapping):
+            raise ValueError("reasoning must be an object")
+        reasoning = dict(reasoning)
+        if reasoning != {"enabled": False} and not reasoning_exception:
+            raise ValueError(
+                "reasoning-enabled requests require a documented non-main-battery exception"
+            )
+        request_parameters["reasoning"] = reasoning
         payload = {
             "model": model_id,
             "messages": normalized_messages,
@@ -201,7 +207,7 @@ class OpenRouterClient:
             result = _completion_result(response, latency_ms)
             settled = True
             self.budget.settle(reservation, result.cost_usd)
-            if result.reasoning_tokens and not allow_reasoning_tokens:
+            if result.reasoning_tokens and not reasoning_exception:
                 raise ReasoningTokenError(
                     f"{model_id} returned {result.reasoning_tokens} reasoning tokens "
                     "in the main path"

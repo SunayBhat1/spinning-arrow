@@ -35,6 +35,11 @@ from spinning_arrow.contracts import (
 
 SMOKE_MODEL = "openai/gpt-oss-120b"
 SMOKE_PROMPT = "This is a response-format check. Reply with exactly the letter C and no other text."
+SMOKE_REASONING = {"effort": "low", "exclude": True}
+SMOKE_REASONING_EXCEPTION = (
+    "Phase 0 smoke only: OpenRouter reports reasoning mandatory for openai/gpt-oss-120b; "
+    "this unscored format check is not part of the main battery."
+)
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -82,6 +87,8 @@ def run_smoke(
         messages=messages,
         maximum_cost_usd=maximum_call_cost_usd,
         max_tokens=8,
+        parameters={"reasoning": SMOKE_REASONING},
+        reasoning_exception=SMOKE_REASONING_EXCEPTION,
     )
     parsed = _parse_smoke_response(completion.text)
     outcome = Outcome.ANSWERED if parsed.valid else Outcome.UNPARSEABLE
@@ -116,7 +123,13 @@ def run_smoke(
         prompt_template_hashes={"phase0_smoke": _hash_text(SMOKE_PROMPT)},
         panel_hash=_hash_file(project_root / "panels" / "smoke.yaml"),
         model_ids=(model_id,),
-        sampling_params={"temperature": 0, "max_tokens": 8, "reasoning": {"enabled": False}},
+        sampling_params={
+            "temperature": 0,
+            "max_tokens": 8,
+            "reasoning": SMOKE_REASONING,
+            "main_battery": False,
+            "reasoning_exception": SMOKE_REASONING_EXCEPTION,
+        },
         parameter_omissions={model_id: ()},
         git_commit=commit,
         started_at=started,
