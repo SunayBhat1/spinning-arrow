@@ -5,7 +5,7 @@ from __future__ import annotations
 import sys
 from collections.abc import Sequence
 
-from spinning_arrow import phase2, report, run, smoke
+from spinning_arrow import phase2, phase2_report, report, run, smoke
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -24,5 +24,5 @@ def main(argv: Sequence[str] | None = None) -> int:
     if command == "phase2":
         return phase2.main(args)
     if command == "phase2-report":
-        return report.phase2_main(args)
+        return phase2_report.main(args)
     return run.main(args)
