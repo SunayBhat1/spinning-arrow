@@ -4,9 +4,9 @@ The single place where current state is tracked. [SPEC.md](../SPEC.md) is the co
 not change as work progresses; this file does. Update it at every phase close, and at any gate
 that returns a decision.
 
-**Current phase: 0 — Gate 0 ready for review.**
-**Blocking on:** Sunay reconciling the real smoke-call cost with the OpenRouter dashboard and
-explicitly approving Gate 0.
+**Current phase: 1 — pilot probe in progress.**
+**Blocking on:** implementation and execution of the six-model pilot, then Sunay’s Gate 1
+go/no-go decision.
 
 ---
 
@@ -14,21 +14,21 @@ explicitly approving Gate 0.
 
 **Planned:** repo scaffold, OpenRouter client with cost accounting, data contracts, `make smoke`.
 **Gate 0 deliverable:** `reports/00_access.md`
-**Status:** ready for Sunay review
+**Status:** approved 2026-08-29
 **Shipped:** `pyproject.toml` + `uv.lock`; ruff and pytest; validated response, score, and manifest
 contracts; OpenRouter client with retries, usage-cost accounting, structured logging, reasoning-token
 guard, and a pre-request run spend-cap reservation; `make smoke`; tests and a recorded API fixture.
-**Open:** The one real smoke-call record and manifest are committed with this phase closeout.
-Sunay must reconcile the recorded `$0.00001145` cost with OpenRouter's dashboard before closing
-the gate. The one exception is documented: OpenRouter currently makes reasoning mandatory for the
-smoke model, so this *unscored, non-battery* check used low-effort reasoning; Phase 1+ battery
-calls remain reasoning-disabled. See [`reports/00_access.md`](../reports/00_access.md).
+**Open:** —
 
 ## Phase 1 — Pilot probe
 
 **Planned:** 6 cheap-but-popular models × 40 items; answer the seven design questions in SPEC §8.
 **Gate 1 deliverable:** `reports/01_pilot.md` — the real go/no-go.
-**Status:** not started
+**Status:** in progress
+**Open:** The six-model panel was re-verified live. OpenRouter currently requires reasoning for
+`openai/gpt-oss-120b` and `google/gemini-3.5-flash-lite`; Sunay authorized a narrowly scoped,
+explicitly recorded exception for these two *Phase 1 pilot* entries only. All other pilot requests
+remain reasoning-disabled, and this does not change the Phase 2+ main-battery policy.
 
 ## Phase 2 — Full battery and scoring
 
@@ -69,5 +69,16 @@ design moved without re-reading every report.
   Gate 4.
 
 - **2026-08-29 — licensing settled.** Dual-licensed: Apache-2.0 for code, CC BY 4.0 for data,
-  instruments, reports, and prose (SPEC D17). `LICENSE`, `LICENSE-DATA`, and `NOTICE` are in the
-  repo. ETHICS confirmed MIT. OEJTS excluded from the item bank on license grounds (D18).
+instruments, reports, and prose (SPEC D17). `LICENSE`, `LICENSE-DATA`, and `NOTICE` are in the
+repo. ETHICS confirmed MIT. OEJTS excluded from the item bank on license grounds (D18).
+
+- **2026-08-29 — Gate 0 approved.** The real `openai/gpt-oss-120b` smoke call produced a valid,
+  committed raw record and manifest at a recorded cost of `$0.00001145`; Sunay confirmed the
+  result and authorized Phase 1. The unscored smoke-only mandatory-reasoning exception remains
+  documented in `reports/00_access.md`; Phase 1 battery calls remain reasoning-disabled.
+
+- **2026-08-29 — Phase 1 reasoning exception approved.** OpenRouter's live metadata reports
+  mandatory reasoning for `openai/gpt-oss-120b` and `google/gemini-3.5-flash-lite`. Sunay approved
+  including both in the six-model pilot with the lowest supported reasoning effort, recording the
+  configuration and any reasoning-token cost in every raw record and manifest. This is limited to
+  the pilot and does not change D5 for the Phase 2+ main battery.

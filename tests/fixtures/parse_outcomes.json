@@ -1,0 +1,6 @@
+[
+  {"raw_response": "C", "outcome": "answered", "canonical_choice": "A"},
+  {"raw_response": "I can't complete this questionnaire.", "outcome": "refused", "canonical_choice": null},
+  {"raw_response": "It depends on the situation.", "outcome": "hedged", "canonical_choice": null},
+  {"raw_response": "The best answer is clearly compassion.", "outcome": "unparseable", "canonical_choice": null}
+]

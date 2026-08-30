@@ -130,3 +130,22 @@ def test_documented_reasoning_exception_is_sent_and_accounted() -> None:
     payload = json.loads(requests[0].data.decode("utf-8"))
     assert payload["reasoning"] == {"effort": "low", "exclude": True}
     assert result.reasoning_tokens == 2
+
+
+def test_reasoning_can_be_explicitly_omitted_for_an_unsupported_model() -> None:
+    requests: list[Request] = []
+
+    def transport(request: Request, _: float) -> HTTPResponse:
+        requests.append(request)
+        return HTTPResponse(status=200, body=_fixture(), headers={})
+
+    client = OpenRouterClient("test-key", RunBudget("0.01"), transport=transport)
+    client.chat_completion(
+        model_id="meta-llama/llama-3.3-70b-instruct",
+        messages=[{"role": "user", "content": "Reply C"}],
+        maximum_cost_usd="0.001",
+        omit_reasoning=True,
+    )
+
+    payload = json.loads(requests[0].data.decode("utf-8"))
+    assert "reasoning" not in payload

@@ -19,7 +19,7 @@ dev = [
 ]
 
 [project.scripts]
-spinning-arrow = "spinning_arrow.smoke:main"
+spinning-arrow = "spinning_arrow.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/spinning_arrow"]

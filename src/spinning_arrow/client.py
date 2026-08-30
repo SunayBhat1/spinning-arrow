@@ -169,6 +169,7 @@ class OpenRouterClient:
         max_tokens: int = 8,
         parameters: Mapping[str, Any] | None = None,
         reasoning_exception: str | None = None,
+        omit_reasoning: bool = False,
     ) -> CompletionResult:
         """Send one non-streaming completion and settle the pre-reserved maximum cost.
 
@@ -183,15 +184,20 @@ class OpenRouterClient:
             raise ValueError("max_tokens must be at least one")
         normalized_messages = _normalise_messages(messages)
         request_parameters = dict(parameters or {})
-        reasoning = request_parameters.pop("reasoning", {"enabled": False})
-        if not isinstance(reasoning, Mapping):
-            raise ValueError("reasoning must be an object")
-        reasoning = dict(reasoning)
-        if reasoning != {"enabled": False} and not reasoning_exception:
-            raise ValueError(
-                "reasoning-enabled requests require a documented non-main-battery exception"
-            )
-        request_parameters["reasoning"] = reasoning
+        requested_reasoning = request_parameters.pop("reasoning", None)
+        if omit_reasoning:
+            if requested_reasoning is not None:
+                raise ValueError("omit_reasoning cannot be combined with a reasoning parameter")
+        else:
+            reasoning = {"enabled": False} if requested_reasoning is None else requested_reasoning
+            if not isinstance(reasoning, Mapping):
+                raise ValueError("reasoning must be an object")
+            reasoning = dict(reasoning)
+            if reasoning != {"enabled": False} and not reasoning_exception:
+                raise ValueError(
+                    "reasoning-enabled requests require a documented non-main-battery exception"
+                )
+            request_parameters["reasoning"] = reasoning
         payload = {
             "model": model_id,
             "messages": normalized_messages,
