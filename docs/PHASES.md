@@ -24,8 +24,13 @@ guard, and a pre-request run spend-cap reservation; `make smoke`; tests and a re
 
 **Planned:** 6 cheap-but-popular models × 40 items; answer the seven design questions in SPEC §8.
 **Gate 1 deliverable:** `reports/01_pilot.md` — the real go/no-go.
-**Status:** in progress
-**Open:** The six-model panel was re-verified live. OpenRouter currently requires reasoning for
+**Status:** ready for Gate 1 review
+**Open:** Sunay’s Gate 1 decision. The completed clean pilot is recorded in
+`reports/01_pilot.md` at run `20260830T060547Z__pilot__3258fb` (2,400 calls; `$0.17570126`
+from raw OpenRouter usage). `mistralai/mistral-medium-3.1`, `qwen/qwen3.8-27b`,
+`meta-llama/llama-3.3-70b-instruct`, and `anthropic/claude-sonnet-5` achieved 98–100% clean
+parse. The two pilot-only mandatory-reasoning exceptions did not: GPT-OSS was 65.2% and Gemini
+was 68.5%. The six-model panel was re-verified live. OpenRouter currently requires reasoning for
 `openai/gpt-oss-120b` and `google/gemini-3.5-flash-lite`; Sunay authorized a narrowly scoped,
 explicitly recorded exception for these two *Phase 1 pilot* entries only. All other pilot requests
 remain reasoning-disabled or explicitly omit an unsupported `reasoning` parameter, and this does
@@ -85,3 +90,8 @@ repo. ETHICS confirmed MIT. OEJTS excluded from the item bank on license grounds
   including both in the six-model pilot with the lowest supported reasoning effort, recording the
   configuration and any reasoning-token cost in every raw record and manifest. This is limited to
   the pilot and does not change D5 for the Phase 2+ main battery.
+
+- **2026-08-30 — Gate 1 report ready.** The clean 2,400-call pilot completed at
+  `20260830T060547Z__pilot__3258fb` with all raw records, a manifest, and
+  `reports/01_pilot.md` committed. Actual raw-record cost was `$0.17570126`. Gate 1 remains
+  pending Sunay’s decision; Phase 2 has not started.

@@ -381,8 +381,9 @@ def _recommendation(
     unexpected = _count(records, Outcome.ERROR)
     if failing:
         recommendation = (
-            "Do not scale this panel to Phase 2 unchanged. Repair or replace the low-parse models, "
-            "then rerun this pilot before choosing the main battery."
+            "Do not scale this six-model configuration to Phase 2 unchanged. The two low-parse "
+            "mandatory-reasoning exceptions are ineligible for the D5 main battery; the strict-D5 "
+            "models at or above the parse threshold are the candidate subset for Gate 1 review."
         )
     else:
         recommendation = (
