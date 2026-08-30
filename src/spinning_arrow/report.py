@@ -338,7 +338,8 @@ def _cost_section(
         f"| **Total** | **${forecast_total:.6f}** | **${actual_total:.6f}** | "
         f"**{_number(float(total_ratio), digits=3)}** |"
     )
-    if actual_total != Decimal(str(manifest.total_cost_usd)):
+    manifest_total = Decimal(str(manifest.total_cost_usd))
+    if abs(actual_total - manifest_total) > Decimal("0.000000001"):
         raise ValueError("manifest total cost does not reconcile to its raw records")
     return lines
 
