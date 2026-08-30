@@ -443,6 +443,11 @@ def _model_overview(
                 "answered": sum(record.outcome is Outcome.ANSWERED for record in group),
                 "parse_rate": sum(record.outcome is Outcome.ANSWERED for record in group) / len(group),
                 "refusal_rate": sum(record.outcome is Outcome.REFUSED for record in group) / len(group),
+                "hedged_rate": sum(record.outcome is Outcome.HEDGED for record in group) / len(group),
+                "unparseable_rate": sum(
+                    record.outcome is Outcome.UNPARSEABLE for record in group
+                )
+                / len(group),
                 "error_rate": sum(record.outcome is Outcome.ERROR for record in group) / len(group),
                 "attention_accuracy": attention_correct / len(attention),
                 "mean_raw_fragility": _mean(
@@ -475,17 +480,20 @@ def _markdown_report(
     root: Path,
 ) -> str:
     quality_rows = [
-        "| Model | Parse | Attention | Refusal | Error | Mean fragility | Suppressed cells | Cost |",
-        "|---|---:|---:|---:|---:|---:|---:|---:|",
+        "| Model | Parse | Attention | Refusal | Hedge | Unparseable | Error | Mean fragility | Suppressed cells | Cost |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for row in overview:
         quality_rows.append(
             "| {model_id} | {parse_rate:.1%} | {attention_accuracy:.1%} | "
-            "{refusal_rate:.1%} | {error_rate:.1%} | {fragility} | {suppressed_cells} | ${cost:.4f} |".format(
+            "{refusal_rate:.1%} | {hedged_rate:.1%} | {unparseable_rate:.1%} | {error_rate:.1%} | "
+            "{fragility} | {suppressed_cells} | ${cost:.4f} |".format(
                 model_id=row["model_id"],
                 parse_rate=float(row["parse_rate"]),
                 attention_accuracy=float(row["attention_accuracy"]),
                 refusal_rate=float(row["refusal_rate"]),
+                hedged_rate=float(row["hedged_rate"]),
+                unparseable_rate=float(row["unparseable_rate"]),
                 error_rate=float(row["error_rate"]),
                 fragility=_decimal_or_dash(row["mean_fragility"]),
                 suppressed_cells=row["suppressed_cells"],
@@ -530,7 +538,7 @@ def _markdown_report(
             "",
             *quality_rows,
             "",
-            "### Refusals and errors by instrument",
+            "### Outcome classes by instrument",
             "",
             *outcome_rows,
             "",
@@ -615,6 +623,8 @@ def _html_report(
             "Parse",
             "Attention",
             "Refusal",
+            "Hedge",
+            "Unparseable",
             "Error",
             "Fragility",
             "Suppressed",
@@ -626,6 +636,8 @@ def _html_report(
                 _percent(row["parse_rate"]),
                 _percent(row["attention_accuracy"]),
                 _percent(row["refusal_rate"]),
+                _percent(row["hedged_rate"]),
+                _percent(row["unparseable_rate"]),
                 _percent(row["error_rate"]),
                 _decimal_or_dash(row["mean_fragility"]),
                 str(row["suppressed_cells"]),
@@ -931,8 +943,8 @@ def _outcome_by_instrument_table(
     for record in records:
         grouped[(record.model_id, record.instrument)].append(record)
     lines = [
-        "| Model | Instrument | Calls | Parse | Refusal | Error |",
-        "|---|---|---:|---:|---:|---:|",
+        "| Model | Instrument | Calls | Parse | Refusal | Hedge | Unparseable | Error |",
+        "|---|---|---:|---:|---:|---:|---:|---:|",
     ]
     for model in models:
         for instrument in sorted({key[1] for key in grouped if key[0] == model}):
@@ -942,6 +954,8 @@ def _outcome_by_instrument_table(
                 f"| {model} | {instrument} | {total} | "
                 f"{sum(record.outcome is Outcome.ANSWERED for record in group) / total:.1%} | "
                 f"{sum(record.outcome is Outcome.REFUSED for record in group) / total:.1%} | "
+                f"{sum(record.outcome is Outcome.HEDGED for record in group) / total:.1%} | "
+                f"{sum(record.outcome is Outcome.UNPARSEABLE for record in group) / total:.1%} | "
                 f"{sum(record.outcome is Outcome.ERROR for record in group) / total:.1%} |"
             )
     return lines
