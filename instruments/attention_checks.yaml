@@ -1,0 +1,152 @@
+{
+  "instrument": "attention_checks",
+  "items": [
+    {
+      "id": "attention_001",
+      "scale": "attention",
+      "text": "For response-quality checking, select the option whose text is ‘Strongly disagree’.",
+      "source_index": 0,
+      "score_type": "attention",
+      "answer_key": "A"
+    },
+    {
+      "id": "attention_002",
+      "scale": "attention",
+      "text": "For response-quality checking, select the option whose text is ‘Disagree’.",
+      "source_index": 1,
+      "score_type": "attention",
+      "answer_key": "B"
+    },
+    {
+      "id": "attention_003",
+      "scale": "attention",
+      "text": "For response-quality checking, select the option whose text is ‘Neither agree nor disagree’.",
+      "source_index": 2,
+      "score_type": "attention",
+      "answer_key": "C"
+    },
+    {
+      "id": "attention_004",
+      "scale": "attention",
+      "text": "For response-quality checking, select the option whose text is ‘Agree’.",
+      "source_index": 3,
+      "score_type": "attention",
+      "answer_key": "D"
+    },
+    {
+      "id": "attention_005",
+      "scale": "attention",
+      "text": "For response-quality checking, select the option whose text is ‘Strongly agree’.",
+      "source_index": 4,
+      "score_type": "attention",
+      "answer_key": "E"
+    },
+    {
+      "id": "attention_006",
+      "scale": "attention",
+      "text": "For response-quality checking, select the option whose text is ‘Strongly disagree’.",
+      "source_index": 5,
+      "score_type": "attention",
+      "answer_key": "A"
+    },
+    {
+      "id": "attention_007",
+      "scale": "attention",
+      "text": "For response-quality checking, select the option whose text is ‘Disagree’.",
+      "source_index": 6,
+      "score_type": "attention",
+      "answer_key": "B"
+    },
+    {
+      "id": "attention_008",
+      "scale": "attention",
+      "text": "For response-quality checking, select the option whose text is ‘Neither agree nor disagree’.",
+      "source_index": 7,
+      "score_type": "attention",
+      "answer_key": "C"
+    },
+    {
+      "id": "attention_009",
+      "scale": "attention",
+      "text": "For response-quality checking, select the option whose text is ‘Agree’.",
+      "source_index": 8,
+      "score_type": "attention",
+      "answer_key": "D"
+    },
+    {
+      "id": "attention_010",
+      "scale": "attention",
+      "text": "For response-quality checking, select the option whose text is ‘Strongly agree’.",
+      "source_index": 9,
+      "score_type": "attention",
+      "answer_key": "E"
+    },
+    {
+      "id": "attention_011",
+      "scale": "attention",
+      "text": "For response-quality checking, select the option whose text is ‘Strongly disagree’.",
+      "source_index": 10,
+      "score_type": "attention",
+      "answer_key": "A"
+    },
+    {
+      "id": "attention_012",
+      "scale": "attention",
+      "text": "For response-quality checking, select the option whose text is ‘Disagree’.",
+      "source_index": 11,
+      "score_type": "attention",
+      "answer_key": "B"
+    },
+    {
+      "id": "attention_013",
+      "scale": "attention",
+      "text": "For response-quality checking, select the option whose text is ‘Neither agree nor disagree’.",
+      "source_index": 12,
+      "score_type": "attention",
+      "answer_key": "C"
+    },
+    {
+      "id": "attention_014",
+      "scale": "attention",
+      "text": "For response-quality checking, select the option whose text is ‘Agree’.",
+      "source_index": 13,
+      "score_type": "attention",
+      "answer_key": "D"
+    },
+    {
+      "id": "attention_015",
+      "scale": "attention",
+      "text": "For response-quality checking, select the option whose text is ‘Strongly agree’.",
+      "source_index": 14,
+      "score_type": "attention",
+      "answer_key": "E"
+    }
+  ],
+  "options": [
+    {
+      "id": "A",
+      "label": "Strongly disagree",
+      "value": 1
+    },
+    {
+      "id": "B",
+      "label": "Disagree",
+      "value": 2
+    },
+    {
+      "id": "C",
+      "label": "Neither agree nor disagree",
+      "value": 3
+    },
+    {
+      "id": "D",
+      "label": "Agree",
+      "value": 4
+    },
+    {
+      "id": "E",
+      "label": "Strongly agree",
+      "value": 5
+    }
+  ]
+}

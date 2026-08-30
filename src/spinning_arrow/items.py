@@ -28,6 +28,8 @@ class Item:
     text: str
     options: tuple[Option, ...]
     source_index: int | None = None
+    score_type: str = "value"
+    answer_key: str | None = None
 
 
 def load_items(paths: list[Path]) -> tuple[Item, ...]:
@@ -35,7 +37,8 @@ def load_items(paths: list[Path]) -> tuple[Item, ...]:
     for path in paths:
         document = _read_document(path)
         instrument = _string(document.get("instrument"), f"{path}: instrument")
-        options = _options(document.get("options"), path)
+        document_options = document.get("options")
+        options = _options(document_options, path) if document_options is not None else None
         raw_items = document.get("items")
         if not isinstance(raw_items, list) or not raw_items:
             raise ItemValidationError(f"{path}: items must be a non-empty list")
@@ -51,14 +54,54 @@ def load_items(paths: list[Path]) -> tuple[Item, ...]:
                 raise ItemValidationError(
                     f"{path}: items[{index}].source_index must be a non-negative integer"
                 )
+            raw_options = raw_item.get("options")
+            item_options = _options(raw_options, path) if raw_options is not None else options
+            if item_options is None:
+                raise ItemValidationError(f"{path}: items[{index}] must provide options")
+            option_values = raw_item.get("option_values")
+            if option_values is not None:
+                if not isinstance(option_values, list) or len(option_values) != len(item_options):
+                    raise ItemValidationError(
+                        f"{path}: items[{index}].option_values must match the option count"
+                    )
+                if any(
+                    isinstance(value, bool) or not isinstance(value, (int, float))
+                    for value in option_values
+                ):
+                    raise ItemValidationError(
+                        f"{path}: items[{index}].option_values must be numeric"
+                    )
+                item_options = tuple(
+                    Option(option.id, option.label, float(value))
+                    for option, value in zip(item_options, option_values, strict=True)
+                )
+            score_type = raw_item.get("score_type", "value")
+            if score_type not in {"value", "reference_agreement", "attention"}:
+                raise ItemValidationError(
+                    f"{path}: items[{index}].score_type must be value, reference_agreement, "
+                    "or attention"
+                )
+            answer_key = raw_item.get("answer_key")
+            if answer_key is not None:
+                answer_key = _string(answer_key, f"{path}: items[{index}].answer_key")
+                if answer_key not in {option.id for option in item_options}:
+                    raise ItemValidationError(
+                        f"{path}: items[{index}].answer_key must be a canonical option ID"
+                    )
+            if score_type in {"reference_agreement", "attention"} and answer_key is None:
+                raise ItemValidationError(
+                    f"{path}: items[{index}].answer_key is required for {score_type} scoring"
+                )
             items.append(
                 Item(
                     id=_string(raw_item.get("id"), f"{path}: items[{index}].id"),
                     instrument=instrument,
                     scale=_string(raw_item.get("scale"), f"{path}: items[{index}].scale"),
                     text=_string(raw_item.get("text"), f"{path}: items[{index}].text"),
-                    options=options,
+                    options=item_options,
                     source_index=source_index,
+                    score_type=score_type,
+                    answer_key=answer_key,
                 )
             )
     ids = [item.id for item in items]
@@ -68,8 +111,9 @@ def load_items(paths: list[Path]) -> tuple[Item, ...]:
 
 
 def item_set_hash(items: tuple[Item, ...]) -> str:
-    payload = [
-        {
+    payload = []
+    for item in items:
+        entry: dict[str, object] = {
             "id": item.id,
             "instrument": item.instrument,
             "scale": item.scale,
@@ -77,8 +121,12 @@ def item_set_hash(items: tuple[Item, ...]) -> str:
             "options": [option.__dict__ for option in item.options],
             "source_index": item.source_index,
         }
-        for item in items
-    ]
+        # Keeping absent optional fields absent preserves the already-approved Phase 1 hash.
+        if item.score_type != "value":
+            entry["score_type"] = item.score_type
+        if item.answer_key is not None:
+            entry["answer_key"] = item.answer_key
+        payload.append(entry)
     canonical = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return "sha256:" + hashlib.sha256(canonical.encode()).hexdigest()
 

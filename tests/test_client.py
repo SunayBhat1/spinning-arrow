@@ -10,6 +10,7 @@ import pytest
 from spinning_arrow.client import (
     HTTPResponse,
     OpenRouterClient,
+    ReasoningTokenError,
     RunBudget,
     SpendCapExceeded,
     UsageAccountingError,
@@ -167,4 +168,26 @@ def test_empty_choice_content_is_still_cost_accounted() -> None:
     )
 
     assert result.text is None
+    assert budget.spent_usd == Decimal("0.00000123")
+
+
+def test_unexpected_reasoning_tokens_preserve_the_auditable_completion() -> None:
+    payload = json.loads(_fixture())
+    payload["usage"]["completion_tokens_details"]["reasoning_tokens"] = 2
+
+    def transport(_: Request, __: float) -> HTTPResponse:
+        return HTTPResponse(status=200, body=json.dumps(payload).encode("utf-8"), headers={})
+
+    budget = RunBudget("0.01")
+    client = OpenRouterClient("test-key", budget, transport=transport)
+
+    with pytest.raises(ReasoningTokenError) as raised:
+        client.chat_completion(
+            model_id="openai/gpt-5.4-mini",
+            messages=[{"role": "user", "content": "Reply C"}],
+            maximum_cost_usd="0.001",
+        )
+
+    assert raised.value.completion.reasoning_tokens == 2
+    assert raised.value.completion.cost_usd == Decimal("0.00000123")
     assert budget.spent_usd == Decimal("0.00000123")

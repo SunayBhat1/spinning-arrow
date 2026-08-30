@@ -40,6 +40,12 @@ class UsageAccountingError(OpenRouterClientError):
 class ReasoningTokenError(OpenRouterClientError):
     """Raised if main-battery traffic is billed for reasoning tokens."""
 
+    def __init__(self, model_id: str, completion: CompletionResult) -> None:
+        super().__init__(
+            f"{model_id} returned {completion.reasoning_tokens} reasoning tokens in the main path"
+        )
+        self.completion = completion
+
 
 class SpendCapExceeded(OpenRouterClientError):
     """Raised when reserving a request would exceed the configured run cap."""
@@ -214,10 +220,7 @@ class OpenRouterClient:
             settled = True
             self.budget.settle(reservation, result.cost_usd)
             if result.reasoning_tokens and not reasoning_exception:
-                raise ReasoningTokenError(
-                    f"{model_id} returned {result.reasoning_tokens} reasoning tokens "
-                    "in the main path"
-                )
+                raise ReasoningTokenError(model_id, result)
             self._log(
                 "completion_succeeded",
                 model_id=model_id,

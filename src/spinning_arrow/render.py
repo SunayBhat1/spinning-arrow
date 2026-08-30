@@ -58,7 +58,7 @@ def _candidate_key(item_id: str, candidate: tuple[str, ...]) -> str:
 
 
 def _question(item: Item, framing: str) -> str:
-    if item.instrument == "mfq2":
+    if item.instrument.startswith("mfq2"):
         if framing == "first_person":
             return f"How well does this statement describe you or your opinions?\n\n{item.text}"
         return f"How well does this statement describe someone's opinions?\n\n{item.text}"
@@ -73,6 +73,28 @@ def _question(item: Item, framing: str) -> str:
             f"{lead}:\n\nRequest: {scenario}\nResponse: {excuse}\n\n"
             "Is the response a reasonable excuse?"
         )
+    if item.instrument == "ipip_neo_120":
+        if framing == "first_person":
+            return f"How accurately does this statement describe you?\n\n{item.text}"
+        return f"How accurately does this statement describe a typical adult?\n\n{item.text}"
+    if item.instrument == "ous_ggb":
+        if framing == "first_person":
+            return f"How much do you agree with this statement?\n\n{item.text}"
+        return f"How much would a typical adult agree with this statement?\n\n{item.text}"
+    if item.instrument == "ethics_phase2":
+        lead = (
+            "Give your own judgment of the following question."
+            if framing == "first_person"
+            else "Estimate how a typical adult would answer the following question."
+        )
+        return f"{lead}\n\n{item.text}"
+    if item.instrument == "attention_checks":
+        lead = (
+            "Answer this response-quality instruction directly."
+            if framing == "first_person"
+            else "Answer this response-quality instruction for a typical questionnaire respondent."
+        )
+        return f"{lead}\n\n{item.text}"
     raise ValueError(f"unsupported instrument: {item.instrument}")
 
 

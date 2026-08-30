@@ -1,0 +1,21 @@
+{
+  "panel": "phase2",
+  "budget_usd": 25.0,
+  "maximum_forecast_usd": 20.0,
+  "forecast_input_tokens": 300,
+  "conditions": ["bare", "evaluator"],
+  "framings": ["third_person", "first_person"],
+  "permutations": 5,
+  "sampling": {"max_tokens": 8, "temperature": 0, "reasoning": {"enabled": false}},
+  "models": [
+    {"id": "openai/gpt-5.4-mini", "max_call_cost_usd": 0.005},
+    {"id": "google/gemini-2.5-flash-lite", "max_call_cost_usd": 0.005},
+    {"id": "anthropic/claude-sonnet-5", "max_call_cost_usd": 0.005, "parameter_omissions": ["temperature"]},
+    {"id": "x-ai/grok-4.20", "max_call_cost_usd": 0.005},
+    {"id": "meta-llama/llama-3.3-70b-instruct", "max_call_cost_usd": 0.005, "parameter_omissions": ["reasoning"]},
+    {"id": "mistralai/mistral-medium-3.1", "max_call_cost_usd": 0.005, "parameter_omissions": ["reasoning"]},
+    {"id": "qwen/qwen3.8-27b", "max_call_cost_usd": 0.005},
+    {"id": "deepseek/deepseek-v4-pro-0813", "max_call_cost_usd": 0.005},
+    {"id": "z-ai/glm-5.2", "max_call_cost_usd": 0.005}
+  ]
+}

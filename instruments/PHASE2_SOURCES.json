@@ -1,0 +1,14 @@
+{
+  "selection_seed": 20260830,
+  "sources": {
+    "commonsense.parquet": "sha256:86c3efef043ddf5661afe6d0398d603bada36eb3b26cc2fd9c859786df6eacb1",
+    "deontology.parquet": "sha256:c8f94b6a4cf576ebf89de757c29b46a62d4fd1b5bdb99f9f536f62077db37cbc",
+    "ggb.json": "sha256:4eb924c7f09b2ff96c5c8ae73600b1680295668c3a4887455c2cb53b1f4dfe41",
+    "ipip_neo_120.html": "sha256:d0500dc01558d292ab517c4c8efa174e2fb3a2a23fff8283cb239831c98b5a4d",
+    "ipip_neo_120_key.html": "sha256:a0e491cc737a1d3f0fbc864d64bbc7c283fa696c64c05dab5c639ced4fc14512",
+    "justice.parquet": "sha256:a53c059efef7f3d73ec971de8fadbcf67d076a60072dbf79b27585d6c352ecd4",
+    "mfq2.html": "sha256:34c17dffdb1618cdb55db9f8feef96a80bbb3dd3d99c3c59d7e051c01e23ed5d",
+    "utilitarianism.parquet": "sha256:8f4e110fa6eab8d8c7650a009ca0ed47f5faa277034c6e8e95de7795c677eee9",
+    "virtue.parquet": "sha256:ea769ea1fa81d277b4740b43f1010c1f375193de45d5284ba6ac6af767433124"
+  }
+}
