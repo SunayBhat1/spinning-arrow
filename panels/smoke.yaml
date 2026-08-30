@@ -1,0 +1,4 @@
+name: phase0-smoke
+description: One-format-check call only; this is not a scored panel.
+models:
+  - id: openai/gpt-oss-120b

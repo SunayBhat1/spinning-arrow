@@ -1,0 +1,21 @@
+{
+  "id": "gen-test-001",
+  "model": "openai/gpt-oss-120b",
+  "provider": "fireworks",
+  "choices": [
+    {
+      "message": {
+        "role": "assistant",
+        "content": "C"
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 17,
+    "completion_tokens": 1,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "cost": 0.00000123
+  }
+}
