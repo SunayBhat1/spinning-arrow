@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import gzip
 import json
+from decimal import Decimal
 from pathlib import Path
 
+from spinning_arrow.client import CompletionResult
 from spinning_arrow.contracts import Outcome, ParsedResponse, ResponseRecord, TokenUsage
 from spinning_arrow.items import load_items
 from spinning_arrow.run import PilotConfig, PilotModel, _append_jsonl_gzip, _run_one
@@ -64,7 +66,7 @@ def test_worker_records_unexpected_call_failures_as_errors() -> None:
     record = _run_one(
         FailingClient(),  # type: ignore[arg-type]
         "run",
-        PilotModel("test/model", 0.01, (), None, None),
+        PilotModel("test/model", Decimal("0.01"), 8, (), None, None),
         item,
         "bare",
         "third_person",
@@ -74,3 +76,36 @@ def test_worker_records_unexpected_call_failures_as_errors() -> None:
 
     assert record.outcome is Outcome.ERROR
     assert record.error == "unexpected client failure"
+
+
+def test_worker_accounts_for_a_completion_without_text() -> None:
+    class EmptyContentClient:
+        def chat_completion(self, **_: object) -> CompletionResult:
+            return CompletionResult(
+                raw={},
+                text=None,
+                provider_served="provider",
+                input_tokens=5,
+                output_tokens=8,
+                reasoning_tokens=3,
+                cost_usd=Decimal("0.000123"),
+                latency_ms=10,
+            )
+
+    root = Path(__file__).parents[1]
+    item = load_items([root / "instruments" / "mfq2.yaml"])[0]
+    config = PilotConfig(Decimal("1"), ("bare",), ("third_person",), 1, 8, 0, ())
+    record = _run_one(
+        EmptyContentClient(),  # type: ignore[arg-type]
+        "run",
+        PilotModel("test/model", Decimal("0.01"), 8, (), None, None),
+        item,
+        "bare",
+        "third_person",
+        0,
+        config,
+    )
+
+    assert record.outcome is Outcome.ERROR
+    assert record.cost_usd == 0.000123
+    assert record.tokens.reasoning_tokens == 3

@@ -40,6 +40,7 @@ from spinning_arrow.smoke import _load_dotenv
 class PilotModel:
     id: str
     max_call_cost_usd: Decimal
+    max_tokens: int
     parameter_omissions: tuple[str, ...]
     reasoning: dict[str, Any] | None
     reasoning_exception: str | None
@@ -161,6 +162,7 @@ def run_pilot(project_root: Path, *, workers: int = 4) -> PilotArtifacts:
         sampling_params={
             "temperature": config.temperature,
             "max_tokens": config.max_tokens,
+            "model_max_tokens": {model.id: model.max_tokens for model in config.models},
             "reasoning": {"enabled": False},
             "exceptions": {
                 model.id: {"reasoning": model.reasoning, "reason": model.reasoning_exception}
@@ -202,7 +204,7 @@ def _run_one(
             model_id=model.id,
             messages=rendered.messages,
             maximum_cost_usd=model.max_call_cost_usd,
-            max_tokens=config.max_tokens,
+            max_tokens=model.max_tokens,
             parameters=parameters,
             reasoning_exception=model.reasoning_exception,
             omit_reasoning="reasoning" in model.parameter_omissions,
@@ -228,6 +230,32 @@ def _run_one(
             cost_usd=0.0,
             latency_ms=0,
             error=str(error),
+        )
+    if completion.text is None:
+        return ResponseRecord(
+            run_id=run_id,
+            ts=_utc_now(),
+            model_id=model.id,
+            provider_served=completion.provider_served,
+            instrument=item.instrument,
+            item_id=item.id,
+            condition=condition,
+            framing=framing,
+            permutation=permutation,
+            option_order=rendered.option_order,
+            prompt_hash=_hash_messages(rendered.messages),
+            messages=rendered.messages,
+            raw_response=None,
+            parsed=ParsedResponse(None, False),
+            outcome=Outcome.ERROR,
+            tokens=TokenUsage(
+                completion.input_tokens,
+                completion.output_tokens,
+                completion.reasoning_tokens,
+            ),
+            cost_usd=float(completion.cost_usd),
+            latency_ms=completion.latency_ms,
+            error="OpenRouter returned a choice without text content",
         )
     parsed = parse_response(completion.text, rendered.option_order)
     return ResponseRecord(
@@ -280,10 +308,14 @@ def _load_config(path: Path) -> PilotConfig:
         exception = raw.get("reasoning_exception")
         if exception is not None and not isinstance(exception, str):
             raise ValueError("reasoning_exception must be a string")
+        max_tokens = raw.get("max_tokens", sampling.get("max_tokens"))
+        if isinstance(max_tokens, bool) or not isinstance(max_tokens, int) or max_tokens < 1:
+            raise ValueError("model max_tokens must be a positive integer")
         models.append(
             PilotModel(
                 id=_required_string(raw.get("id"), "model id"),
                 max_call_cost_usd=Decimal(str(raw.get("max_call_cost_usd"))),
+                max_tokens=max_tokens,
                 parameter_omissions=tuple(omissions),
                 reasoning=reasoning,
                 reasoning_exception=exception,

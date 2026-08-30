@@ -57,7 +57,7 @@ class CompletionResult:
     """OpenRouter response data needed by the raw-response contract."""
 
     raw: Mapping[str, Any]
-    text: str
+    text: str | None
     provider_served: str | None
     input_tokens: int
     output_tokens: int
@@ -394,7 +394,7 @@ def _reasoning_tokens(usage: Mapping[str, Any]) -> int:
     return max(values)
 
 
-def _content_text(content: Any) -> str:
+def _content_text(content: Any) -> str | None:
     if isinstance(content, str):
         return content
     if isinstance(content, Sequence) and not isinstance(content, (str, bytes)):
@@ -404,7 +404,7 @@ def _content_text(content: Any) -> str:
                 parts.append(part["text"])
         if parts:
             return "".join(parts)
-    raise OpenRouterClientError("OpenRouter returned a choice without text content")
+    return None
 
 
 def _provider_served(payload: Mapping[str, Any]) -> str | None:

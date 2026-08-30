@@ -149,3 +149,22 @@ def test_reasoning_can_be_explicitly_omitted_for_an_unsupported_model() -> None:
 
     payload = json.loads(requests[0].data.decode("utf-8"))
     assert "reasoning" not in payload
+
+
+def test_empty_choice_content_is_still_cost_accounted() -> None:
+    payload = json.loads(_fixture())
+    payload["choices"][0]["message"]["content"] = None
+
+    def transport(_: Request, __: float) -> HTTPResponse:
+        return HTTPResponse(status=200, body=json.dumps(payload).encode("utf-8"), headers={})
+
+    budget = RunBudget("0.01")
+    client = OpenRouterClient("test-key", budget, transport=transport)
+    result = client.chat_completion(
+        model_id="openai/gpt-oss-120b",
+        messages=[{"role": "user", "content": "Reply C"}],
+        maximum_cost_usd="0.001",
+    )
+
+    assert result.text is None
+    assert budget.spent_usd == Decimal("0.00000123")

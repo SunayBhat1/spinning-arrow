@@ -6,8 +6,8 @@
   "permutations": 5,
   "sampling": {"max_tokens": 8, "temperature": 0, "reasoning": {"enabled": false}},
   "models": [
-    {"id": "openai/gpt-oss-120b", "max_call_cost_usd": 0.01, "reasoning": {"effort": "low", "exclude": true}, "reasoning_exception": "Phase 1 pilot exception approved 2026-08-29: OpenRouter marks reasoning mandatory.", "pricing_per_million_tokens": {"input_usd": 0.037, "output_usd": 0.17}},
-    {"id": "google/gemini-3.5-flash-lite", "max_call_cost_usd": 0.01, "reasoning": {"effort": "minimal", "exclude": true}, "reasoning_exception": "Phase 1 pilot exception approved 2026-08-29: OpenRouter marks reasoning mandatory.", "pricing_per_million_tokens": {"input_usd": 0.3, "output_usd": 2.5}},
+    {"id": "openai/gpt-oss-120b", "max_call_cost_usd": 0.01, "max_tokens": 64, "reasoning": {"effort": "low", "exclude": true}, "reasoning_exception": "Phase 1 pilot exception approved 2026-08-29: OpenRouter marks reasoning mandatory; 64 tokens reserve room for a final answer after low-effort reasoning.", "pricing_per_million_tokens": {"input_usd": 0.037, "output_usd": 0.17}},
+    {"id": "google/gemini-3.5-flash-lite", "max_call_cost_usd": 0.01, "max_tokens": 512, "reasoning": {"effort": "minimal", "exclude": true}, "reasoning_exception": "Phase 1 pilot exception approved 2026-08-29: OpenRouter marks reasoning mandatory; 512 tokens permit Gemini's provider-controlled minimal thinking and a final answer.", "pricing_per_million_tokens": {"input_usd": 0.3, "output_usd": 2.5}},
     {"id": "mistralai/mistral-medium-3.1", "max_call_cost_usd": 0.01, "parameter_omissions": ["reasoning"], "pricing_per_million_tokens": {"input_usd": 0.4, "output_usd": 2.0}},
     {"id": "qwen/qwen3.8-27b", "max_call_cost_usd": 0.01, "pricing_per_million_tokens": {"input_usd": 0.425, "output_usd": 2.55}},
     {"id": "meta-llama/llama-3.3-70b-instruct", "max_call_cost_usd": 0.01, "parameter_omissions": ["reasoning"], "pricing_per_million_tokens": {"input_usd": 0.71, "output_usd": 0.71}},

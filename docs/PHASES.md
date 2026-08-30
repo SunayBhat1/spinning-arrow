@@ -28,7 +28,10 @@ guard, and a pre-request run spend-cap reservation; `make smoke`; tests and a re
 **Open:** The six-model panel was re-verified live. OpenRouter currently requires reasoning for
 `openai/gpt-oss-120b` and `google/gemini-3.5-flash-lite`; Sunay authorized a narrowly scoped,
 explicitly recorded exception for these two *Phase 1 pilot* entries only. All other pilot requests
-remain reasoning-disabled, and this does not change the Phase 2+ main-battery policy.
+remain reasoning-disabled or explicitly omit an unsupported `reasoning` parameter, and this does
+not change the Phase 2+ main-battery policy. The first 8-token exception-model attempt was stopped
+after 461 checkpointed calls because reasoning consumed the final-answer allowance; the clean retry
+uses recorded 64- and 512-token exception-model ceilings and records usage even when content is empty.
 
 ## Phase 2 — Full battery and scoring
 
