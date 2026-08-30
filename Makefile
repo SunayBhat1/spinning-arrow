@@ -1,6 +1,6 @@
 UV_CACHE_DIR ?= .uv-cache
 
-.PHONY: test lint smoke pilot
+.PHONY: test lint smoke pilot pilot-report
 
 test:
 	UV_CACHE_DIR=$(UV_CACHE_DIR) uv run --group dev pytest
@@ -13,3 +13,6 @@ smoke:
 
 pilot:
 	UV_CACHE_DIR=$(UV_CACHE_DIR) uv run spinning-arrow pilot --workers 4
+
+pilot-report:
+	UV_CACHE_DIR=$(UV_CACHE_DIR) uv run spinning-arrow pilot-report $(RUN_ID)
