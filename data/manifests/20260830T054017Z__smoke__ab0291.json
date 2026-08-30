@@ -1,0 +1,34 @@
+{
+  "ended_at": "2026-08-30T05:40:18Z",
+  "git_commit": "e4e1f608e090dc8b8e726301fffd6928bee32bae",
+  "item_set_hash": "sha256:b2618d0a3536c42eeb6d7d4e41e0dc99b0e8e9484f913ba5c068ba3a781e230f",
+  "model_ids": [
+    "openai/gpt-oss-120b"
+  ],
+  "outcome_counts": {
+    "answered": 1
+  },
+  "panel_hash": "sha256:1af0f7db574cf58010e145fa16b455497ed3cc52615af0617fc99d761fb5b197",
+  "parameter_omissions": {
+    "openai/gpt-oss-120b": []
+  },
+  "per_model_cost_usd": {
+    "openai/gpt-oss-120b": 1.145e-05
+  },
+  "prompt_template_hashes": {
+    "phase0_smoke": "sha256:40c12a8438f8b01a7cfcec8d5b1eca3f7817a9deff88142ea122da30938d6785"
+  },
+  "run_id": "20260830T054017Z__smoke__ab0291",
+  "sampling_params": {
+    "main_battery": false,
+    "max_tokens": 8,
+    "reasoning": {
+      "effort": "low",
+      "exclude": true
+    },
+    "reasoning_exception": "Phase 0 smoke only: OpenRouter reports reasoning mandatory for openai/gpt-oss-120b; this unscored format check is not part of the main battery.",
+    "temperature": 0
+  },
+  "started_at": "2026-08-30T05:40:17Z",
+  "total_cost_usd": 1.145e-05
+}

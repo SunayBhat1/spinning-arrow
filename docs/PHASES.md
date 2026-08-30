@@ -4,9 +4,9 @@ The single place where current state is tracked. [SPEC.md](../SPEC.md) is the co
 not change as work progresses; this file does. Update it at every phase close, and at any gate
 that returns a decision.
 
-**Current phase: 0 — Gate 0 open.**
-**Blocking on:** Sunay completing the account checklist in SPEC.md §4, creating/pushing the
-public Git repository, and reviewing one real smoke-call record.
+**Current phase: 0 — Gate 0 ready for review.**
+**Blocking on:** Sunay reconciling the real smoke-call cost with the OpenRouter dashboard and
+explicitly approving Gate 0.
 
 ---
 
@@ -14,13 +14,15 @@ public Git repository, and reviewing one real smoke-call record.
 
 **Planned:** repo scaffold, OpenRouter client with cost accounting, data contracts, `make smoke`.
 **Gate 0 deliverable:** `reports/00_access.md`
-**Status:** scaffold and offline verification complete; real smoke call not yet run
+**Status:** ready for Sunay review
 **Shipped:** `pyproject.toml` + `uv.lock`; ruff and pytest; validated response, score, and manifest
 contracts; OpenRouter client with retries, usage-cost accounting, structured logging, reasoning-token
 guard, and a pre-request run spend-cap reservation; `make smoke`; tests and a recorded API fixture.
-**Open:** No local Git repository/committed revision is present, and no `.env` OpenRouter key is
-available to this workspace. `make smoke` correctly stops before network access. See
-[`reports/00_access.md`](../reports/00_access.md).
+**Open:** The one real smoke-call record and manifest are committed with this phase closeout.
+Sunay must reconcile the recorded `$0.00001145` cost with OpenRouter's dashboard before closing
+the gate. The one exception is documented: OpenRouter currently makes reasoning mandatory for the
+smoke model, so this *unscored, non-battery* check used low-effort reasoning; Phase 1+ battery
+calls remain reasoning-disabled. See [`reports/00_access.md`](../reports/00_access.md).
 
 ## Phase 1 — Pilot probe
 

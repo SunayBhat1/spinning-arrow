@@ -1,6 +1,6 @@
 # Gate 0 — access and scaffold
 
-**Status: open — not ready for review until the real smoke call is run.**
+**Status: ready for Sunay’s Gate 0 review.**
 
 ## What is ready
 
@@ -27,7 +27,7 @@ make lint
 All checks passed!
 
 make test
-9 passed
+11 passed
 ```
 
 The tests replay `tests/fixtures/openrouter_completion.json`; they never make network requests.
@@ -35,27 +35,34 @@ They cover usage-cost accounting, transient retry behavior, pre-request spend-ca
 missing-cost failure, response and manifest round trips, canonical-choice validation, the
 suppressed-score form, and end-to-end smoke artifact creation.
 
-## Real smoke-call status
+## Real smoke-call result
 
-No real API request has been made. This workspace has neither a Git repository with a committed
-revision nor a local `.env` key. The guard was verified with:
+`make smoke` completed successfully on `20260830T054017Z__smoke__ab0291` and wrote both required
+artifacts:
 
-```text
-make smoke
-Smoke call did not run: A committed Git revision is required before the smoke call so its manifest is reproducible.
-```
+- [`data/raw/20260830T054017Z__smoke__ab0291/smoke.jsonl.gz`](../data/raw/20260830T054017Z__smoke__ab0291/smoke.jsonl.gz)
+- [`data/manifests/20260830T054017Z__smoke__ab0291.json`](../data/manifests/20260830T054017Z__smoke__ab0291.json)
 
-It stopped before reading the API key or opening the network connection. No response or manifest
-was written, so there is no cost to reconcile yet.
+The raw record validates as an `answered` response with canonical choice `C`, routed to
+`SiliconFlow`. It records 85 input tokens, 16 output tokens, 15 reasoning tokens, 1,347 ms
+latency, and **$0.00001145** in OpenRouter `usage.cost`. The manifest links it to code revision
+`e4e1f608e090dc8b8e726301fffd6928bee32bae` and the exact prompt, panel, and item-set hashes.
+
+### Required, documented smoke-only exception
+
+The first disabled-reasoning attempt was rejected before a completion with HTTP 400:
+`Reasoning is mandatory for this endpoint and cannot be disabled.` OpenRouter's public model
+metadata currently marks `openai/gpt-oss-120b` as mandatory reasoning with high/medium/low effort
+only. The smoke check is unscored and not part of the main battery, so its second (successful)
+attempt used `reasoning: {"effort": "low", "exclude": true}`. This exception appears directly in
+the manifest; its reasoning tokens are recorded and charged. It does **not** change D5: Phase 1+
+main-battery requests still default to `reasoning: {"enabled": false}` and require an explicit
+documented exception to do otherwise.
 
 ## Sunay’s remaining Gate 0 actions
 
-1. Create and push the public `spinning-arrow` GitHub repository, then make a commit containing
-   this scaffold. The smoke manifest intentionally refuses an uncommitted revision.
-2. Create the dedicated OpenRouter key, set its hard $30 spend limit, and place it in a local,
-   uncommitted `.env` as `OPENROUTER_API_KEY=...`.
-3. Run `make smoke` from a committed checkout.
-4. Review the resulting gzipped response record and manifest, then reconcile its `cost_usd` with
-   the OpenRouter dashboard. They must agree before Gate 0 passes.
+1. Confirm OpenRouter's dashboard lists the same **$0.00001145** charge for the smoke call.
+2. Review the linked gzipped response record, manifest, and smoke-only reasoning exception.
+3. Explicitly approve or return a decision on Gate 0. Do not begin Phase 1 until that happens.
 
 Do not begin Phase 1 until this gate is reviewed and explicitly closed.
