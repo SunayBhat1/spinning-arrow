@@ -1,0 +1,16 @@
+{
+  "panel": "phase3",
+  "budget_usd": 2.0,
+  "maximum_forecast_usd": 1.0,
+  "forecast_input_tokens": 300,
+  "conditions": ["bare"],
+  "surface_forms": ["direct", "advice"],
+  "permutations": 6,
+  "baseline_run_id": "20260830T155412Z__phase2__8fbf10",
+  "sampling": {"max_tokens": 8, "temperature": 0, "reasoning": {"enabled": false}},
+  "models": [
+    {"id":"meta-llama/llama-3.3-70b-instruct","max_call_cost_usd":0.005,"parameter_omissions":["reasoning"]},
+    {"id":"mistralai/mistral-medium-3.1","max_call_cost_usd":0.005,"parameter_omissions":["reasoning"]},
+    {"id":"anthropic/claude-sonnet-5","max_call_cost_usd":0.005,"parameter_omissions":["temperature"]}
+  ]
+}

@@ -1,0 +1,4 @@
+model_id,calls,answered,refused,unparseable,errors,clean_parse_rate,cost_usd
+meta-llama/llama-3.3-70b-instruct,360,360,0,0,0,1.0,0.00653306
+mistralai/mistral-medium-3.1,360,360,0,0,0,1.0,0.0132576
+anthropic/claude-sonnet-5,360,360,0,0,0,1.0,0.103796

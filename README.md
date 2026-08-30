@@ -11,8 +11,9 @@ Evaluations for Values and Opinions in Large Language Models* (ACL 2024).
 
 Phases 0–2 are approved. The strict-D5 Phase 2 battery made 56,700 calls at a recorded cost of
 `$5.378043`, with zero reasoning tokens; see the [visual dashboard](reports/02_scoring.html) and
-[written scoring report](reports/02_scoring.md). Phase 3 is now at Gate 3a: its paired behavioural
-scenario drafts require editorial approval before any paid evaluation. See [the draft](reports/03a_scenarios.md)
+[written scoring report](reports/02_scoring.md). Phase 3 is complete: its 1,080 controlled
+scenario calls across Llama, Mistral, and Claude cost `$0.123587`, with zero reasoning tokens and
+a 100% clean parse rate. See [the gap report](reports/03b_gap.md), [interactive visual](reports/03b_gap.html),
 and [phase state](docs/PHASES.md).
 
 ## Local setup
@@ -51,6 +52,13 @@ scoring report with:
 
 ```sh
 RUN_ID=20260830T155412Z__phase2__8fbf10 make phase2-report
+```
+
+Phase 3 has the same durable-run controls, including a live catalog preflight and a `$2` hard cap:
+
+```sh
+make phase3
+RUN_ID=20260830T230045Z__phase3__74142b make phase3-report
 ```
 
 ## Reproducibility and licenses

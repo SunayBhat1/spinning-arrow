@@ -5,14 +5,23 @@ from __future__ import annotations
 import sys
 from collections.abc import Sequence
 
-from spinning_arrow import phase2, phase2_report, report, run, smoke
+from spinning_arrow import phase2, phase2_report, phase3, phase3_report, report, run, smoke
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = list(sys.argv[1:] if argv is None else argv)
-    if not args or args[0] not in {"smoke", "pilot", "pilot-report", "phase2", "phase2-report"}:
+    if not args or args[0] not in {
+        "smoke",
+        "pilot",
+        "pilot-report",
+        "phase2",
+        "phase2-report",
+        "phase3",
+        "phase3-report",
+    }:
         print(
-            "Usage: spinning-arrow {smoke|pilot|pilot-report|phase2|phase2-report} [options]",
+            "Usage: spinning-arrow "
+            "{smoke|pilot|pilot-report|phase2|phase2-report|phase3|phase3-report} [options]",
             file=sys.stderr,
         )
         return 2
@@ -25,4 +34,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         return phase2.main(args)
     if command == "phase2-report":
         return phase2_report.main(args)
+    if command == "phase3":
+        return phase3.main(args)
+    if command == "phase3-report":
+        return phase3_report.main(args)
     return run.main(args)

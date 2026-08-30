@@ -1,0 +1,94 @@
+{
+  "approved_forecast_limit_usd": "1.0",
+  "calls_per_model": 360,
+  "catalog_url": "https://openrouter.ai/api/v1/models",
+  "checked_at": "2026-08-30T23:00:45Z",
+  "forecast_input_tokens": 300,
+  "forecast_total_usd": "0.37248480",
+  "models": [
+    {
+      "forecast_usd": "0.07872480",
+      "id": "meta-llama/llama-3.3-70b-instruct",
+      "name": "Meta: Llama 3.3 70B Instruct",
+      "pricing_per_token_usd": {
+        "completion": "7.1E-7",
+        "prompt": "7.1E-7"
+      },
+      "reasoning": null
+    },
+    {
+      "forecast_usd": "0.0489600",
+      "id": "mistralai/mistral-medium-3.1",
+      "name": "Mistral: Mistral Medium 3.1",
+      "pricing_per_token_usd": {
+        "completion": "0.000002",
+        "prompt": "4E-7"
+      },
+      "reasoning": null
+    },
+    {
+      "forecast_usd": "0.244800",
+      "id": "anthropic/claude-sonnet-5",
+      "name": "Anthropic: Claude Sonnet 5",
+      "pricing_per_token_usd": {
+        "completion": "0.00001",
+        "prompt": "0.000002"
+      },
+      "reasoning": {
+        "default_effort": "high",
+        "default_enabled": true,
+        "mandatory": false,
+        "supported_efforts": [
+          "max",
+          "xhigh",
+          "high",
+          "medium",
+          "low"
+        ]
+      }
+    }
+  ],
+  "probe_total_cost_usd": "0.0003238",
+  "probes": [
+    {
+      "cost_usd": "0.0000202",
+      "latency_ms": 532,
+      "model_id": "meta-llama/llama-3.3-70b-instruct",
+      "outcome": "answered",
+      "provider_served": "Parasail",
+      "raw_response": "A.",
+      "tokens": {
+        "in": 85,
+        "out": 3,
+        "reasoning": 0
+      }
+    },
+    {
+      "cost_usd": "0.0000356",
+      "latency_ms": 445,
+      "model_id": "mistralai/mistral-medium-3.1",
+      "outcome": "answered",
+      "provider_served": "Mistral",
+      "raw_response": "A",
+      "tokens": {
+        "in": 79,
+        "out": 2,
+        "reasoning": 0
+      }
+    },
+    {
+      "cost_usd": "0.000268",
+      "latency_ms": 2289,
+      "model_id": "anthropic/claude-sonnet-5",
+      "outcome": "answered",
+      "provider_served": "Claude Platform on AWS",
+      "raw_response": "A",
+      "tokens": {
+        "in": 119,
+        "out": 3,
+        "reasoning": 0
+      }
+    }
+  ],
+  "run_cap_usd": "2.0"
+}

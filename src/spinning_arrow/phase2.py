@@ -238,6 +238,7 @@ def _execute_tasks(
     total_tasks: int,
     raw_directory: Path,
     workers: int,
+    progress_label: str = "Phase 2",
 ) -> tuple[list[ResponseRecord], str | None]:
     records: list[ResponseRecord] = []
     stop_reason: str | None = None
@@ -275,7 +276,7 @@ def _execute_tasks(
                     stop_reason = result.stop_reason
                 if completed % 250 == 0 or completed == total_tasks:
                     print(
-                        f"Phase 2 progress: {completed}/{total_tasks} calls persisted; "
+                        f"{progress_label} progress: {completed}/{total_tasks} calls persisted; "
                         f"spent=${client.budget.spent_usd}",
                         file=sys.stderr,
                         flush=True,

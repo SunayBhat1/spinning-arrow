@@ -4,8 +4,8 @@ The single place where current state is tracked. [SPEC.md](../SPEC.md) is the co
 not change as work progresses; this file does. Update it at every phase close, and at any gate
 that returns a decision.
 
-**Current phase: 3 — scenario-design review (Gate 3a).**
-**Blocking on:** Sunay's editorial review of the Phase 3 scenario drafts before any paid run.
+**Current phase: 4 — site.**
+**Blocking on:** Phase 4 design and deployment work has not begun.
 
 ---
 
@@ -72,17 +72,19 @@ because their current mandatory-reasoning configuration cannot carry into the D5
 ## Phase 3 — Revealed preference
 
 **Planned:** ~30 paired behavioral scenarios; stated-vs-revealed gap.
-**Gate 3a:** `reports/03a_scenarios.md` (drafts, before any large run — needs Sunay's edits)
+**Gate 3a:** `reports/03a_scenarios.md` (approved scenario slate)
 **Gate 3b:** `reports/03b_gap.md`
-**Status:** in progress — Gate 3a draft ready for review
-**Shipped:** Draft 0 is in `reports/03a_scenarios.md`: 30 scenario sketches paired to Phase 2
-constructs, a pre-specified concordance rule, response-format controls, and a recommended
-three-model design. Gate 3a has made no API calls. The proposed Gate 3b run is 1,080 calls
-(30 scenarios × 3 models × 6 choice orders × 2 surface forms), expected to cost `$0.15–$0.50`
-from Phase 2 observed usage and bounded by a `$2` hard cap after live preflight. No Phase 3
-evaluation may run until Sunay edits and approves the scenarios and selected three-model panel.
-**Open:** Editorial review: mundane versus adversarial situations, scenario wording, pairings,
-and the recommended Llama/Mistral/Claude three-model panel.
+**Status:** complete 2026-08-30
+**Shipped:** Gate 3a's approved 30 scenarios and their versioned scoring contract are committed in
+`instruments/phase3_scenarios.yaml` and `instruments/phase3_contract.json`. Gate 3b run
+`20260830T230045Z__phase3__74142b` completed its planned 1,080 calls (360 per model) across
+Llama 3.3 70B Instruct, Mistral Medium 3.1, and Claude Sonnet 5. The live preflight forecast was
+`$0.372485` against a `$1` forecast guard and `$2` hard cap; raw-record cost was `$0.12358666`.
+All responses parsed as choices and all reported zero reasoning tokens. The durable evidence bundle
+includes raw JSONL, a manifest, preflight, derived tables, [gap report](../reports/03b_gap.md), and
+[visual report](../reports/03b_gap.html). The report intentionally excludes ethics-reference
+agreement from directional concordance because reference accuracy is not an action-direction scale.
+**Open:** —
 
 ## Phase 4 — Site
 
@@ -152,6 +154,13 @@ repo. ETHICS confirmed MIT. OEJTS excluded from the item bank on license grounds
   approved advancing to Gate 3a. Phase 3 begins with drafted, paired behavioural scenarios only;
   no model calls occur until Sunay edits and approves that scenario set. The default Gate 3b
   design is 1,080 calls on three models with an expected `$0.15–$0.50` cost and a `$2` hard cap.
+
+- **2026-08-30 — Gate 3a approved; Phase 3 completed.** Sunay approved the scenario slate,
+  six choice-order permutations, direct/advice surface controls, the Llama/Mistral/Claude contrast
+  panel, and the conservative interval rule. The live preflight forecast `$0.37248480`; the full
+  run `20260830T230045Z__phase3__74142b` completed 1,080 calls at `$0.12358666`, with 100% clean
+  parsing and zero reasoning tokens. Gate 3b results are in `reports/03b_gap.md` and
+  `reports/03b_gap.html`; Phase 4 may begin.
 
 - **2026-08-30 — Phase 4 deployment and human-comparison direction.** The preferred live-site
   arrangement is a GitHub Pages subdomain beneath Sunay's Squarespace-managed personal domain.

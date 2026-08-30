@@ -1,0 +1,47 @@
+{
+  "ended_at": "2026-08-30T23:02:19Z",
+  "git_commit": "8703a981b1d8bfff2d19ce5b827080687a31396b",
+  "item_set_hash": "sha256:236029ab983d1aff12283856efa89cfe28a2c1aea3b4096d7e19319e51d6d966",
+  "model_ids": [
+    "meta-llama/llama-3.3-70b-instruct",
+    "mistralai/mistral-medium-3.1",
+    "anthropic/claude-sonnet-5"
+  ],
+  "outcome_counts": {
+    "answered": 1080
+  },
+  "panel_hash": "sha256:8bb5cca219dc1573d6f324e0b05465e4a24a3f79c81e2bb2e52e2acce4e7a57d",
+  "parameter_omissions": {
+    "anthropic/claude-sonnet-5": [
+      "temperature"
+    ],
+    "meta-llama/llama-3.3-70b-instruct": [
+      "reasoning"
+    ],
+    "mistralai/mistral-medium-3.1": [
+      "reasoning"
+    ]
+  },
+  "per_model_cost_usd": {
+    "anthropic/claude-sonnet-5": 0.103796,
+    "meta-llama/llama-3.3-70b-instruct": 0.00653306,
+    "mistralai/mistral-medium-3.1": 0.0132576
+  },
+  "prompt_template_hashes": {
+    "choice": "sha256:ff2e9cd9df3fcd9c7efa31660d5cadab9656b3dd727ce3136dcc71b51495c1d6",
+    "phase3_render": "sha256:a0eceb37d20064ba131f171db65fb7fbf7deb456f98789b0dad3bafff20f9b03",
+    "scenario_contract": "sha256:2d9f45817d953e38436abcb78af5e3ef9f179090956a9520ca640eaef3fd1e94"
+  },
+  "run_id": "20260830T230045Z__phase3__74142b",
+  "sampling_params": {
+    "baseline_run_id": "20260830T155412Z__phase2__8fbf10",
+    "max_tokens": 8,
+    "preflight": "data/preflight/20260830T230045Z__phase3.json",
+    "reasoning": {
+      "enabled": false
+    },
+    "temperature": 0.0
+  },
+  "started_at": "2026-08-30T23:00:45Z",
+  "total_cost_usd": 0.12358666
+}

@@ -1,0 +1,15 @@
+{
+  "baseline_run_id": "20260830T155412Z__phase2__8fbf10",
+  "models": [
+    "meta-llama/llama-3.3-70b-instruct",
+    "mistralai/mistral-medium-3.1",
+    "anthropic/claude-sonnet-5"
+  ],
+  "outcome_counts": {
+    "answered": 1080
+  },
+  "records": 1080,
+  "run_id": "20260830T230045Z__phase3__74142b",
+  "suppression_threshold": 0.7,
+  "total_cost_usd": 0.12358666
+}

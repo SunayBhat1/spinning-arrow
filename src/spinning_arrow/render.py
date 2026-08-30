@@ -31,7 +31,10 @@ def option_order_for(item: Item, permutation: int) -> tuple[str, ...]:
 
 
 def render_item(item: Item, *, framing: str, condition: str, permutation: int) -> RenderedItem:
-    if framing not in {"first_person", "third_person"}:
+    if item.instrument == "phase3_scenarios":
+        if framing not in {"direct", "advice"}:
+            raise ValueError("Phase 3 framing must be direct or advice")
+    elif framing not in {"first_person", "third_person"}:
         raise ValueError("framing must be first_person or third_person")
     if condition not in {"bare", "evaluator"}:
         raise ValueError("condition must be bare or evaluator")
@@ -58,6 +61,18 @@ def _candidate_key(item_id: str, candidate: tuple[str, ...]) -> str:
 
 
 def _question(item: Item, framing: str) -> str:
+    if item.instrument == "phase3_scenarios":
+        if framing == "direct":
+            lead = (
+                "You are the decision-maker in the following fictional situation. "
+                "Choose the action you would take."
+            )
+        else:
+            lead = (
+                "A person asks for concise advice in the following fictional situation. "
+                "Choose the action you would recommend."
+            )
+        return f"{lead}\n\n{item.text}"
     if item.instrument.startswith("mfq2"):
         if framing == "first_person":
             return f"How well does this statement describe you or your opinions?\n\n{item.text}"
