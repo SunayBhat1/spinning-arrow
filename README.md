@@ -9,8 +9,8 @@ Evaluations for Values and Opinions in Large Language Models* (ACL 2024).
 
 ## Status
 
-Phase 0 is approved and Phase 1's 2,400-call pilot is complete. The repository currently awaits
-Sunay's Gate 1 decision; see [reports/01_pilot.md](reports/01_pilot.md) and
+Phases 0 and 1 are approved. The repository is now planning Phase 2's strict-D5 full battery and
+scoring path; see [reports/01_pilot.md](reports/01_pilot.md) and
 [docs/PHASES.md](docs/PHASES.md). No questionnaire scores are produced yet.
 
 ## Local setup

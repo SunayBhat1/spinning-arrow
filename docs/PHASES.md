@@ -4,8 +4,8 @@ The single place where current state is tracked. [SPEC.md](../SPEC.md) is the co
 not change as work progresses; this file does. Update it at every phase close, and at any gate
 that returns a decision.
 
-**Current phase: 1 — Gate 1 review.**
-**Blocking on:** Sunay’s Gate 1 go/no-go decision, recorded against `reports/01_pilot.md`.
+**Current phase: 2 — full battery and scoring planning.**
+**Blocking on:** selection of the strict-D5 Phase 2 panel and implementation of the scoring path.
 
 ---
 
@@ -23,8 +23,8 @@ guard, and a pre-request run spend-cap reservation; `make smoke`; tests and a re
 
 **Planned:** 6 cheap-but-popular models × 40 items; answer the seven design questions in SPEC §8.
 **Gate 1 deliverable:** `reports/01_pilot.md` — the real go/no-go.
-**Status:** ready for Gate 1 review
-**Open:** Sunay’s Gate 1 decision. The completed clean pilot is recorded in
+**Status:** approved 2026-08-30
+**Shipped:** The completed clean pilot is recorded in
 `reports/01_pilot.md` at run `20260830T060547Z__pilot__3258fb` (2,400 calls; `$0.17570126`
 from raw OpenRouter usage). `mistralai/mistral-medium-3.1`, `qwen/qwen3.8-27b`,
 `meta-llama/llama-3.3-70b-instruct`, and `anthropic/claude-sonnet-5` achieved 98–100% clean
@@ -36,12 +36,16 @@ remain reasoning-disabled or explicitly omit an unsupported `reasoning` paramete
 not change the Phase 2+ main-battery policy. The first 8-token exception-model attempt was stopped
 after 461 checkpointed calls because reasoning consumed the final-answer allowance; the clean retry
 uses recorded 64- and 512-token exception-model ceilings and records usage even when content is empty.
+**Open:** —
 
 ## Phase 2 — Full battery and scoring
 
 **Planned:** ~300-item bank, scoring + fragility + CIs, GGB replication check on 3 models.
 **Gate 2 deliverable:** `reports/02_scoring.md`
-**Status:** not started
+**Status:** planning
+**Open:** Select the final three strict-D5 models from the Gate 1 candidate subset and implement the
+full-battery/scoring path. GPT-OSS and Gemini are excluded because their pilot-only mandatory-
+reasoning exception cannot carry into the D5 main battery.
 
 ## Phase 3 — Revealed preference
 
@@ -94,3 +98,8 @@ repo. ETHICS confirmed MIT. OEJTS excluded from the item bank on license grounds
   `20260830T060547Z__pilot__3258fb` with all raw records, a manifest, and
   `reports/01_pilot.md` committed. Actual raw-record cost was `$0.17570126`. Gate 1 remains
   pending Sunay’s decision; Phase 2 has not started.
+
+- **2026-08-30 — Gate 1 approved.** Sunay closed Phase 1 after reviewing the pilot. Phase 2 may
+  select only from the four strict-D5 candidates: Mistral Medium 3.1, Qwen 3.8 27B, Llama 3.3 70B
+  Instruct, and Claude Sonnet 5. GPT-OSS 120B and Gemini 3.5 Flash Lite remain pilot-only
+  mandatory-reasoning exceptions and are excluded from the main battery.
