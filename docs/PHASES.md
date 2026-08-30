@@ -4,8 +4,8 @@ The single place where current state is tracked. [SPEC.md](../SPEC.md) is the co
 not change as work progresses; this file does. Update it at every phase close, and at any gate
 that returns a decision.
 
-**Current phase: 2 — Gate 2 review.**
-**Blocking on:** Sunay's review of the completed Phase 2 evidence bundle.
+**Current phase: 3 — scenario-design review (Gate 3a).**
+**Blocking on:** Sunay's editorial review of the Phase 3 scenario drafts before any paid run.
 
 ---
 
@@ -43,7 +43,7 @@ uses recorded 64- and 512-token exception-model ceilings and records usage even 
 **Planned:** ~300-item bank, scoring + fragility + CIs, GGB replication check on a nine-model
 coverage panel.
 **Gate 2 deliverable:** `reports/02_scoring.md`
-**Status:** complete; Gate 2 pending review
+**Status:** approved 2026-08-30
 **Panel selected and live-reverified 2026-08-30:**
 
 | Coverage | Pinned OpenRouter ID | D5 handling |
@@ -67,20 +67,31 @@ and self-contained [visual dashboard](../reports/02_scoring.html). Scores with u
 cell coverage are suppressed; 896 responses are retained as unparseable and 9 as refusals rather
 than silently scored. GPT-OSS, Gemini 3.5 Flash Lite, GLM 5.3, and Grok 4.6 remain excluded
 because their current mandatory-reasoning configuration cannot carry into the D5 main battery.
-**Open:** Gate 2 review only. Do not start Phase 3 without a user decision.
+**Open:** —
 
 ## Phase 3 — Revealed preference
 
 **Planned:** ~30 paired behavioral scenarios; stated-vs-revealed gap.
 **Gate 3a:** `reports/03a_scenarios.md` (drafts, before any large run — needs Sunay's edits)
 **Gate 3b:** `reports/03b_gap.md`
-**Status:** not started
+**Status:** in progress — Gate 3a draft ready for review
+**Shipped:** Draft 0 is in `reports/03a_scenarios.md`: 30 scenario sketches paired to Phase 2
+constructs, a pre-specified concordance rule, response-format controls, and a recommended
+three-model design. Gate 3a has made no API calls. The proposed Gate 3b run is 1,080 calls
+(30 scenarios × 3 models × 6 choice orders × 2 surface forms), expected to cost `$0.15–$0.50`
+from Phase 2 observed usage and bounded by a `$2` hard cap after live preflight. No Phase 3
+evaluation may run until Sunay edits and approves the scenarios and selected three-model panel.
+**Open:** Editorial review: mundane versus adversarial situations, scenario wording, pairings,
+and the recommended Llama/Mistral/Claude three-model panel.
 
 ## Phase 4 — Site
 
 **Planned:** Astro static site, themed SVG plots, methodology page, GitHub Pages deploy.
 **Gate 4 deliverable:** deployed preview URL + `reports/04_site.md`. Domain decided here.
 **Status:** not started
+**Note:** GitHub Pages on a dedicated subdomain of Sunay's Squarespace-managed personal domain is
+technically feasible. The optional human comparison is a Phase 4 local-only feature: browser-side
+scoring of a short licensed subset with no answer collection or diagnostic claim.
 
 ## Phase 5 — Launch
 
@@ -136,3 +147,13 @@ repo. ETHICS confirmed MIT. OEJTS excluded from the item bank on license grounds
   run `20260830T155412Z__phase2__8fbf10`: 56,700 calls, 6,300 per model, `$5.37804276152` in raw
   OpenRouter-recorded cost, and zero reasoning tokens. The report and visual dashboard are ready
   for review; this records no Gate 2 decision and does not authorize Phase 3.
+
+- **2026-08-30 — Gate 2 approved; Phase 3 started.** Sunay reviewed the Phase 2 battery and
+  approved advancing to Gate 3a. Phase 3 begins with drafted, paired behavioural scenarios only;
+  no model calls occur until Sunay edits and approves that scenario set. The default Gate 3b
+  design is 1,080 calls on three models with an expected `$0.15–$0.50` cost and a `$2` hard cap.
+
+- **2026-08-30 — Phase 4 deployment and human-comparison direction.** The preferred live-site
+  arrangement is a GitHub Pages subdomain beneath Sunay's Squarespace-managed personal domain.
+  A future human response-profile comparison belongs to Phase 4 and must begin as local-only
+  browser scoring with no answer collection, diagnostic claim, or user ranking.

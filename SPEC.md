@@ -413,6 +413,13 @@ scale** — the scenarios are the content, and a bad scenario set discredits the
 **before** any large run. Sunay edits and approves.
 **Gate 3b — deliverable `reports/03b_gap.md`**: gap results on three models.
 
+**Phase 3 budget and run shape.** Gate 3a is design-only and makes no API calls. The default
+Gate 3b shape is 30 scenarios × 3 models × 6 deterministic choice-order permutations × 2 surface
+forms = 1,080 calls. Based on Phase 2's observed provider usage, the expected cost is `$0.15–$0.50`
+for the recommended three-model panel; a live preflight must reconcile the final prompt and
+selected models before execution. The hard run cap is `$2`. Expanding the panel or changing that
+design requires a new forecast and Sunay approval.
+
 ---
 
 ### Phase 4 — Site
@@ -424,7 +431,17 @@ scale** — the scenarios are the content, and a bad scenario set discredits the
   argument, not decoration.
 - `METHODOLOGY.md` written in plain language, including a frank limitations section that states
   the narrow claim from §0 and links the criticisms it answers.
-- Deploy to GitHub Pages via Actions.
+- Deploy to GitHub Pages via Actions. The preferred production arrangement is a dedicated
+  `spinningarrow.<Sunay personal domain>` subdomain hosted by GitHub Pages, while the personal
+  site's apex remains on Squarespace. At Gate 4, configure the GitHub Pages custom domain first,
+  then its corresponding Squarespace DNS record, retain domain verification, and enforce HTTPS.
+  Do not use wildcard DNS records.
+- Optional **human response-profile comparison**: a visitor may take a short, licensed subset and
+  see where their answers sit relative to the published model response profiles. Version 1 must
+  score entirely in the browser, collect or transmit no answers, and make no diagnostic, moral-
+  quality, or identity claim. It must say that the comparison is prompt- and instrument-specific.
+  Any later account, analytics, result-sharing, or server-side collection feature requires a
+  separate consent, privacy, retention, and security design before implementation.
 
 **Gate 4 — deliverable: a deployed preview URL** plus `reports/04_site.md` noting anything
 unresolved. Sunay reviews design and copy. Domain decision happens here.
@@ -519,6 +536,7 @@ Tests never hit the network — record fixtures under `tests/fixtures/` and repl
 | **"You're claiming models have ethics"** — the predictable public criticism. | The §0 framing, stated everywhere, and the fragility index as the headline. This criticism is anticipated and answered by the design; do not let copy drift back into overclaiming. |
 | **Instrument licensing challenged** | D3, D17, D18 + `instruments/LICENSES.md`. Nothing ships without recorded provenance. Launch bank is public domain / CC BY / MIT only. |
 | **Cost overrun** | Key spend limit (D13) — a hard stop that does not depend on code being correct. |
+| **Human comparison is mistaken for a diagnosis or silently collects sensitive responses** | Phase 4 v1 is local-only, uses clear non-diagnostic language, and does not transmit answers. Any data collection is a separately approved privacy feature. |
 
 ---
 
@@ -526,8 +544,9 @@ Tests never hit the network — record fixtures under `tests/fixtures/` and repl
 
 Do not block on these; they come due at the gate noted.
 
-1. **Domain** — the name is settled; the domain is not. `spinningarrow.ai`, `spinningarrow.org`,
-   and `spinning-arrow.org` are all unchecked for availability. Due at **Gate 4**.
+1. **Production hostname** — the preferred deployment is a GitHub Pages subdomain of Sunay's
+   Squarespace-managed personal domain, preserving the existing Squarespace apex. Select the exact
+   subdomain and verify the DNS/HTTPS setup at **Gate 4**.
 2. **Scenario content** for Phase 3 — how adversarial should the dilemmas be? Trolley-style
    abstractions, or mundane advice situations? Mundane probably measures deployment behavior
    better; abstractions are more legible to readers. Due at **Gate 3a**.
