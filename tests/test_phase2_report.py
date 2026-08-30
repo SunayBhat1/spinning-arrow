@@ -10,7 +10,9 @@ from spinning_arrow.phase2_report import (
 )
 
 
-def _record(permutation: int, outcome: Outcome, choice: str | None) -> ResponseRecord:
+def _record(
+    permutation: int, outcome: Outcome, choice: str | None, *, framing: str = "first_person"
+) -> ResponseRecord:
     return ResponseRecord(
         run_id="run",
         ts="2026-08-30T00:00:00Z",
@@ -19,7 +21,7 @@ def _record(permutation: int, outcome: Outcome, choice: str | None) -> ResponseR
         instrument="instrument",
         item_id="item",
         condition="bare",
-        framing="first_person",
+        framing=framing,
         permutation=permutation,
         option_order=("A", "B"),
         prompt_hash="sha256:" + "0" * 64,
@@ -85,3 +87,24 @@ def test_ipip_domain_scores_roll_up_facet_cells() -> None:
     assert domain.scale == "ipip.openness"
     assert domain.score == 5
     assert domain.total_items == 1
+
+
+def test_identical_choices_are_permutation_and_framing_invariant() -> None:
+    item = Item(
+        id="item",
+        instrument="instrument",
+        scale="instrument.scale",
+        text="text",
+        options=(Option("A", "Low", 1), Option("B", "High", 5)),
+    )
+    records = [
+        _record(permutation, Outcome.ANSWERED, "B", framing=framing)
+        for framing in ("first_person", "third_person")
+        for permutation in range(5)
+    ]
+
+    cells = _cell_scores(records, {"item": item})
+
+    assert {cell.score for cell in cells} == {5}
+    assert {cell.raw_fragility for cell in cells} == {0.0}
+    assert {cell.fragility for cell in cells} == {0.0}

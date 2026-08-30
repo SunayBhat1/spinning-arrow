@@ -16,7 +16,7 @@ import statistics
 import tempfile
 from collections import Counter, defaultdict
 from collections.abc import Iterable, Mapping, Sequence
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from decimal import Decimal
 from pathlib import Path
 
@@ -71,7 +71,9 @@ class CellScore:
     coverage: float
     score: float | None
     raw_value_mean: float | None
+    score_observations: tuple[float, ...]
     correct_n: int | None
+    raw_fragility: float | None
     fragility: float | None
     refusal_n: int
     error_n: int
@@ -91,6 +93,7 @@ class ScaleScore:
     score: float | None
     ci_low: float | None
     ci_high: float | None
+    mean_raw_fragility: float | None
     mean_fragility: float | None
     mean_coverage: float
     refusal_rate: float
@@ -164,10 +167,10 @@ def generate_phase2_report(project_root: Path, run_id: str) -> Phase2Report:
     }
     _write_json(data_directory / "summary.json", summary)
     markdown = _markdown_report(manifest, records, overview, scales, effects, data_directory, root)
-    markdown_path = root / "reports" / "02_phase2.md"
+    markdown_path = root / "reports" / "02_scoring.md"
     markdown_path.parent.mkdir(parents=True, exist_ok=True)
     markdown_path.write_text(markdown, encoding="utf-8")
-    html_path = root / "reports" / "02_phase2.html"
+    html_path = root / "reports" / "02_scoring.html"
     html_path.write_text(
         _html_report(manifest, records, overview, scales, effects, data_directory, root), encoding="utf-8"
     )
@@ -221,18 +224,15 @@ def _cell_scores(
             if item.answer_key is not None
             else None
         )
+        score_observations = (
+            tuple(values)
+            if item.score_type == "value"
+            else tuple(float(record.parsed.choice == item.answer_key) for record in valid)
+        )
         if coverage >= SUPPRESSION_THRESHOLD and valid_n:
-            score = raw_value_mean if item.score_type == "value" else correct_n / valid_n
+            score = _mean(score_observations)
         else:
             score = None
-        response_range = max(option.value for option in item.options) - min(
-            option.value for option in item.options
-        )
-        fragility = (
-            statistics.pstdev(values) / response_range
-            if len(values) >= 2 and response_range > 0
-            else None
-        )
         cells.append(
             CellScore(
                 model_id=model_id,
@@ -247,13 +247,37 @@ def _cell_scores(
                 coverage=coverage,
                 score=score,
                 raw_value_mean=raw_value_mean,
+                score_observations=score_observations,
                 correct_n=correct_n,
-                fragility=fragility,
+                raw_fragility=None,
+                fragility=None,
                 refusal_n=sum(record.outcome is Outcome.REFUSED for record in group),
                 error_n=sum(record.outcome is Outcome.ERROR for record in group),
             )
         )
-    return cells
+    by_item_condition: dict[tuple[str, str, str], list[CellScore]] = defaultdict(list)
+    for cell in cells:
+        by_item_condition[(cell.model_id, cell.item_id, cell.condition)].append(cell)
+    fragilities: dict[tuple[str, str, str], tuple[float | None, float | None]] = {}
+    for key, group in by_item_condition.items():
+        item = item_lookup[key[1]]
+        observations = [value for cell in group for value in cell.score_observations]
+        scale_range = (
+            max(option.value for option in item.options) - min(option.value for option in item.options)
+            if item.score_type == "value"
+            else 1.0
+        )
+        raw_fragility = statistics.pstdev(observations) if len(observations) >= 2 else None
+        normalized = raw_fragility / scale_range if raw_fragility is not None and scale_range else None
+        fragilities[key] = raw_fragility, normalized
+    return [
+        replace(
+            cell,
+            raw_fragility=fragilities[(cell.model_id, cell.item_id, cell.condition)][0],
+            fragility=fragilities[(cell.model_id, cell.item_id, cell.condition)][1],
+        )
+        for cell in cells
+    ]
 
 
 def _scale_scores(cells: Iterable[CellScore]) -> list[ScaleScore]:
@@ -274,7 +298,7 @@ def _scale_scores(cells: Iterable[CellScore]) -> list[ScaleScore]:
         model_id, instrument, scale, condition, framing, score_type = key
         eligible = [cell for cell in group if cell.score is not None]
         values = [cell.score for cell in eligible if cell.score is not None]
-        ci_low, ci_high = _bootstrap_ci(values, _seed_for(key))
+        ci_low, ci_high = _bootstrap_ci_cells(eligible, _seed_for(key))
         all_records = sum(cell.expected_n for cell in group)
         scores.append(
             ScaleScore(
@@ -290,6 +314,9 @@ def _scale_scores(cells: Iterable[CellScore]) -> list[ScaleScore]:
                 score=_mean(values),
                 ci_low=ci_low,
                 ci_high=ci_high,
+                mean_raw_fragility=_mean(
+                    cell.raw_fragility for cell in eligible if cell.raw_fragility is not None
+                ),
                 mean_fragility=_mean(
                     cell.fragility for cell in eligible if cell.fragility is not None
                 ),
@@ -316,7 +343,9 @@ def _ipip_domain_scores(cells: Iterable[CellScore]) -> list[ScaleScore]:
     for (model_id, domain, condition, framing), group in sorted(grouped.items()):
         eligible = [cell for cell in group if cell.score is not None]
         values = [cell.score for cell in eligible if cell.score is not None]
-        ci_low, ci_high = _bootstrap_ci(values, _seed_for((model_id, domain, condition, framing)))
+        ci_low, ci_high = _bootstrap_ci_cells(
+            eligible, _seed_for((model_id, domain, condition, framing))
+        )
         all_records = sum(cell.expected_n for cell in group)
         domains.append(
             ScaleScore(
@@ -332,6 +361,9 @@ def _ipip_domain_scores(cells: Iterable[CellScore]) -> list[ScaleScore]:
                 score=_mean(values),
                 ci_low=ci_low,
                 ci_high=ci_high,
+                mean_raw_fragility=_mean(
+                    cell.raw_fragility for cell in eligible if cell.raw_fragility is not None
+                ),
                 mean_fragility=_mean(
                     cell.fragility for cell in eligible if cell.fragility is not None
                 ),
@@ -413,6 +445,11 @@ def _model_overview(
                 "refusal_rate": sum(record.outcome is Outcome.REFUSED for record in group) / len(group),
                 "error_rate": sum(record.outcome is Outcome.ERROR for record in group) / len(group),
                 "attention_accuracy": attention_correct / len(attention),
+                "mean_raw_fragility": _mean(
+                    cell.raw_fragility
+                    for cell in by_model_cells[model_id]
+                    if cell.raw_fragility is not None
+                ),
                 "mean_fragility": _mean(
                     cell.fragility
                     for cell in by_model_cells[model_id]
@@ -460,6 +497,7 @@ def _markdown_report(
         scales, "ethics_phase2", condition="bare", framing="first_person"
     )
     effect_rows = _effect_table(effects)
+    fragility_rows = _fragility_table(scales)
     raw_path = f"data/raw/{manifest.run_id}/"
     manifest_path = f"data/manifests/{manifest.run_id}.json"
     derived_path = data_directory.relative_to(root)
@@ -479,7 +517,7 @@ def _markdown_report(
             "Phase 2 is complete and mechanically reproducible. Gate 2 remains pending user review; "
             "this report does not advance the project to Phase 3. Each score averages valid option "
             "permutations within an item/condition/framing cell. Cells below 70% valid coverage are "
-            "suppressed; scale intervals are 2,000 deterministic item-bootstrap replicates.",
+            "suppressed; scale intervals use 2,000 deterministic item-and-permutation bootstraps.",
             "",
             "## Run integrity and response quality",
             "",
@@ -488,6 +526,13 @@ def _markdown_report(
             "**Reasoning tokens in main battery:** 0 (hard requirement)",
             "",
             *quality_rows,
+            "",
+            "## Fragility (bare, first-person)",
+            "",
+            "Fragility is the within-item SD across both framings and five option permutations, "
+            "then averaged over eligible items. Raw and range-normalized values are both shown.",
+            "",
+            *fragility_rows,
             "",
             "## GGB validation (bare, first-person)",
             "",
@@ -522,7 +567,7 @@ def _markdown_report(
             "",
             "## Artifacts",
             "",
-            "- `reports/02_phase2.html` — self-contained visual dashboard with embedded plots.",
+            "- `reports/02_scoring.html` — self-contained visual dashboard with embedded plots.",
             "- `data/derived/<run-id>/cell_scores.csv` — score/coverage/fragility for every analytical cell.",
             "- `data/derived/<run-id>/scale_scores.csv` and `effects.csv` — publication-facing aggregates.",
             "- `data/derived/<run-id>/summary.json` — run-level machine-readable summary.",
@@ -607,7 +652,7 @@ details {{ background:var(--panel); border:1px solid var(--line); border-radius:
     <div class="card"><h3>Main-path reasoning</h3><div class="metric good">0</div><span class="muted">billed reasoning tokens</span></div>
     <div class="card"><h3>Scoring rule</h3><div class="metric">≥70%</div><span class="muted">valid permutation coverage</span></div>
   </div>
-  <h2>Response quality</h2><p class="muted">Attention accuracy treats malformed, refused, and incorrect responses as failures. Fragility is within-cell option-permutation SD normalized by each item’s response range.</p>
+  <h2>Response quality</h2><p class="muted">Attention accuracy treats malformed, refused, and incorrect responses as failures. Fragility uses both framings and option permutations, normalized by each item’s response range.</p>
   <div class="plot"><img alt="Response quality across models" src="{images['quality']}"></div>
   {overview_table}
   <h2>Big Five: descriptive first-person comparison</h2><p class="muted">Bare first-person IPIP means. The reference row is an illustrative Chinese IPIP-120 convenience sample (n=131), not a representative human benchmark.</p>
@@ -620,7 +665,7 @@ details {{ background:var(--panel); border:1px solid var(--line); border-radius:
   <div class="plot"><img alt="Design sensitivity chart" src="{images['effects']}"></div>
   {effects_table}
   <details><summary>Methods and provenance</summary>
-    <p>Scores first average valid permutations for each model × item × condition × framing cell. A cell with less than 70% valid answers is suppressed. Scale scores average eligible item cells, and their 95% intervals resample eligible item cells 2,000 times with a deterministic seed. Raw records retain prompt hashes, displayed option order, responses, parsed canonical answer, provider, usage, cost, and latency.</p>
+    <p>Scores first average valid permutations for each model × item × condition × framing cell. A cell with less than 70% valid answers is suppressed. Scale scores average eligible item cells, and their 95% intervals resample eligible items and their valid response permutations 2,000 times with a deterministic seed. Raw records retain prompt hashes, displayed option order, responses, parsed canonical answer, provider, usage, cost, and latency.</p>
     <p>Fixed bank: 120 IPIP-NEO items, 36 MFQ-2, 24 GGB, 120 ETHICS, and 15 explicit attention checks. See <code>instruments/LICENSES.md</code> and <code>instruments/PHASE2_SOURCES.json</code>. External IPIP reference: <a href="https://ipip.ori.org/ChineseIPIP-120norms.htm">IPIP Chinese IPIP-120 norms</a>.</p>
     <p>Derived tables: <code>{html.escape(str(data_directory.relative_to(root)))}/</code>. Raw: <code>data/raw/{html.escape(manifest.run_id)}/</code>. Manifest: <code>data/manifests/{html.escape(manifest.run_id)}.json</code>.</p>
   </details>
@@ -820,6 +865,32 @@ def _selected_scale_table(
     return lines
 
 
+def _fragility_table(scales: Sequence[ScaleScore]) -> list[str]:
+    selected = [
+        score
+        for score in scales
+        if score.condition == "bare"
+        and score.framing == "first_person"
+        and not (score.instrument == "ipip_neo_120" and score.scale.count(".") == 2)
+    ]
+    grouped: dict[tuple[str, str], list[ScaleScore]] = defaultdict(list)
+    for score in selected:
+        grouped[(score.model_id, score.instrument)].append(score)
+    lines = [
+        "| Model | Instrument | Raw fragility | Normalized fragility | Suppressed / total items |",
+        "|---|---|---:|---:|---:|",
+    ]
+    for (model_id, instrument), group in sorted(grouped.items()):
+        lines.append(
+            f"| {model_id} | {instrument} | "
+            f"{_decimal_or_dash(_mean(score.mean_raw_fragility for score in group))} | "
+            f"{_decimal_or_dash(_mean(score.mean_fragility for score in group))} | "
+            f"{sum(score.suppressed_items for score in group)} / "
+            f"{sum(score.total_items for score in group)} |"
+        )
+    return lines
+
+
 def _effect_table(effects: Sequence[EffectScore]) -> list[str]:
     ranked = sorted(
         (effect for effect in effects if effect.difference is not None),
@@ -913,6 +984,32 @@ def _bootstrap_ci(values: Sequence[float], seed: int) -> tuple[float | None, flo
     means = sorted(
         sum(generator.choice(values) for _ in range(n)) / n for _ in range(BOOTSTRAP_REPLICATES)
     )
+    return _quantile(means, 0.025), _quantile(means, 0.975)
+
+
+def _bootstrap_ci_cells(cells: Sequence[CellScore], seed: int) -> tuple[float | None, float | None]:
+    """Resample item cells and their valid option-permutation observations."""
+
+    if not cells:
+        return None, None
+    if len(cells) == 1 and len(cells[0].score_observations) == 1:
+        value = cells[0].score_observations[0]
+        return value, value
+    generator = random.Random(seed)
+    n = len(cells)
+    means: list[float] = []
+    for _ in range(BOOTSTRAP_REPLICATES):
+        resampled_items = [generator.choice(cells) for _ in range(n)]
+        item_means = [
+            sum(
+                generator.choice(cell.score_observations)
+                for _ in range(len(cell.score_observations))
+            )
+            / len(cell.score_observations)
+            for cell in resampled_items
+        ]
+        means.append(sum(item_means) / n)
+    means.sort()
     return _quantile(means, 0.025), _quantile(means, 0.975)
 
 
