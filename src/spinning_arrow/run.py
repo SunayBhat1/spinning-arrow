@@ -112,6 +112,8 @@ def run_pilot(project_root: Path, *, workers: int = 4) -> PilotArtifacts:
         for framing in config.framings
         for permutation in range(config.permutations)
     ]
+    raw_directory = root / "data" / "raw" / run_id
+    raw_directory.mkdir(parents=True, exist_ok=True)
     records: list[ResponseRecord] = []
     with ThreadPoolExecutor(max_workers=workers, thread_name_prefix="pilot") as executor:
         futures = [
@@ -128,17 +130,21 @@ def run_pilot(project_root: Path, *, workers: int = 4) -> PilotArtifacts:
             )
             for model, item, condition, framing, permutation in tasks
         ]
-        for future in as_completed(futures):
-            records.append(future.result())
+        for completed, future in enumerate(as_completed(futures), start=1):
+            record = future.result()
+            records.append(record)
+            _append_jsonl_gzip(raw_directory / f"{_file_stem(record.model_id)}.jsonl.gz", record)
+            if completed % 100 == 0:
+                print(
+                    f"Pilot progress: {completed}/{len(tasks)} calls persisted",
+                    file=sys.stderr,
+                    flush=True,
+                )
     records.sort(key=_record_sort_key)
     ended_at = _utc_now()
-    raw_directory = root / "data" / "raw" / run_id
-    raw_directory.mkdir(parents=True, exist_ok=True)
     by_model: dict[str, list[ResponseRecord]] = defaultdict(list)
     for record in records:
         by_model[record.model_id].append(record)
-    for model_id, model_records in by_model.items():
-        _write_jsonl_gzip(raw_directory / f"{_file_stem(model_id)}.jsonl.gz", model_records)
     per_model_cost = {
         model.id: sum(record.cost_usd for record in by_model[model.id]) for model in config.models
     }
@@ -201,7 +207,7 @@ def _run_one(
             reasoning_exception=model.reasoning_exception,
             omit_reasoning="reasoning" in model.parameter_omissions,
         )
-    except OpenRouterClientError as error:
+    except Exception as error:
         return ResponseRecord(
             run_id=run_id,
             ts=_utc_now(),
@@ -341,13 +347,12 @@ def _file_stem(model_id: str) -> str:
     return model_id.replace("/", "__").replace(":", "_")
 
 
-def _write_jsonl_gzip(path: Path, records: Sequence[ResponseRecord]) -> None:
-    temporary = path.with_name(path.name + ".tmp")
-    with gzip.open(temporary, "wt", encoding="utf-8") as handle:
-        for record in records:
-            handle.write(json.dumps(record.to_dict(), ensure_ascii=False, sort_keys=True))
-            handle.write("\n")
-    temporary.replace(path)
+def _append_jsonl_gzip(path: Path, record: ResponseRecord) -> None:
+    """Append one independently recoverable gzip member as soon as a call completes."""
+
+    with gzip.open(path, "at", encoding="utf-8") as handle:
+        handle.write(json.dumps(record.to_dict(), ensure_ascii=False, sort_keys=True))
+        handle.write("\n")
 
 
 def _write_json(path: Path, document: Mapping[str, object]) -> None:
