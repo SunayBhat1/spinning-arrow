@@ -143,7 +143,7 @@ def generate_phase2_report(project_root: Path, run_id: str) -> Phase2Report:
     _validate_complete_run(manifest, records, items)
     item_lookup = {item.id: item for item in items}
     cells = _cell_scores(records, item_lookup)
-    scales = _scale_scores(cells)
+    scales = [*_scale_scores(cells), *_ipip_domain_scores(cells)]
     effects = _effect_scores(cells)
     overview = _model_overview(records, cells, item_lookup, manifest)
     data_directory = root / "data" / "derived" / run_id
@@ -299,6 +299,48 @@ def _scale_scores(cells: Iterable[CellScore]) -> list[ScaleScore]:
             )
         )
     return scores
+
+
+def _ipip_domain_scores(cells: Iterable[CellScore]) -> list[ScaleScore]:
+    """Roll the 30 four-item IPIP facets into the five 24-item domain means."""
+
+    grouped: dict[tuple[str, str, str, str], list[CellScore]] = defaultdict(list)
+    for cell in cells:
+        if cell.instrument != "ipip_neo_120":
+            continue
+        parts = cell.scale.split(".")
+        if len(parts) != 3:
+            raise ValueError(f"unexpected IPIP scale identifier: {cell.scale}")
+        grouped[(cell.model_id, parts[1], cell.condition, cell.framing)].append(cell)
+    domains: list[ScaleScore] = []
+    for (model_id, domain, condition, framing), group in sorted(grouped.items()):
+        eligible = [cell for cell in group if cell.score is not None]
+        values = [cell.score for cell in eligible if cell.score is not None]
+        ci_low, ci_high = _bootstrap_ci(values, _seed_for((model_id, domain, condition, framing)))
+        all_records = sum(cell.expected_n for cell in group)
+        domains.append(
+            ScaleScore(
+                model_id=model_id,
+                instrument="ipip_neo_120",
+                scale=f"ipip.{domain}",
+                condition=condition,
+                framing=framing,
+                score_type="value",
+                eligible_items=len(eligible),
+                suppressed_items=len(group) - len(eligible),
+                total_items=len(group),
+                score=_mean(values),
+                ci_low=ci_low,
+                ci_high=ci_high,
+                mean_fragility=_mean(
+                    cell.fragility for cell in eligible if cell.fragility is not None
+                ),
+                mean_coverage=_mean(cell.coverage for cell in group) or 0.0,
+                refusal_rate=(sum(cell.refusal_n for cell in group) / all_records if all_records else 0.0),
+                error_rate=(sum(cell.error_n for cell in group) / all_records if all_records else 0.0),
+            )
+        )
+    return domains
 
 
 def _effect_scores(cells: Iterable[CellScore]) -> list[EffectScore]:

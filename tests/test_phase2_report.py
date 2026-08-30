@@ -2,7 +2,12 @@ from __future__ import annotations
 
 from spinning_arrow.contracts import Outcome, ParsedResponse, ResponseRecord, TokenUsage
 from spinning_arrow.items import Item, Option
-from spinning_arrow.phase2_report import SUPPRESSION_THRESHOLD, _bootstrap_ci, _cell_scores
+from spinning_arrow.phase2_report import (
+    SUPPRESSION_THRESHOLD,
+    _bootstrap_ci,
+    _cell_scores,
+    _ipip_domain_scores,
+)
 
 
 def _record(permutation: int, outcome: Outcome, choice: str | None) -> ResponseRecord:
@@ -62,3 +67,21 @@ def test_bootstrap_interval_is_deterministic() -> None:
     assert first == second
     assert first[0] is not None and first[1] is not None
     assert first[0] <= 2.5 <= first[1]
+
+
+def test_ipip_domain_scores_roll_up_facet_cells() -> None:
+    item = Item(
+        id="item",
+        instrument="ipip_neo_120",
+        scale="ipip.openness.imagination",
+        text="text",
+        options=(Option("A", "Low", 1), Option("B", "High", 5)),
+    )
+    records = [_record(index, Outcome.ANSWERED, "B") for index in range(5)]
+    cells = _cell_scores(records, {"item": item})
+
+    domain = _ipip_domain_scores(cells)[0]
+
+    assert domain.scale == "ipip.openness"
+    assert domain.score == 5
+    assert domain.total_items == 1
