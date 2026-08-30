@@ -1,0 +1,15 @@
+{
+  "name": "spinning-arrow-site",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "prepare-data": "node scripts/prepare-data.mjs",
+    "dev": "npm run prepare-data && astro dev",
+    "build": "npm run prepare-data && astro build",
+    "preview": "astro preview"
+  },
+  "devDependencies": {
+    "astro": "^7.2.9"
+  }
+}

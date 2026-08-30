@@ -90,10 +90,17 @@ agreement from directional concordance because reference accuracy is not an acti
 
 **Planned:** Astro static site, themed SVG plots, methodology page, GitHub Pages deploy.
 **Gate 4 deliverable:** deployed preview URL + `reports/04_site.md`. Domain decided here.
-**Status:** not started
-**Note:** GitHub Pages on a dedicated subdomain of Sunay's Squarespace-managed personal domain is
-technically feasible. The optional human comparison is a Phase 4 local-only feature: browser-side
-scoring of a short licensed subset with no answer collection or diagnostic claim.
+**Status:** in progress — local preview ready for review
+**Shipped:** The first mobile-first Astro preview is in `site/`. It reads committed Phase 2 and 3
+evidence at build time, offers model and scale drill-downs, and exposes one fixed, documented raw
+answer per model/question/condition rather than loading the entire raw archive on a phone. The
+short human profile form is included in Version 1: it runs only in the visitor's browser, stores
+and transmits no answers, and makes no diagnostic or moral-quality claim. The visual direction is
+deliberately minimal: warm paper, moss, clay, restrained metrics, and progressively disclosed
+methodology. `.github/workflows/deploy-site.yml` is ready for a public GitHub Pages project
+site after review; it is not yet deployed or connected to DNS.
+**Open:** Sunay’s preview/design review; then enable GitHub Actions Pages, deploy the preview, and
+add the `spinning-arrow.sunaybhat.me` domain and verification records in Squarespace/GitHub.
 
 ## Phase 5 — Launch
 

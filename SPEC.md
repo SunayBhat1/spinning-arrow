@@ -436,7 +436,7 @@ design requires a new forecast and Sunay approval.
   site's apex remains on Squarespace. At Gate 4, configure the GitHub Pages custom domain first,
   then its corresponding Squarespace DNS record, retain domain verification, and enforce HTTPS.
   Do not use wildcard DNS records.
-- Optional **human response-profile comparison**: a visitor may take a short, licensed subset and
+- **Human response-profile comparison**: a visitor may take a short, licensed subset and
   see where their answers sit relative to the published model response profiles. Version 1 must
   score entirely in the browser, collect or transmit no answers, and make no diagnostic, moral-
   quality, or identity claim. It must say that the comparison is prompt- and instrument-specific.

@@ -1,0 +1,38 @@
+---
+import Base from "../../layouts/Base.astro";
+import data from "../../data/generated.json";
+
+export function getStaticPaths() {
+  return Object.keys(data.scaleInfo).map((scale) => ({
+    params: { slug: scale.replaceAll(".", "-") },
+    props: { scale },
+  }));
+}
+
+const { scale } = Astro.props;
+const info = data.scaleInfo[scale];
+const base = import.meta.env.BASE_URL;
+const scores = data.models.map((model) => ({ model, score: model.scores.find((entry) => entry.scale === scale) })).filter((entry) => entry.score);
+const questions = data.items.filter((item) => item.scale === scale);
+---
+
+<Base title={`${info.label} — Spinning Arrow`}>
+  <section>
+    <a class="back" href={`${base}models`}>← All models</a>
+    <p class="eyebrow" style="margin-top:30px">A questionnaire lens</p>
+    <h1>{info.label}</h1>
+    <p class="lede">{info.plain}</p>
+    <p class="quiet-box">A score is the model’s average answer to the questions in this lens, on a 1–5 response scale. It is not a universal measure of character or safety.</p>
+  </section>
+  <section class="section">
+    <div class="panel">
+      {scores.map(({ model, score }) => <a class="model-row" href={`${base}models/${model.slug}`}><span class="model-name">{model.label}</span><span class="bar-area"><span class="bar"><i style={`width:${score.score * 20}%`}></i></span></span><span class="small">{Number(score.score).toFixed(2)} / 5</span><span class="arrow">→</span></a>)}
+    </div>
+  </section>
+  <section class="section">
+    <p class="eyebrow">The questions behind the score</p><h2>Question-level evidence</h2>
+    <div class="panel" style="margin-top:24px">
+      {questions.map((question) => <details><summary>{question.text}</summary><p>Open a recorded answer directly. The destination shows the exact prompt, raw output, and mapped option.</p><div class="action-row">{data.models.map((model) => <a class="button ghost" href={`${base}models/${model.slug}?item=${question.id}#evidence`}>{model.label} →</a>)}</div></details>)}
+    </div>
+  </section>
+</Base>

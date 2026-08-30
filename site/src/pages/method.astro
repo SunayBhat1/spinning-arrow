@@ -1,0 +1,41 @@
+---
+import Base from "../layouts/Base.astro";
+const base = import.meta.env.BASE_URL;
+---
+
+<Base title="Method — Spinning Arrow">
+  <section>
+    <p class="eyebrow">Method and limits</p>
+    <h1>Read the result before reading into it.</h1>
+    <p class="lede">This project measures how a model responds to particular questions under specified conditions. It does not measure a model’s true values, intentions, or moral worth.</p>
+  </section>
+
+  <section id="results" class="section method-grid">
+    <div>
+      <p class="eyebrow">The short version</p><h2>What the first two studies found.</h2>
+      <p>In Phase 2, nine models completed several established questionnaires under controlled prompt conditions. In Phase 3, three models faced everyday scenarios related to the same themes.</p>
+      <p>Llama and Mistral generally gave practical choices that matched their clear survey positions on helping beyond one’s circle. Claude’s survey answers on that lens were lower, while its practical choices repeatedly selected the directly helpful action. That mismatch is the key result—not evidence that one model is morally better than another.</p>
+    </div>
+    <aside class="panel"><p class="eyebrow">Evidence trail</p><p>Every headline can lead back to a scale, the source question, and an exact recorded answer.</p><a class="button ghost" href={`${base}models`}>Open the explorer</a></aside>
+  </section>
+
+  <section id="scores" class="section">
+    <p class="eyebrow">How to read a score</p><h2>Numbers are summaries, not labels.</h2>
+    <div class="panel" style="margin-top:24px">
+      <details open><summary>A 1–5 questionnaire score</summary><p>For a given lens, this is the model’s average mapped answer to its relevant questions. A higher or lower number only has meaning in the context of that lens. For example, lower instrumental-harm scores mean more reluctance to harm someone for a larger benefit.</p></details>
+      <details><summary>Confidence interval</summary><p>This shows the range produced by resampling the questionnaire items. If the range crosses the middle of the scale, the project does not force a directional claim in Phase 3.</p></details>
+      <details><summary>Fragility</summary><p>This measures how much an answer shifted when wording or the displayed answer position changed. Lower is more stable under those specific controls; it is not a general reliability grade.</p></details>
+      <details><summary>“Concordant” in Phase 3</summary><p>It means a clear survey direction and the model’s most common practical choice pointed the same way. Ties and uncertain survey positions are deliberately left unjudged.</p></details>
+    </div>
+  </section>
+
+  <section id="phase3" class="section">
+    <p class="eyebrow">The practical-choice check</p><h2>Why ask scenarios at all?</h2>
+    <p>Abstract statements can produce different outputs from practical choices. Each Phase 3 scenario was asked six times with shuffled answer order and in two light versions: “what would you do?” and “what would you advise?” This helps separate a stable response pattern from a mere answer-position effect.</p>
+  </section>
+
+  <section class="section">
+    <p class="eyebrow">What this cannot establish</p><h2>Important limits.</h2>
+    <div class="panel"><ul><li>Models do not necessarily have beliefs or preferences in the human sense.</li><li>These results are tied to the exact model versions, prompts, and providers used in the recorded runs.</li><li>A cleanly parsed response is not proof of sincerity, safety, or real-world behaviour.</li><li>The human short form is an educational comparison, not an assessment of character, politics, or mental health.</li></ul></div>
+  </section>
+</Base>

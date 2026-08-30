@@ -1,0 +1,57 @@
+---
+import Base from "../layouts/Base.astro";
+import data from "../data/generated.json";
+---
+
+<Base title="Your response profile — Spinning Arrow">
+  <section>
+    <p class="eyebrow">A private short form</p>
+    <h1>Where does your response pattern sit?</h1>
+    <p class="lede">Answer ten research questions. Your answers are scored only in this browser and compared with the published model response profiles.</p>
+    <p class="quiet-box">This is not a personality test, moral assessment, diagnosis, or identity label. It uses a short subset, so “closest” means only that the numeric answers are most similar on these ten prompts.</p>
+  </section>
+
+  <section class="section panel">
+    <form id="profile-form">
+      {data.humanQuestions.map((question, index) => <fieldset class="question">
+        <legend>{index + 1}. {question.text}</legend>
+        <p class="scale-caption">{data.scaleInfo[question.scale]?.label ?? question.scale}</p>
+        <div class="options">
+          {question.options.map((option) => <label class="option"><input type="radio" name={question.id} value={option.value} required /><span>{option.label}</span></label>)}
+        </div>
+      </fieldset>)}
+      <div class="action-row"><button class="button" type="submit">See my comparison</button><button class="button ghost" type="reset">Clear answers</button></div>
+    </form>
+    <div id="profile-result" class="result" aria-live="polite"></div>
+  </section>
+</Base>
+
+<script define:vars={{ questions: data.humanQuestions, models: data.models }}>
+  const form = document.querySelector("#profile-form");
+  const result = document.querySelector("#profile-result");
+  const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[character]);
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const answersByScale = {};
+    for (const question of questions) {
+      const selected = new FormData(form).get(question.id);
+      if (!selected) return;
+      (answersByScale[question.scale] ??= []).push(Number(selected));
+    }
+    const human = Object.fromEntries(Object.entries(answersByScale).map(([scale, values]) => [scale, values.reduce((total, value) => total + value, 0) / values.length]));
+    const ranked = models.map((model) => {
+      const shared = Object.keys(human).filter((scale) => model.scores.some((score) => score.scale === scale));
+      const distance = Math.sqrt(shared.reduce((total, scale) => {
+        const modelScore = model.scores.find((score) => score.scale === scale).score;
+        return total + (human[scale] - modelScore) ** 2;
+      }, 0) / shared.length);
+      return { label: model.label, distance };
+    }).sort((left, right) => left.distance - right.distance);
+    const top = ranked.slice(0, 3);
+    result.classList.add("show");
+    result.innerHTML = `<p class="eyebrow">Your local comparison</p><h2>Closest short-form pattern: ${escapeHtml(top[0].label)}</h2><p>This means its published answers were numerically nearest to yours on these ten prompts. It does not mean you share its beliefs, identity, or behaviour.</p><ol>${top.map((entry) => `<li><strong>${escapeHtml(entry.label)}</strong> <span class="small">response-pattern distance ${entry.distance.toFixed(2)} / 4</span></li>`).join("")}</ol><p class="small">Nothing was saved or sent. Refreshing or clearing this form removes the result.</p>`;
+    result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+  form.addEventListener("reset", () => result.classList.remove("show"));
+</script>
