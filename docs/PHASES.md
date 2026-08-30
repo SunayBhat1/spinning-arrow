@@ -74,7 +74,7 @@ because their current mandatory-reasoning configuration cannot carry into the D5
 **Planned:** ~30 paired behavioral scenarios; stated-vs-revealed gap.
 **Gate 3a:** `reports/03a_scenarios.md` (approved scenario slate)
 **Gate 3b:** `reports/03b_gap.md`
-**Status:** complete 2026-08-30
+**Status:** approved and complete 2026-08-30
 **Shipped:** Gate 3a's approved 30 scenarios and their versioned scoring contract are committed in
 `instruments/phase3_scenarios.yaml` and `instruments/phase3_contract.json`. Gate 3b run
 `20260830T230045Z__phase3__74142b` completed its planned 1,080 calls (360 per model) across
@@ -161,6 +161,9 @@ repo. ETHICS confirmed MIT. OEJTS excluded from the item bank on license grounds
   run `20260830T230045Z__phase3__74142b` completed 1,080 calls at `$0.12358666`, with 100% clean
   parsing and zero reasoning tokens. Gate 3b results are in `reports/03b_gap.md` and
   `reports/03b_gap.html`; Phase 4 may begin.
+
+- **2026-08-30 — Gate 3b approved.** Sunay reviewed the completed Phase 3 evidence bundle and
+  accepted the results. Phase 3 is formally closed; Phase 4 is authorized to begin when requested.
 
 - **2026-08-30 — Phase 4 deployment and human-comparison direction.** The preferred live-site
   arrangement is a GitHub Pages subdomain beneath Sunay's Squarespace-managed personal domain.
