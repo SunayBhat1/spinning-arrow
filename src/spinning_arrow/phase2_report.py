@@ -498,6 +498,9 @@ def _markdown_report(
     )
     effect_rows = _effect_table(effects)
     fragility_rows = _fragility_table(scales)
+    outcome_rows = _outcome_by_instrument_table(records, manifest.model_ids)
+    suppression_rows = _suppression_table(scales)
+    ggb_check = _ggb_replication_note(scales, manifest.model_ids)
     raw_path = f"data/raw/{manifest.run_id}/"
     manifest_path = f"data/manifests/{manifest.run_id}.json"
     derived_path = data_directory.relative_to(root)
@@ -527,6 +530,10 @@ def _markdown_report(
             "",
             *quality_rows,
             "",
+            "### Refusals and errors by instrument",
+            "",
+            *outcome_rows,
+            "",
             "## Fragility (bare, first-person)",
             "",
             "Fragility is the within-item SD across both framings and five option permutations, "
@@ -534,11 +541,20 @@ def _markdown_report(
             "",
             *fragility_rows,
             "",
+            "## Suppression list",
+            "",
+            "Any listed score has at least one item/condition/framing cell below 70% valid coverage "
+            "and is excluded from that aggregate. Unlisted aggregates had no suppressed item cells.",
+            "",
+            *suppression_rows,
+            "",
             "## GGB validation (bare, first-person)",
             "",
             "Higher impartial-beneficence agreement and lower instrumental-harm agreement are the "
             "pre-specified directional sanity check. Values are 1–5 agreement means with 95% bootstrap "
             "intervals; they are descriptive model outputs, not evidence of moral competence.",
+            "",
+            ggb_check,
             "",
             *ggb_rows,
             "",
@@ -889,6 +905,67 @@ def _fragility_table(scales: Sequence[ScaleScore]) -> list[str]:
             f"{sum(score.total_items for score in group)} |"
         )
     return lines
+
+
+def _suppression_table(scales: Sequence[ScaleScore]) -> list[str]:
+    suppressed = [score for score in scales if score.suppressed_items]
+    if not suppressed:
+        return ["No score aggregates had suppressed item cells."]
+    lines = [
+        "| Model | Instrument | Scale | Condition | Framing | Suppressed / total | Mean coverage |",
+        "|---|---|---|---|---|---:|---:|",
+    ]
+    for score in suppressed:
+        lines.append(
+            f"| {score.model_id} | {score.instrument} | {score.scale} | {score.condition} | "
+            f"{score.framing} | {score.suppressed_items} / {score.total_items} | "
+            f"{score.mean_coverage:.1%} |"
+        )
+    return lines
+
+
+def _outcome_by_instrument_table(
+    records: Sequence[ResponseRecord], models: Sequence[str]
+) -> list[str]:
+    grouped: dict[tuple[str, str], list[ResponseRecord]] = defaultdict(list)
+    for record in records:
+        grouped[(record.model_id, record.instrument)].append(record)
+    lines = [
+        "| Model | Instrument | Calls | Parse | Refusal | Error |",
+        "|---|---|---:|---:|---:|---:|",
+    ]
+    for model in models:
+        for instrument in sorted({key[1] for key in grouped if key[0] == model}):
+            group = grouped[(model, instrument)]
+            total = len(group)
+            lines.append(
+                f"| {model} | {instrument} | {total} | "
+                f"{sum(record.outcome is Outcome.ANSWERED for record in group) / total:.1%} | "
+                f"{sum(record.outcome is Outcome.REFUSED for record in group) / total:.1%} | "
+                f"{sum(record.outcome is Outcome.ERROR for record in group) / total:.1%} |"
+            )
+    return lines
+
+
+def _ggb_replication_note(scales: Sequence[ScaleScore], models: Sequence[str]) -> str:
+    lookup = _scale_lookup(scales, condition="bare", framing="first_person")
+    reproduced: list[str] = []
+    nonconforming: list[str] = []
+    for model in models:
+        ib = lookup.get((model, "ggb.impartial_beneficence"))
+        ih = lookup.get((model, "ggb.instrumental_harm"))
+        if ib is None or ih is None or ib.score is None or ih.score is None:
+            nonconforming.append(f"{model} (suppressed)")
+        elif ib.score > 3 and ih.score < 3:
+            reproduced.append(model)
+        else:
+            nonconforming.append(model)
+    return (
+        "Directional flag uses the neutral midpoint: impartial beneficence > 3 and instrumental "
+        "harm < 3. Reproduced: "
+        f"{', '.join(reproduced) if reproduced else 'none'}. "
+        f"Not reproduced / suppressed: {', '.join(nonconforming) if nonconforming else 'none'}."
+    )
 
 
 def _effect_table(effects: Sequence[EffectScore]) -> list[str]:
