@@ -40,12 +40,28 @@ uses recorded 64- and 512-token exception-model ceilings and records usage even 
 
 ## Phase 2 — Full battery and scoring
 
-**Planned:** ~300-item bank, scoring + fragility + CIs, GGB replication check on 3 models.
+**Planned:** ~300-item bank, scoring + fragility + CIs, GGB replication check on a nine-model
+coverage panel.
 **Gate 2 deliverable:** `reports/02_scoring.md`
 **Status:** planning
-**Open:** Select the final three strict-D5 models from the Gate 1 candidate subset and implement the
-full-battery/scoring path. GPT-OSS and Gemini are excluded because their pilot-only mandatory-
-reasoning exception cannot carry into the D5 main battery.
+**Panel selected 2026-08-30; live reverify immediately before execution:**
+
+| Coverage | Pinned OpenRouter ID | D5 handling |
+|---|---|---|
+| OpenAI | `openai/gpt-5.4-mini` | `reasoning: {"enabled": false}` |
+| Google | `google/gemini-2.5-flash-lite` | `reasoning: {"enabled": false}` |
+| Anthropic | `anthropic/claude-sonnet-5` | `reasoning: {"enabled": false}`; omit unsupported sampling fields |
+| xAI | `x-ai/grok-4.20` | `reasoning: {"enabled": false}` |
+| Meta | `meta-llama/llama-3.3-70b-instruct` | omit unsupported `reasoning` field |
+| Mistral | `mistralai/mistral-medium-3.1` | omit unsupported `reasoning` field |
+| Alibaba | `qwen/qwen3.8-27b` | `reasoning: {"enabled": false}` |
+| DeepSeek | `deepseek/deepseek-v4-pro-0813` | `reasoning: {"enabled": false}` |
+| Z.ai | `z-ai/glm-5.2` | `reasoning: {"enabled": false}` |
+
+**Open:** Build the full item bank and scoring path, then reforecast from the final prompt and
+item counts. The provisional Phase 2 estimate is `$18`, inside the `$30` monthly ceiling. GPT-OSS,
+Gemini 3.5 Flash Lite, GLM 5.3, and Grok 4.6 are excluded because their current mandatory-
+reasoning configuration cannot carry into the D5 main battery.
 
 ## Phase 3 — Revealed preference
 
@@ -103,3 +119,9 @@ repo. ETHICS confirmed MIT. OEJTS excluded from the item bank on license grounds
   select only from the four strict-D5 candidates: Mistral Medium 3.1, Qwen 3.8 27B, Llama 3.3 70B
   Instruct, and Claude Sonnet 5. GPT-OSS 120B and Gemini 3.5 Flash Lite remain pilot-only
   mandatory-reasoning exceptions and are excluded from the main battery.
+
+- **2026-08-30 — Phase 2 panel expanded.** Sunay selected a nine-model full-battery coverage
+  panel: OpenAI, Google, Anthropic, xAI, Meta, Mistral, Qwen, DeepSeek, and Z.ai. This supersedes
+  the original three-model Phase 2 scope. Live OpenRouter metadata confirms the recorded IDs can
+  run with reasoning disabled (or omit an unsupported reasoning parameter); GLM 5.3 and the newest
+  Gemini and Grok flagships are excluded because reasoning is mandatory.

@@ -379,7 +379,9 @@ the real go/no-go for the project.
 - Assemble the full ~300-item bank with per-item provenance; write `instruments/LICENSES.md`.
 - Implement scoring, reverse-keying, fragility, bootstrap CIs, suppression rule.
 - Add the `evaluator` condition (D11) and attention checks.
-- Run the full battery on **three** models only.
+- Run the full battery on **nine** models: the four major closed-model providers, Meta, Mistral,
+  and the Qwen, DeepSeek, and GLM Chinese-model cohort. This Phase 2 expansion was approved at
+  Gate 1 on 2026-08-30; each model must still meet D5 at live preflight.
 
 **External validity check — this is the point of the phase.** Compare results against published
 findings. Specifically, GGB reports that most LLMs show marked preference for *impartial
@@ -389,7 +391,7 @@ Big Five scores against published human norms; wildly off-scale values usually m
 reverse-keying error.
 
 **Gate 2 — deliverable `reports/02_scoring.md`**
-Scored output for three models, the GGB replication check, the norm comparison, refusal and
+Scored output for nine models, the GGB replication check, the norm comparison, refusal and
 fragility tables, and the suppression list. Sunay reviews whether the numbers are believable.
 
 ---
@@ -467,7 +469,7 @@ Per-model sweep at 300 items × 5 permutations × 2 framings × 2 conditions = 6
 |---|---|---|
 | 0 | smoke calls | < $0.01 |
 | 1 | pilot, 6 models × 400 calls | **< $1** |
-| 2 | full battery × 3 models | ~$6 |
+| 2 | full battery × 9 models | ~$18 provisional; reforecast before execution |
 | 3 | scenarios × 3 models | ~$3 |
 | 5 | full launch sweep, 12 models | ~$10 |
 | — | steady state: new-model sweeps + monthly drift | **~$4/month** |
