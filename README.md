@@ -9,9 +9,10 @@ Evaluations for Values and Opinions in Large Language Models* (ACL 2024).
 
 ## Status
 
-Phases 0 and 1 are approved. The repository is now planning Phase 2's strict-D5 full battery and
-scoring path; see [reports/01_pilot.md](reports/01_pilot.md) and
-[docs/PHASES.md](docs/PHASES.md). No questionnaire scores are produced yet.
+Phases 0 and 1 are approved, and the strict-D5 Phase 2 battery and scoring are complete. The
+nine-model run made 56,700 calls at a recorded cost of `$5.378043`, with zero reasoning tokens.
+Review the [visual dashboard](reports/02_scoring.html), [written scoring report](reports/02_scoring.md),
+and [phase state](docs/PHASES.md). Gate 2 remains pending user review; Phase 3 has not started.
 
 ## Local setup
 
@@ -42,6 +43,14 @@ reasoning and records that exception in its manifest. Main-battery calls continu
 The Phase 1 pilot can be reproduced with `make pilot`; it enforces its recorded `$2` cap and
 writes raw records as each call completes. Generate its Gate 1 report with
 `RUN_ID=<run_id> make pilot-report`.
+
+The completed Phase 2 main battery can be reproduced with `make phase2`; it performs a live
+preflight, enforces its run guards, and records every response as it completes. Generate the
+scoring report with:
+
+```sh
+RUN_ID=20260830T155412Z__phase2__8fbf10 make phase2-report
+```
 
 ## Reproducibility and licenses
 

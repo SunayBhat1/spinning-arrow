@@ -4,8 +4,8 @@ The single place where current state is tracked. [SPEC.md](../SPEC.md) is the co
 not change as work progresses; this file does. Update it at every phase close, and at any gate
 that returns a decision.
 
-**Current phase: 2 — full battery and scoring planning.**
-**Blocking on:** selection of the strict-D5 Phase 2 panel and implementation of the scoring path.
+**Current phase: 2 — Gate 2 review.**
+**Blocking on:** Sunay's review of the completed Phase 2 evidence bundle.
 
 ---
 
@@ -43,8 +43,8 @@ uses recorded 64- and 512-token exception-model ceilings and records usage even 
 **Planned:** ~300-item bank, scoring + fragility + CIs, GGB replication check on a nine-model
 coverage panel.
 **Gate 2 deliverable:** `reports/02_scoring.md`
-**Status:** planning
-**Panel selected 2026-08-30; live reverify immediately before execution:**
+**Status:** complete; Gate 2 pending review
+**Panel selected and live-reverified 2026-08-30:**
 
 | Coverage | Pinned OpenRouter ID | D5 handling |
 |---|---|---|
@@ -58,10 +58,16 @@ coverage panel.
 | DeepSeek | `deepseek/deepseek-v4-pro-0813` | `reasoning: {"enabled": false}` |
 | Z.ai | `z-ai/glm-5.2` | `reasoning: {"enabled": false}` |
 
-**Open:** Build the full item bank and scoring path, then reforecast from the final prompt and
-item counts. The provisional Phase 2 estimate is `$18`, inside the `$30` monthly ceiling. GPT-OSS,
-Gemini 3.5 Flash Lite, GLM 5.3, and Grok 4.6 are excluded because their current mandatory-
-reasoning configuration cannot carry into the D5 main battery.
+**Shipped:** Run `20260830T155412Z__phase2__8fbf10` completed all 56,700 planned calls (6,300 per
+model) across the nine-model panel. The live preflight forecast was `$15.577002` against a `$20`
+forecast guardrail and `$25` hard run cap; raw OpenRouter-recorded cost was `$5.37804276152`.
+The main battery recorded zero reasoning tokens. The reproducible evidence bundle includes the
+raw JSONL, run manifest, derived score tables, [written scoring report](../reports/02_scoring.md),
+and self-contained [visual dashboard](../reports/02_scoring.html). Scores with under 70% valid
+cell coverage are suppressed; 896 responses are retained as unparseable and 9 as refusals rather
+than silently scored. GPT-OSS, Gemini 3.5 Flash Lite, GLM 5.3, and Grok 4.6 remain excluded
+because their current mandatory-reasoning configuration cannot carry into the D5 main battery.
+**Open:** Gate 2 review only. Do not start Phase 3 without a user decision.
 
 ## Phase 3 — Revealed preference
 
@@ -125,3 +131,8 @@ repo. ETHICS confirmed MIT. OEJTS excluded from the item bank on license grounds
   the original three-model Phase 2 scope. Live OpenRouter metadata confirms the recorded IDs can
   run with reasoning disabled (or omit an unsupported reasoning parameter); GLM 5.3 and the newest
   Gemini and Grok flagships are excluded because reasoning is mandatory.
+
+- **2026-08-30 — Phase 2 collected; Gate 2 pending.** The strict-D5 main battery completed as
+  run `20260830T155412Z__phase2__8fbf10`: 56,700 calls, 6,300 per model, `$5.37804276152` in raw
+  OpenRouter-recorded cost, and zero reasoning tokens. The report and visual dashboard are ready
+  for review; this records no Gate 2 decision and does not authorize Phase 3.
