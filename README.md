@@ -9,8 +9,9 @@ Evaluations for Values and Opinions in Large Language Models* (ACL 2024).
 
 ## Status
 
-Phase 0 is being prepared. The repository currently provides the OpenRouter client, data
-contracts, and a narrowly scoped smoke call. No questionnaire scores are produced yet.
+Phase 0 is approved and Phase 1's 2,400-call pilot is complete. The repository currently awaits
+Sunay's Gate 1 decision; see [reports/01_pilot.md](reports/01_pilot.md) and
+[docs/PHASES.md](docs/PHASES.md). No questionnaire scores are produced yet.
 
 ## Local setup
 
@@ -37,6 +38,10 @@ The smoke call is unscored and is not a main-battery request. As of 2026-08-29,
 `openai/gpt-oss-120b` requires reasoning on OpenRouter, so this one format check uses low-effort
 reasoning and records that exception in its manifest. Main-battery calls continue to require
 `reasoning: {"enabled": false}`.
+
+The Phase 1 pilot can be reproduced with `make pilot`; it enforces its recorded `$2` cap and
+writes raw records as each call completes. Generate its Gate 1 report with
+`RUN_ID=<run_id> make pilot-report`.
 
 ## Reproducibility and licenses
 

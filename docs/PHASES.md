@@ -4,9 +4,8 @@ The single place where current state is tracked. [SPEC.md](../SPEC.md) is the co
 not change as work progresses; this file does. Update it at every phase close, and at any gate
 that returns a decision.
 
-**Current phase: 1 — pilot probe in progress.**
-**Blocking on:** implementation and execution of the six-model pilot, then Sunay’s Gate 1
-go/no-go decision.
+**Current phase: 1 — Gate 1 review.**
+**Blocking on:** Sunay’s Gate 1 go/no-go decision, recorded against `reports/01_pilot.md`.
 
 ---
 
