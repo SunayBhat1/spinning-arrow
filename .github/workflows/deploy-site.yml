@@ -35,8 +35,8 @@ jobs:
       - name: Build static site
         working-directory: site
         env:
-          PUBLIC_BASE_PATH: /spinning-arrow
-          PUBLIC_SITE_URL: https://sunaybhat1.github.io/spinning-arrow
+          PUBLIC_BASE_PATH: /
+          PUBLIC_SITE_URL: https://spinning-arrow.sunaybhat.me
         run: npm run build
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v3
