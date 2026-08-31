@@ -52,7 +52,8 @@ files above remain unchanged so their approved manifest continues to identify it
 - **Instrument:** 24 statements selected without replacement (12 Impartial Beneficence, 12
   Instrumental Harm) from the public Greatest Good Benchmark data, using the committed seed.
 - **Source of record:** https://github.com/noehsueh/greatest-good-benchmark/blob/main/data/GreatestGoodBenchmark.json
-- **Citation:** https://arxiv.org/abs/2505.18836
+- **Citation:** Marraffini et al. (2024), *The Greatest Good Benchmark: Measuring LLMs’ Alignment
+  with Utilitarian Moral Dilemmas*, EMNLP 2024. https://aclanthology.org/2024.emnlp-main.1224/
 - **License:** MIT, per the source repository.
 
 ### ETHICS test splits

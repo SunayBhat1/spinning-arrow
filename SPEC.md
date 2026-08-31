@@ -425,8 +425,14 @@ design requires a new forecast and Sunay approval.
 ### Phase 4 — Site
 
 - Astro static site reading committed Parquet/CSV at build time.
-- Views: panel leaderboard, per-model page, per-scale comparison, timeline, methodology page,
-  and a "see the raw responses" link on **every** number.
+- Two primary evidence routes: a model-first dossier (scores, practical choices, then exact
+  recorded answers) and a metric-first comparison (all models on one defined axis, then source
+  question and answer). Every summary view must link to its underlying evidence.
+- A pattern explorer may show metric-to-metric plots and item-level model-profile similarity. It
+  must label correlations as exploratory and descriptive. Lab, model-size, architecture,
+  release-date, or training-cutoff comparisons remain readiness views until there are multiple
+  comparable models per group and consistently disclosed metadata across both open and closed
+  providers.
 - Plots as themed SVG from matplotlib (D12). Error bars are visually prominent — they are the
   argument, not decoration.
 - `METHODOLOGY.md` written in plain language, including a frank limitations section that states
@@ -436,12 +442,18 @@ design requires a new forecast and Sunay approval.
   site's apex remains on Squarespace. At Gate 4, configure the GitHub Pages custom domain first,
   then its corresponding Squarespace DNS record, retain domain verification, and enforce HTTPS.
   Do not use wildcard DNS records.
-- Optional **human response-profile comparison**: a visitor may take a short, licensed subset and
-  see where their answers sit relative to the published model response profiles. Version 1 must
-  score entirely in the browser, collect or transmit no answers, and make no diagnostic, moral-
-  quality, or identity claim. It must say that the comparison is prompt- and instrument-specific.
-  Any later account, analytics, result-sharing, or server-side collection feature requires a
-  separate consent, privacy, retention, and security design before implementation.
+- **Human response-profile comparison**: a visitor may choose either a concise ten-question or a
+  detailed 25–50-question licensed subset and see where their answers sit relative to the published
+  model answers to those same individual prompts. Version 1 must score entirely in the browser,
+  collect or transmit no answers, and make no diagnostic, moral-quality, or identity claim. It must
+  show each question's provenance and say that the comparison is prompt- and instrument-specific.
+  Each result must show the five closest response patterns, a visual all-model similarity panel,
+  and, on choosing any model, the complete same-question human/model comparison with a link to
+  fixed recorded model output for every row.
+  Applied technology scenarios (for example, privacy versus security) may only enter the comparison
+  after a sourced bank and a corresponding run across every displayed model are committed. Any later
+  account, analytics, result-sharing, or server-side collection feature requires a separate consent,
+  privacy, retention, and security design before implementation.
 
 **Gate 4 — deliverable: a deployed preview URL** plus `reports/04_site.md` noting anything
 unresolved. Sunay reviews design and copy. Domain decision happens here.

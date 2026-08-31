@@ -1,0 +1,154 @@
+---
+import Base from "../layouts/Base.astro";
+import data from "../data/generated.json";
+
+const questionSets = data.questionSets;
+const base = import.meta.env.BASE_URL;
+---
+
+<Base title="Your response profile — Spinning Arrow">
+  <section>
+    <p class="eyebrow">A private reflection</p>
+    <h1>Explore a response pattern, not a label.</h1>
+    <p class="lede">Choose a short reflection or take more time with everyday cases. Your answers stay in this browser and are compared only with what the models answered to the same questions.</p>
+    <p class="quiet-box">This is not a personality test, moral grade, diagnosis, or identity claim. “Closest” means the numerical responses were nearest on this particular set of prompts.</p>
+  </section>
+
+  <section class="section profile-intro">
+    <p class="eyebrow">Choose your pace</p>
+    <div class="mode-switch" role="group" aria-label="Questionnaire length">
+      {Object.entries(questionSets).map(([key, set]) => <button class:list={["mode-picker", { selected: key === "quick" }]} type="button" data-mode-picker={key} aria-pressed={key === "quick" ? "true" : "false"}>
+        <strong>{set.label}</strong><span>{set.duration} · {set.questions.length} questions</span>
+      </button>)}
+    </div>
+    <p class="note" id="mode-description">{questionSets.quick.plain}</p>
+  </section>
+
+  <section class="section panel questionnaire-shell">
+    {Object.entries(questionSets).map(([key, set]) => <section class="questionnaire-mode" data-mode-panel={key} hidden={key !== "quick"}>
+      <div class="questionnaire-head">
+        <div><p class="eyebrow">{set.label}</p><h2>{set.questions.length} questions, {set.duration}.</h2></div>
+        <p class="small" data-progress={key}>0 / {set.questions.length} answered</p>
+      </div>
+      <p class="note">{set.plain}</p>
+      <form class="profile-form" data-question-set={key} data-question-count={set.questions.length}>
+        {set.questions.map((question, index) => <fieldset class="question">
+          <legend>{index + 1}. {question.text}</legend>
+          <p class="scale-caption">{question.source.label} · {question.scale.replaceAll(".", " · ")}</p>
+          <details class="question-source">
+            <summary>About this question</summary>
+            <p>{question.source.plain}</p>
+            <p class="small">Source item: <code>{question.id}</code> · The benchmark is a lens for comparison, not a correct-answer test.</p>
+          </details>
+          <div class="options">
+            {question.options.map((option) => <label class="option"><input type="radio" name={question.id} value={option.value} required /><span>{option.label}</span></label>)}
+          </div>
+        </fieldset>)}
+        <div class="action-row"><button class="button" type="submit">See my comparison</button><button class="button ghost" type="reset">Clear answers</button></div>
+      </form>
+      <div class="result" data-profile-result={key} aria-live="polite"></div>
+    </section>)}
+  </section>
+
+  <section class="section method-grid">
+    <div>
+      <p class="eyebrow">What is included</p><h2>Question sources stay visible.</h2>
+      <p>The fast route uses concise published statements. The detailed route adds five longer everyday cases from ETHICS, in the familiar AITA (“Am I the A**hole?”) style, where reasonable people can weigh autonomy, fairness, safety, authority, and care differently.</p>
+    </div>
+    <aside class="panel"><p class="eyebrow">Applied technology is next</p><p class="small">The completed nine-model dataset does not contain privacy-versus-security or other technology dilemmas. They are intentionally not faked into this comparison. A future applied set needs a public source, review, and a fresh run across every displayed model.</p></aside>
+  </section>
+</Base>
+
+<script define:vars={{ questionSets, models: data.models, base }}>
+  const modeDescriptions = Object.fromEntries(Object.entries(questionSets).map(([key, set]) => [key, set.plain]));
+  const modeButtons = document.querySelectorAll("[data-mode-picker]");
+  const modePanels = document.querySelectorAll("[data-mode-panel]");
+  const description = document.querySelector("#mode-description");
+
+  function chooseMode(mode) {
+    for (const button of modeButtons) {
+      const selected = button.dataset.modePicker === mode;
+      button.classList.toggle("selected", selected);
+      button.setAttribute("aria-pressed", String(selected));
+    }
+    for (const panel of modePanels) panel.hidden = panel.dataset.modePanel !== mode;
+    description.textContent = modeDescriptions[mode];
+  }
+
+  for (const button of modeButtons) button.addEventListener("click", () => chooseMode(button.dataset.modePicker));
+
+  const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[character]);
+
+  function normalizedValue(question, value) {
+    const values = question.options.map((option) => Number(option.value));
+    const minimum = Math.min(...values);
+    const maximum = Math.max(...values);
+    return maximum === minimum ? 0 : (Number(value) - minimum) / (maximum - minimum);
+  }
+
+  for (const form of document.querySelectorAll(".profile-form")) {
+    const setKey = form.dataset.questionSet;
+    const set = questionSets[setKey];
+    const result = document.querySelector(`[data-profile-result="${setKey}"]`);
+    const progress = document.querySelector(`[data-progress="${setKey}"]`);
+
+    function updateProgress() {
+      const completed = set.questions.filter((question) => new FormData(form).get(question.id)).length;
+      progress.textContent = `${completed} / ${set.questions.length} answered`;
+    }
+
+    form.addEventListener("change", updateProgress);
+    form.addEventListener("reset", () => {
+      result.classList.remove("show");
+      window.setTimeout(updateProgress, 0);
+    });
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const submitted = new FormData(form);
+      const answers = Object.fromEntries(set.questions.map((question) => [question.id, Number(submitted.get(question.id))]));
+      const ranked = models.map((model) => {
+        const matched = set.questions.filter((question) => Number.isFinite(Number(model.itemScores[question.id])));
+        const squaredDifferences = matched.map((question) => {
+          const visitor = normalizedValue(question, answers[question.id]);
+          const modelAnswer = normalizedValue(question, model.itemScores[question.id]);
+          return (visitor - modelAnswer) ** 2;
+        });
+        const distance = Math.sqrt(squaredDifferences.reduce((total, value) => total + value, 0) / squaredDifferences.length);
+        return {
+          label: model.label,
+          slug: model.slug,
+          distance,
+          similarity: Math.max(0, 1 - distance),
+          matched: matched.length,
+        };
+      }).filter((entry) => entry.matched === set.questions.length).sort((left, right) => left.distance - right.distance);
+      const top = ranked.slice(0, 5);
+      result.classList.add("show");
+      result.innerHTML = `<p class="eyebrow">Your local comparison</p><h2>Five closest response patterns</h2><p>This comparison uses the same ${set.questions.length} questions. A higher similarity means your mapped answers were closer on this selected question set. It is not a personality match, diagnosis, or identity label.</p><div class="top-model-grid">${top.map((entry, index) => `<button type="button" class="top-model-choice" data-profile-model="${escapeHtml(entry.slug)}" aria-controls="response-panel-${escapeHtml(setKey)}"><span class="eyebrow">#${index + 1}</span><strong>${escapeHtml(entry.label)}</strong><span>${Math.round(entry.similarity * 100)}% response similarity</span><i aria-hidden="true"></i></button>`).join("")}</div><div class="similarity-plot"><div class="similarity-plot-head"><div><p class="eyebrow">Full tested panel</p><h3>Similarity to all nine models</h3></div><p class="small">100 = identical mapped answers on these ${set.questions.length} prompts.</p></div><div class="similarity-rows">${ranked.map((entry, index) => `<button type="button" class="similarity-row${index < 5 ? " is-top-five" : ""}" data-profile-model="${escapeHtml(entry.slug)}" aria-controls="response-panel-${escapeHtml(setKey)}"><span class="similarity-rank">${index + 1}</span><span class="similarity-name">${escapeHtml(entry.label)}<span class="similarity-bar"><i style="width:${(entry.similarity * 100).toFixed(1)}%"></i></span></span><strong>${Math.round(entry.similarity * 100)}<small>%</small></strong></button>`).join("")}</div></div><div id="response-panel-${escapeHtml(setKey)}" class="selected-response-panel" aria-live="polite"><p class="quiet-box">Select any model above to see its answer pattern across all ${set.questions.length} questions, alongside your own.</p></div><p class="small">Nothing was saved or sent. The model value below is its average mapped answer across five shuffled answer-order versions of each question; every row also links to one fixed recorded output.</p>`;
+
+      const responsePanel = result.querySelector(".selected-response-panel");
+      const modelChoices = result.querySelectorAll("[data-profile-model]");
+      const responseSummary = (question, value) => {
+        const numeric = Number(value);
+        const closest = question.options.reduce((best, option) => Math.abs(Number(option.value) - numeric) < Math.abs(Number(best.value) - numeric) ? option : best, question.options[0]);
+        const maximum = Math.max(...question.options.map((option) => Number(option.value)));
+        return { numeric: numeric.toFixed(2), maximum, nearest: closest.label };
+      };
+      function showResponsePanel(slug) {
+        const selectedModel = models.find((model) => model.slug === slug);
+        if (!selectedModel) return;
+        for (const choice of modelChoices) choice.classList.toggle("selected", choice.dataset.profileModel === slug);
+        const rows = set.questions.map((question, index) => {
+          const visitor = responseSummary(question, answers[question.id]);
+          const model = responseSummary(question, selectedModel.itemScores[question.id]);
+          const evidenceUrl = `${base}models/${encodeURIComponent(selectedModel.slug)}?item=${encodeURIComponent(question.id)}#evidence`;
+          return `<article class="response-comparison-row"><p class="eyebrow">Question ${index + 1} · ${escapeHtml(question.source.label)}</p><h4>${escapeHtml(question.text)}</h4><div class="response-comparison-values"><div><span>Your answer</span><strong>${escapeHtml(visitor.nearest)}</strong><small>${visitor.numeric} / ${visitor.maximum}</small></div><div><span>${escapeHtml(selectedModel.label)} average</span><strong>${escapeHtml(model.nearest)}</strong><small>${model.numeric} / ${model.maximum} across 5 runs</small></div></div><a class="response-evidence-link" href="${evidenceUrl}">Open this model’s fixed recorded output →</a></article>`;
+        }).join("");
+        responsePanel.innerHTML = `<div class="selected-response-head"><div><p class="eyebrow">Full ${escapeHtml(set.label)} response panel</p><h3>Your answers alongside ${escapeHtml(selectedModel.label)}</h3></div><a class="button ghost" href="${base}models/${encodeURIComponent(selectedModel.slug)}#evidence">Open full model dossier</a></div><p class="note">The form uses the same questions for both sides. “Average” preserves the model’s five answer-order runs; use the evidence link on any row to see a fixed recorded response.</p><div class="response-comparison-list">${rows}</div>`;
+        responsePanel.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      for (const choice of modelChoices) choice.addEventListener("click", () => showResponsePanel(choice.dataset.profileModel));
+      result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+  }
+</script>

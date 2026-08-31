@@ -1,0 +1,56 @@
+---
+import Base from "../../layouts/Base.astro";
+import data from "../../data/generated.json";
+
+export function getStaticPaths() {
+  return Object.keys(data.scaleInfo).map((scale) => ({
+    params: { slug: scale.replaceAll(".", "-") },
+    props: { scale },
+  }));
+}
+
+const { scale } = Astro.props;
+const info = data.scaleInfo[scale];
+const base = import.meta.env.BASE_URL;
+const scores = data.models
+  .map((model) => ({ model, score: model.scores.find((entry) => entry.scale === scale) }))
+  .filter((entry) => entry.score)
+  .sort((left, right) => Number(right.score.score) - Number(left.score.score));
+const questions = data.items.filter((item) => item.scale === scale);
+---
+
+<Base title={`${info.label} — Spinning Arrow`}>
+  <section>
+    <a class="back" href={`${base}metrics`}>← All metrics</a>
+    <p class="eyebrow" style="margin-top:30px">A questionnaire lens</p>
+    <h1>{info.label}</h1>
+    <p class="lede">{info.plain}</p>
+    <p class="quiet-box">Each mark is a model’s average answer to this lens’s source questions. The interval shown beside it comes from resampling those questions; it shows how much the summary depends on this item set.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><div><p class="eyebrow">Panel comparison</p><h2>All nine models on one axis.</h2></div><a class="note" href={`${base}patterns`}>Compare this axis with another →</a></div>
+    <div class="panel metric-comparison-plot" aria-label={`${info.label} comparison plot`}>
+      {scores.map(({ model, score }) => {
+        const low = Number(score.ciLow);
+        const high = Number(score.ciHigh);
+        const value = Number(score.score);
+        return <a class="metric-row" href={`${base}models/${model.slug}`}>
+          <span class="model-name">{model.label}<small>{model.lab}</small></span>
+          <span class="metric-track"><i class="metric-interval" style={`left:${(low - 1) * 25}%; width:${Math.max(1, (high - low) * 25)}%`}></i><b style={`left:${(value - 1) * 25}%`}></b></span>
+          <span class="small">{value.toFixed(2)} / 5</span>
+          <span class="arrow">→</span>
+        </a>;
+      })}
+      <div class="metric-axis" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="eyebrow">Question-level evidence</p><h2>Open the source prompts.</h2>
+    <p class="note">Choose a model below each item to open its exact prompt, raw output, displayed letter, and resolved answer.</p>
+    <div class="panel" style="margin-top:24px">
+      {questions.map((question) => <details><summary>{question.text}</summary><p>Source item <code>{question.id}</code> · one item inside the {info.label} summary.</p><div class="action-row">{data.models.map((model) => <a class="button ghost" href={`${base}models/${model.slug}?item=${question.id}#evidence`}>{model.label} →</a>)}</div></details>)}
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,26 @@
+---
+import Base from "../../layouts/Base.astro";
+import data from "../../data/generated.json";
+const base = import.meta.env.BASE_URL;
+---
+
+<Base title="Models — Spinning Arrow">
+  <section>
+    <p class="eyebrow">Model profiles</p>
+    <h1>Open a model. Follow the evidence.</h1>
+    <p class="lede">Each profile starts with a plain-language summary, then lets you move from a scale to a question and the model’s exact recorded answer.</p>
+  </section>
+  <section class="section">
+    <div class="card-grid">
+      {data.models.map((model) => {
+        const overview = model.overview;
+        return <a class="card" href={`${base}models/${model.slug}`}>
+          <p class="eyebrow">{model.lab} · Phase 2 + 3</p>
+          <h3>{model.label}</h3>
+          <p>{Number(overview.parse_rate * 100).toFixed(1)}% of its main-battery outputs parsed cleanly. Open its response profile and raw-answer explorer.</p>
+          <span class="arrow">View profile →</span>
+        </a>;
+      })}
+    </div>
+  </section>
+</Base>

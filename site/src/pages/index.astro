@@ -1,0 +1,61 @@
+---
+import Base from "../layouts/Base.astro";
+import data from "../data/generated.json";
+
+const modelRows = data.models.map((model) => {
+  const score = (scale) => model.scores.find((entry) => entry.scale === scale)?.score ?? 3;
+  return {
+    ...model,
+    impartial: score("ggb.impartial_beneficence"),
+    avoidsHarm: 6 - score("ggb.instrumental_harm"),
+  };
+});
+const base = import.meta.env.BASE_URL;
+---
+
+<Base>
+  <section>
+    <p class="eyebrow">A public research dashboard</p>
+    <h1>How a model answers can shift with the question.</h1>
+    <p class="lede">Spinning Arrow compares models’ direct survey answers with the choices they make in practical situations—then leaves the evidence open for inspection.</p>
+    <div class="action-row">
+      <a class="button" href={`${base}metrics`}>Browse by metric</a>
+      <a class="button ghost" href={`${base}models`}>Browse by model</a>
+    </div>
+    <p class="small">Or <a href={`${base}profile`}>take the private 10-question comparison</a> · <a href={`${base}method`}>read the method</a></p>
+  </section>
+
+  <section class="section">
+    <div class="metric-grid" aria-label="Study overview">
+      <div class="metric"><strong>9</strong><span>models in the main questionnaire battery</span></div>
+      <div class="metric"><strong>56,700</strong><span>controlled Phase 2 answers</span></div>
+      <div class="metric"><strong>1,080</strong><span>practical-scenario choices in Phase 3</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div><p class="eyebrow">A simple first read</p><h2>Two lenses, not a moral ranking.</h2></div>
+      <a href={`${base}method#scores`} class="note">What do these bars mean? →</a>
+    </div>
+    <p class="quiet-box">The bars summarize how models answered particular research questionnaires. They do not tell us whether a model is “good,” safe, or has beliefs. Open a model to see the underlying questions and exact answers.</p>
+    <div class="panel" style="margin-top:24px">
+      {modelRows.map((model) => (
+        <a class="model-row" href={`${base}models/${model.slug}`}>
+          <span class="model-name">{model.label}</span>
+          <span class="bar-area"><span class="bar-label">Helping beyond one’s circle</span><span class="bar"><i style={`width:${model.impartial * 20}%`}></i></span></span>
+          <span class="bar-area"><span class="bar-label">Avoiding harm for a larger goal</span><span class="bar"><i style={`width:${model.avoidsHarm * 20}%`}></i></span></span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="card-grid">
+      <article class="card"><p class="eyebrow">Metric-first</p><h3>Compare one question</h3><p>Choose a lens, see all nine models, then open its source questions and recorded answers.</p><a href={`${base}metrics`}>Browse metrics →</a></article>
+      <article class="card"><p class="eyebrow">Model-first</p><h3>Open a full dossier</h3><p>See one model’s scores, practical choices, and exact responses in one place.</p><a href={`${base}models`}>Browse models →</a></article>
+      <article class="card"><p class="eyebrow">Relationships</p><h3>Explore patterns</h3><p>Compare metrics and model-response profiles, with the study’s small-sample limits made explicit.</p><a href={`${base}patterns`}>Open patterns →</a></article>
+    </div>
+  </section>
+</Base>

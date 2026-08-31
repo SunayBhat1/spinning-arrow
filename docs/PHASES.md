@@ -90,10 +90,25 @@ agreement from directional concordance because reference accuracy is not an acti
 
 **Planned:** Astro static site, themed SVG plots, methodology page, GitHub Pages deploy.
 **Gate 4 deliverable:** deployed preview URL + `reports/04_site.md`. Domain decided here.
-**Status:** not started
-**Note:** GitHub Pages on a dedicated subdomain of Sunay's Squarespace-managed personal domain is
-technically feasible. The optional human comparison is a Phase 4 local-only feature: browser-side
-scoring of a short licensed subset with no answer collection or diagnostic claim.
+**Status:** in progress — local preview ready for review
+**Shipped:** The first mobile-first Astro preview is in `site/`. It reads committed Phase 2 and 3
+evidence at build time, offers separate model-first and metric-first routes, and exposes one fixed,
+documented raw answer per model/question/condition rather than loading the entire raw archive on a
+phone. A new Patterns page adds an interactive metric-to-metric plot, item-level model-profile
+similarity heatmap, and an explicit readiness table for future lab, size, architecture, and dated
+release comparisons; it does not claim causal effects from the nine-model panel. The
+browser-only human profile form now offers a ten-question quick route and a 33-question detailed
+route; both compare only with each model's average answer to the same prompts, identify each
+source, store and transmit no answers, and make no diagnostic or moral-quality claim. Each result
+now ranks the closest five response patterns, plots all nine, and can open a full same-question
+comparison with any selected model (including a per-row evidence link). The visual
+direction is deliberately minimal: warm paper, moss, clay, restrained metrics, and progressively
+disclosed methodology. `.github/workflows/deploy-site.yml` is ready for a public GitHub Pages
+project site after review; it is not yet deployed or connected to DNS.
+**Open:** Sunay’s questionnaire/content and visual review; then enable GitHub Actions Pages,
+deploy the preview, and add the `spinning-arrow.sunaybhat.me` domain and verification records in
+Squarespace/GitHub. Privacy/security/technology scenarios remain a separately sourced and
+evaluated follow-on, not an unsupported claim in the current form.
 
 ## Phase 5 — Launch
 
@@ -169,3 +184,9 @@ repo. ETHICS confirmed MIT. OEJTS excluded from the item bank on license grounds
   arrangement is a GitHub Pages subdomain beneath Sunay's Squarespace-managed personal domain.
   A future human response-profile comparison belongs to Phase 4 and must begin as local-only
   browser scoring with no answer collection, diagnostic claim, or user ranking.
+
+- **2026-08-30 — Phase 4 questionnaire curation.** Sunay requested a fast and a deeper human
+  response path, both using more nuanced sourced prompts and scenario cases. The site now uses a
+  10-question quick path and a 33-question detailed path, with exact item-level comparison to all
+  nine models. The completed bank contains no evaluated technology privacy/security dilemmas, so
+  those are deferred until a public source and a corresponding full-panel run are approved.

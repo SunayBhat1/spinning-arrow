@@ -1,0 +1,116 @@
+---
+import Base from "../layouts/Base.astro";
+import data from "../data/generated.json";
+
+const base = import.meta.env.BASE_URL;
+const { axes, metricPairs, modelSimilarity, varianceReadiness, futureVarianceFactors } = data.correlations;
+const axisById = Object.fromEntries(axes.map((axis) => [axis.id, axis]));
+const strongestPairs = metricPairs
+  .filter((pair) => Number.isFinite(pair.r))
+  .sort((left, right) => Math.abs(right.r) - Math.abs(left.r))
+  .slice(0, 5);
+
+function similarityColor(value) {
+  if (!Number.isFinite(value)) return "#efede6";
+  const amount = Math.min(1, Math.abs(value));
+  return value >= 0
+    ? `rgba(102, 116, 95, ${0.12 + amount * 0.58})`
+    : `rgba(173, 96, 69, ${0.12 + amount * 0.58})`;
+}
+---
+
+<Base title="Patterns — Spinning Arrow">
+  <section>
+    <p class="eyebrow">Pattern explorer</p>
+    <h1>What moves together—and what we cannot yet know.</h1>
+    <p class="lede">Explore relationships among the study’s measured questionnaire scores and prompt sensitivities. These are descriptive patterns across nine models, not explanations or causal findings.</p>
+    <p class="quiet-box">Nine models are enough to generate hypotheses and inspect outliers, not enough to declare that a lab, architecture, size, or release date caused a result.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><div><p class="eyebrow">Metric-to-metric plot</p><h2>Put any two measured axes together.</h2></div><a class="note" href={`${base}method#scores`}>How metrics are calculated →</a></div>
+    <div class="panel scatter-panel">
+      <div class="axis-controls">
+        <label>X axis<select id="x-axis">{axes.map((axis) => <option value={axis.id} selected={axis.id === "ggb.impartial_beneficence"}>{axis.group}: {axis.label}</option>)}</select></label>
+        <label>Y axis<select id="y-axis">{axes.map((axis) => <option value={axis.id} selected={axis.id === "ggb.instrumental_harm"}>{axis.group}: {axis.label}</option>)}</select></label>
+      </div>
+      <p id="scatter-summary" class="quiet-box"></p>
+      <svg id="scatter-plot" class="scatter-plot" viewBox="0 0 680 400" role="img" aria-live="polite" aria-label="Selected metric relationship plot"></svg>
+      <div class="plot-legend">{data.models.map((model) => <a href={`${base}models/${model.slug}`}><span class="dot-mark"></span>{model.label}</a>)}</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><div><p class="eyebrow">Model-to-model profile similarity</p><h2>Which response patterns resemble one another?</h2></div><a class="note" href={`${base}models`}>Open a model profile →</a></div>
+    <p class="quiet-box">Each cell is the Pearson correlation between two models’ normalized, item-level Phase 2 response patterns under the same bare, first-person condition. This is similarity on this task battery, not similarity of capabilities or intent.</p>
+    <div class="panel table-scroll" style="margin-top:24px">
+      <table class="similarity-table">
+        <thead><tr><th scope="col">Model</th>{data.models.map((model) => <th scope="col" title={model.label}>{model.label}</th>)}</tr></thead>
+        <tbody>{data.models.map((rowModel, rowIndex) => <tr><th scope="row"><a href={`${base}models/${rowModel.slug}`}>{rowModel.label}</a></th>{data.models.map((columnModel, columnIndex) => {
+          const cell = modelSimilarity[rowIndex][columnIndex];
+          const value = Number(cell.r);
+          return <td style={`background:${similarityColor(value)}`}><a href={`${base}models/${rowModel.slug}#evidence`} aria-label={`${rowModel.label} and ${columnModel.label}: response-profile correlation ${Number.isFinite(value) ? value.toFixed(2) : "unavailable"} across ${cell.n} shared questions. Open ${rowModel.label}'s evidence.`}>{Number.isFinite(value) ? value.toFixed(2) : "—"}</a></td>;
+        })}</tr>)}</tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section method-grid">
+    <div>
+      <p class="eyebrow">Largest exploratory associations</p><h2>Signals to inspect, not conclusions.</h2>
+      <div class="panel" style="margin-top:24px">{strongestPairs.map((pair) => <div class="stat-line"><strong>r {Number(pair.r).toFixed(2)}</strong><span>{axisById[pair.left].label} ↔ {axisById[pair.right].label}</span><span class="small">n = {pair.n} models</span></div>)}</div>
+    </div>
+    <aside class="panel"><p class="eyebrow">A practical rule</p><p>Use a visible relationship to decide where to read deeper. Then inspect the underlying model pages, questions, confidence intervals, and prompt sensitivity before treating it as meaningful.</p></aside>
+  </section>
+
+  <section class="section">
+    <p class="eyebrow">Possible sources of variation</p><h2>What this panel can and cannot test yet.</h2>
+    <div class="panel table-scroll" style="margin-top:24px"><table class="readiness-table"><thead><tr><th>Candidate factor</th><th>Current coverage</th><th>Decision</th><th>Why</th></tr></thead><tbody>{varianceReadiness.map((row) => <tr><th scope="row">{row.factor}</th><td>{row.current}</td><td><strong>{row.verdict}</strong></td><td>{row.why}</td></tr>)}</tbody></table></div>
+  </section>
+
+  <section class="section card-grid">
+    <article class="card"><p class="eyebrow">Already measured</p><h3>Prompt and response sensitivity</h3><p>Answer order, wording surface, evaluator context, parse rate, and stated-versus-scenario differences are the cleanest current variance candidates.</p></article>
+    <article class="card"><p class="eyebrow">Next panel design</p><h3>Repeated families matter</h3><p>To test a lab or architecture effect, sample multiple dated models within each group—not one flagship per provider.</p></article>
+    <article class="card"><p class="eyebrow">Additional axes</p><ul>{futureVarianceFactors.map((factor) => <li>{factor}</li>)}</ul></article>
+  </section>
+</Base>
+
+<script define:vars={{ axes, models: data.models, base }}>
+  const xSelect = document.querySelector("#x-axis");
+  const ySelect = document.querySelector("#y-axis");
+  const summary = document.querySelector("#scatter-summary");
+  const plot = document.querySelector("#scatter-plot");
+  const axisById = Object.fromEntries(axes.map((axis) => [axis.id, axis]));
+  const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[character]);
+  const mean = (values) => values.reduce((total, value) => total + value, 0) / values.length;
+  const pearson = (left, right) => {
+    const leftMean = mean(left); const rightMean = mean(right);
+    const numerator = left.reduce((total, value, index) => total + (value - leftMean) * (right[index] - rightMean), 0);
+    const denominator = Math.sqrt(left.reduce((total, value) => total + (value - leftMean) ** 2, 0) * right.reduce((total, value) => total + (value - rightMean) ** 2, 0));
+    return denominator ? numerator / denominator : null;
+  };
+  const bounded = (values) => {
+    const minimum = Math.min(...values); const maximum = Math.max(...values); const spread = maximum - minimum || 1;
+    return [minimum - spread * 0.12, maximum + spread * 0.12];
+  };
+  const project = (value, [minimum, maximum], origin, length, invert = false) => origin + (invert ? 1 - (value - minimum) / (maximum - minimum) : (value - minimum) / (maximum - minimum)) * length;
+
+  function renderScatter() {
+    const xAxis = axisById[xSelect.value]; const yAxis = axisById[ySelect.value];
+    const points = models.map((model) => ({ model, x: Number(xAxis.values[model.id]), y: Number(yAxis.values[model.id]) })).filter((point) => Number.isFinite(point.x) && Number.isFinite(point.y));
+    const xValues = points.map((point) => point.x); const yValues = points.map((point) => point.y);
+    const xBounds = bounded(xValues); const yBounds = bounded(yValues); const left = 72; const top = 28; const width = 560; const height = 292;
+    const r = pearson(xValues, yValues);
+    const xMean = mean(xValues); const yMean = mean(yValues);
+    const slopeDenominator = xValues.reduce((total, value) => total + (value - xMean) ** 2, 0);
+    const slope = slopeDenominator ? xValues.reduce((total, value, index) => total + (value - xMean) * (yValues[index] - yMean), 0) / slopeDenominator : 0;
+    const intercept = yMean - slope * xMean;
+    const lineStart = { x: xBounds[0], y: slope * xBounds[0] + intercept };
+    const lineEnd = { x: xBounds[1], y: slope * xBounds[1] + intercept };
+    const xPixel = (value) => project(value, xBounds, left, width);
+    const yPixel = (value) => project(value, yBounds, top, height, true);
+    summary.textContent = `${xAxis.label} and ${yAxis.label}: exploratory Pearson r = ${r?.toFixed(2) ?? "—"} across ${points.length} models. Each dot opens that model’s evidence.`;
+    plot.innerHTML = `<line class="plot-axis" x1="${left}" y1="${top + height}" x2="${left + width}" y2="${top + height}"/><line class="plot-axis" x1="${left}" y1="${top}" x2="${left}" y2="${top + height}"/><line class="trend-line" x1="${xPixel(lineStart.x)}" y1="${yPixel(lineStart.y)}" x2="${xPixel(lineEnd.x)}" y2="${yPixel(lineEnd.y)}"/><text class="plot-label" x="${left + width / 2}" y="${top + height + 52}" text-anchor="middle">${escapeHtml(xAxis.label)}</text><text class="plot-label" x="18" y="${top + height / 2}" text-anchor="middle" transform="rotate(-90 18 ${top + height / 2})">${escapeHtml(yAxis.label)}</text>${points.map((point) => `<a href="${base}models/${encodeURIComponent(point.model.slug)}"><circle class="plot-dot" cx="${xPixel(point.x)}" cy="${yPixel(point.y)}" r="7"><title>${escapeHtml(point.model.label)} — ${escapeHtml(xAxis.label)} ${point.x.toFixed(2)}, ${escapeHtml(yAxis.label)} ${point.y.toFixed(2)}</title></circle></a>`).join("")}`;
+  }
+  xSelect.addEventListener("change", renderScatter); ySelect.addEventListener("change", renderScatter); renderScatter();
+</script>
