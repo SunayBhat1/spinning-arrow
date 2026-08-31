@@ -6,6 +6,7 @@ import argparse
 import json
 import os
 import sys
+import time
 from collections import Counter, defaultdict
 from collections.abc import Iterator, Mapping, Sequence
 from concurrent.futures import FIRST_COMPLETED, Future, ThreadPoolExecutor, wait
@@ -21,6 +22,7 @@ from spinning_arrow.client import (
     CompletionResult,
     OpenRouterClient,
     OpenRouterClientError,
+    OpenRouterHTTPError,
     ReasoningTokenError,
     RunBudget,
     SpendCapExceeded,
@@ -548,17 +550,27 @@ def _run_preflight(
             parameters["temperature"] = config.temperature
         if "reasoning" not in model.parameter_omissions:
             parameters["reasoning"] = {"enabled": False}
-        try:
-            result = probe_client.chat_completion(
-                model_id=model.id,
-                messages=rendered.messages,
-                maximum_cost_usd=model.max_call_cost_usd,
-                max_tokens=model.max_tokens,
-                parameters=parameters,
-                omit_reasoning="reasoning" in model.parameter_omissions,
-            )
-        except Exception as error:
-            raise Phase2PreflightError(f"live probe failed for {model.id}: {error}") from error
+        result: CompletionResult | None = None
+        for attempt in range(1, 4):
+            try:
+                result = probe_client.chat_completion(
+                    model_id=model.id,
+                    messages=rendered.messages,
+                    maximum_cost_usd=model.max_call_cost_usd,
+                    max_tokens=model.max_tokens,
+                    parameters=parameters,
+                    omit_reasoning="reasoning" in model.parameter_omissions,
+                )
+                break
+            except OpenRouterHTTPError as error:
+                if error.status != 429 or attempt == 3:
+                    raise Phase2PreflightError(
+                        f"live probe failed for {model.id}: {error}"
+                    ) from error
+                time.sleep(5 * attempt)
+            except Exception as error:
+                raise Phase2PreflightError(f"live probe failed for {model.id}: {error}") from error
+        assert result is not None
         parsed = parse_response(result.text or "", rendered.option_order)
         if result.reasoning_tokens:
             raise Phase2PreflightError(
