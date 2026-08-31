@@ -67,13 +67,13 @@ p { max-width: 70ch; }
 .stat-line { display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); align-items: baseline; flex-wrap: wrap; }
 .stat-line strong { font-family: var(--serif); font-size: 1.35rem; }
 .small { font-size: .85rem; color: var(--quiet); }
-.question { border-top: 1px solid var(--line); padding: 28px 0; }
+.question { margin: 0; min-inline-size: 0; border: 0; border-top: 1px solid var(--line); padding: 32px 0; }
 .question:first-of-type { border-top: 0; }
-.question legend { font-family: var(--serif); font-size: 1.22rem; max-width: 800px; padding: 0; }
-.question .scale-caption { color: var(--moss); font-size: .75rem; font-weight: 700; letter-spacing: .08em; margin: 9px 0 14px; text-transform: uppercase; }
-.options { display: grid; gap: 8px; max-width: 680px; }
-.option { border: 1px solid var(--line); padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start; cursor: pointer; background: var(--card); }
-.option:has(input:checked) { border-color: var(--moss); background: #edf0e9; }
+.question legend { display: block; width: 100%; font-family: var(--serif); font-size: 1.22rem; max-width: 800px; padding: 0; }
+.question .scale-caption { color: var(--moss); font-size: .75rem; font-weight: 700; letter-spacing: .08em; margin: 14px 0 8px; text-transform: uppercase; }
+.options { display: grid; gap: 0; max-width: 680px; border-top: 1px solid var(--line); }
+.option { border: 0; border-bottom: 1px solid var(--line); padding: 13px 12px; display: flex; gap: 10px; align-items: flex-start; cursor: pointer; background: transparent; }
+.option:has(input:checked) { box-shadow: inset 3px 0 0 var(--moss); background: #e9eee5; }
 .result { margin-top: 26px; display: none; }
 .result.show { display: block; }
 .result ol { padding-left: 20px; }
@@ -89,7 +89,7 @@ p { max-width: 70ch; }
 .questionnaire-shell { padding-top: clamp(24px, 4vw, 38px); }
 .questionnaire-head { display: flex; justify-content: space-between; gap: 20px; align-items: start; }
 .questionnaire-head .small { margin: 5px 0 0; white-space: nowrap; }
-.question-source { max-width: 680px; margin: 0 0 14px; padding: 8px 0; }
+.question-source { max-width: 680px; margin: 0 0 12px; padding: 4px 0; border: 0; }
 .question-source summary { font-family: var(--sans); font-size: .86rem; color: var(--quiet); }
 .question-source p { margin: 9px 0 0; font-size: .86rem; }
 .method-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(250px, .6fr); gap: 48px; }
