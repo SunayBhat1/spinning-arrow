@@ -50,7 +50,7 @@ def test_phase2_all_instruments_render_under_every_experimental_condition() -> N
 def test_phase2_panel_has_exact_required_call_count_and_d5_configuration() -> None:
     config = _load_config(ROOT / "panels" / "phase2.yaml")
 
-    assert len(config.models) == 9
+    assert len(config.models) == 21
     call_count = (
         len(_phase2_items(ROOT))
         * len(config.conditions)
@@ -58,17 +58,29 @@ def test_phase2_panel_has_exact_required_call_count_and_d5_configuration() -> No
         * config.permutations
     )
     assert call_count == 6300
-    assert config.budget_usd == 25
+    assert config.budget_usd == 20
     assert config.maximum_forecast_usd == 20
     assert {model.id for model in config.models} == {
         "anthropic/claude-sonnet-5",
+        "amazon/nova-lite-v1",
+        "cohere/command-r7b-12-2024",
+        "deepseek/deepseek-v4-flash-0731",
         "deepseek/deepseek-v4-pro-0813",
+        "google/gemini-2.5-flash",
         "google/gemini-2.5-flash-lite",
         "meta-llama/llama-3.3-70b-instruct",
+        "meta-llama/llama-4-maverick",
+        "microsoft/phi-4",
         "mistralai/mistral-medium-3.1",
+        "mistralai/mistral-small-3.2-24b-instruct",
         "openai/gpt-5.4-mini",
+        "openai/gpt-5.6-luna",
+        "moonshotai/kimi-k2",
+        "nvidia/nemotron-3.5-lightning",
         "qwen/qwen3.8-27b",
+        "qwen/qwen3.8-flash",
         "x-ai/grok-4.20",
+        "z-ai/glm-4.5-air",
         "z-ai/glm-5.2",
     }
 

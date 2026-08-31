@@ -441,8 +441,8 @@ def _load_config(path: Path) -> Phase2Config:
         raise ValueError(f"could not read Phase 2 panel {path}") from error
     raw_models = document.get("models")
     sampling = document.get("sampling")
-    if not isinstance(raw_models, list) or len(raw_models) != 9:
-        raise ValueError("Phase 2 panel must list exactly nine models")
+    if not isinstance(raw_models, list) or len(raw_models) != 21:
+        raise ValueError("Phase 2 launch panel must list exactly 21 models")
     if not isinstance(sampling, Mapping):
         raise ValueError("Phase 2 panel must include sampling settings")
     models: list[Phase2Model] = []

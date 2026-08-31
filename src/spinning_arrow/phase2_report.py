@@ -181,8 +181,8 @@ def _validate_complete_run(
     manifest: RunManifest, records: Sequence[ResponseRecord], items: Sequence[Item]
 ) -> None:
     expected_models = set(manifest.model_ids)
-    if len(manifest.model_ids) != 9:
-        raise ValueError("Phase 2 manifest must list exactly nine models")
+    if len(manifest.model_ids) != 21:
+        raise ValueError("Phase 2 launch manifest must list exactly 21 models")
     if len(items) != 315:
         raise ValueError("Phase 2 report requires 315 fixed items")
     by_model = Counter(record.model_id for record in records)
@@ -1130,14 +1130,26 @@ def _figure_data_uri(figure: plt.Figure) -> str:
 def _short_model(model: str) -> str:
     replacements = {
         "openai/gpt-5.4-mini": "GPT-5.4 mini",
+        "openai/gpt-5.6-luna": "GPT-5.6 Luna",
         "google/gemini-2.5-flash-lite": "Gemini 2.5 Flash-Lite",
+        "google/gemini-2.5-flash": "Gemini 2.5 Flash",
         "anthropic/claude-sonnet-5": "Claude Sonnet 5",
         "x-ai/grok-4.20": "Grok 4.20",
         "meta-llama/llama-3.3-70b-instruct": "Llama 3.3 70B",
+        "meta-llama/llama-4-maverick": "Llama 4 Maverick",
         "mistralai/mistral-medium-3.1": "Mistral Medium 3.1",
+        "mistralai/mistral-small-3.2-24b-instruct": "Mistral Small 3.2",
         "qwen/qwen3.8-27b": "Qwen 3.8 27B",
+        "qwen/qwen3.8-flash": "Qwen 3.8 Flash",
         "deepseek/deepseek-v4-pro-0813": "DeepSeek V4 Pro",
+        "deepseek/deepseek-v4-flash-0731": "DeepSeek V4 Flash",
         "z-ai/glm-5.2": "GLM-5.2",
+        "z-ai/glm-4.5-air": "GLM-4.5 Air",
+        "cohere/command-r7b-12-2024": "Command R7B",
+        "nvidia/nemotron-3.5-lightning": "Nemotron 3.5 Lightning",
+        "amazon/nova-lite-v1": "Nova Lite 1.0",
+        "microsoft/phi-4": "Phi-4",
+        "moonshotai/kimi-k2": "Kimi K2",
     }
     return replacements.get(model, model)
 

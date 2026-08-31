@@ -1,6 +1,6 @@
 {
   "panel": "phase2",
-  "budget_usd": 25.0,
+  "budget_usd": 20.0,
   "maximum_forecast_usd": 20.0,
   "forecast_input_tokens": 300,
   "conditions": ["bare", "evaluator"],
@@ -9,13 +9,25 @@
   "sampling": {"max_tokens": 8, "temperature": 0, "reasoning": {"enabled": false}},
   "models": [
     {"id": "openai/gpt-5.4-mini", "max_call_cost_usd": 0.005},
+    {"id": "openai/gpt-5.6-luna", "max_call_cost_usd": 0.005, "parameter_omissions": ["temperature"]},
     {"id": "google/gemini-2.5-flash-lite", "max_call_cost_usd": 0.005},
+    {"id": "google/gemini-2.5-flash", "max_call_cost_usd": 0.005},
     {"id": "anthropic/claude-sonnet-5", "max_call_cost_usd": 0.005, "parameter_omissions": ["temperature"]},
     {"id": "x-ai/grok-4.20", "max_call_cost_usd": 0.005},
     {"id": "meta-llama/llama-3.3-70b-instruct", "max_call_cost_usd": 0.005, "parameter_omissions": ["reasoning"]},
+    {"id": "meta-llama/llama-4-maverick", "max_call_cost_usd": 0.005, "parameter_omissions": ["reasoning"]},
     {"id": "mistralai/mistral-medium-3.1", "max_call_cost_usd": 0.005, "parameter_omissions": ["reasoning"]},
+    {"id": "mistralai/mistral-small-3.2-24b-instruct", "max_call_cost_usd": 0.005, "parameter_omissions": ["reasoning"]},
     {"id": "qwen/qwen3.8-27b", "max_call_cost_usd": 0.005},
+    {"id": "qwen/qwen3.8-flash", "max_call_cost_usd": 0.005},
     {"id": "deepseek/deepseek-v4-pro-0813", "max_call_cost_usd": 0.005},
+    {"id": "deepseek/deepseek-v4-flash-0731", "max_call_cost_usd": 0.005},
     {"id": "z-ai/glm-5.2", "max_call_cost_usd": 0.005}
+    ,{"id": "z-ai/glm-4.5-air", "max_call_cost_usd": 0.005}
+    ,{"id": "cohere/command-r7b-12-2024", "max_call_cost_usd": 0.005, "parameter_omissions": ["reasoning"]}
+    ,{"id": "nvidia/nemotron-3.5-lightning", "max_call_cost_usd": 0.005}
+    ,{"id": "amazon/nova-lite-v1", "max_call_cost_usd": 0.005, "parameter_omissions": ["reasoning"]}
+    ,{"id": "microsoft/phi-4", "max_call_cost_usd": 0.005, "parameter_omissions": ["reasoning"]}
+    ,{"id": "moonshotai/kimi-k2", "max_call_cost_usd": 0.005, "parameter_omissions": ["reasoning"]}
   ]
 }
