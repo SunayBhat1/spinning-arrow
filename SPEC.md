@@ -436,12 +436,15 @@ design requires a new forecast and Sunay approval.
   site's apex remains on Squarespace. At Gate 4, configure the GitHub Pages custom domain first,
   then its corresponding Squarespace DNS record, retain domain verification, and enforce HTTPS.
   Do not use wildcard DNS records.
-- **Human response-profile comparison**: a visitor may take a short, licensed subset and
-  see where their answers sit relative to the published model response profiles. Version 1 must
-  score entirely in the browser, collect or transmit no answers, and make no diagnostic, moral-
-  quality, or identity claim. It must say that the comparison is prompt- and instrument-specific.
-  Any later account, analytics, result-sharing, or server-side collection feature requires a
-  separate consent, privacy, retention, and security design before implementation.
+- **Human response-profile comparison**: a visitor may choose either a concise ten-question or a
+  detailed 25–50-question licensed subset and see where their answers sit relative to the published
+  model answers to those same individual prompts. Version 1 must score entirely in the browser,
+  collect or transmit no answers, and make no diagnostic, moral-quality, or identity claim. It must
+  show each question's provenance and say that the comparison is prompt- and instrument-specific.
+  Applied technology scenarios (for example, privacy versus security) may only enter the comparison
+  after a sourced bank and a corresponding run across every displayed model are committed. Any later
+  account, analytics, result-sharing, or server-side collection feature requires a separate consent,
+  privacy, retention, and security design before implementation.
 
 **Gate 4 — deliverable: a deployed preview URL** plus `reports/04_site.md` noting anything
 unresolved. Sunay reviews design and copy. Domain decision happens here.

@@ -11,8 +11,11 @@
 - Model pages, scale pages, and method pages with progressive disclosure.
 - Question-level links to fixed-condition exact model prompts, raw outputs, displayed letters, and
   canonical answer mapping.
-- A ten-question human short form that runs entirely in the visitor’s browser. It sends and saves
-  no answers, and says clearly that its closest-profile result is not a diagnosis or identity claim.
+- Two browser-only human response paths: a concise ten-question reflection and a 33-question
+  detailed reflection with five context-rich ETHICS cases. Each prompt identifies its source, and
+  each comparison uses a model's answer to the same individual questions rather than a broad
+  scale average. Nothing is sent or saved; the closest-profile result is not a diagnosis or identity
+  claim.
 - GitHub Pages Actions workflow prepared, using the project-site path before a custom domain is
   connected.
 
@@ -21,8 +24,9 @@
 The public explorer packages one exact response per model/question under the documented `bare` /
 `first_person` / permutation-0 condition, rather than downloading the 37 MB complete Phase 2 raw
 archive on a phone. The full durable raw archive remains committed and linked through the project
-repository. The form uses a short subset, so its output is an educational proximity comparison—not
-a full instrument score.
+repository. The form uses benchmark subsets, so its output is an educational proximity comparison—
+not a full instrument score. The currently completed nine-model bank has no technology privacy or
+security dilemmas; those must be sourced and run before they can be represented in a comparison.
 
 ## Before public deployment
 

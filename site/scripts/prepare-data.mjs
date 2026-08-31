@@ -37,10 +37,37 @@ const scaleInfo = {
   "mfq2.purity": { label: "Purity", plain: "Importance placed on ideas of sanctity, restraint, and contamination." },
 };
 
-const humanQuestionIds = [
-  "ggb_013", "ggb_016", "ggb_001", "ggb_004", "mfq2_001",
-  "mfq2_002", "mfq2_003", "mfq2_004", "mfq2_005", "mfq2_006",
+// The fast path deliberately uses short, non-graphic statements. The deeper path adds
+// published applied cases, but stays inside the completed Phase 2 item bank so every
+// displayed comparison can use an answer from all nine models.
+const quickQuestionIds = [
+  "ggb_013", "ggb_016", "ggb_017", "ggb_020", "mfq2_001",
+  "mfq2_002", "mfq2_003", "mfq2_010", "mfq2_005", "mfq2_006",
 ];
+
+const detailedQuestionIds = [
+  ...quickQuestionIds,
+  "mfq2_007", "mfq2_008", "mfq2_009", "mfq2_011", "mfq2_013", "mfq2_014",
+  "mfq2_015", "mfq2_016", "mfq2_017", "mfq2_018", "mfq2_019", "mfq2_020",
+  "ggb_018", "ggb_019", "ggb_021", "ggb_022", "ggb_023", "ggb_024",
+  "ethics_commonsense_012", "ethics_commonsense_016", "ethics_commonsense_017",
+  "ethics_commonsense_022", "ethics_commonsense_024",
+];
+
+const sourceInfo = {
+  ous_ggb: {
+    label: "Greatest Good Benchmark",
+    plain: "A published LLM benchmark adapted from the Oxford Utilitarianism Scale. These statements probe costly helping and hard trade-offs; they are not moral-answer keys.",
+  },
+  mfq2_phase2: {
+    label: "Moral Foundations Questionnaire-2",
+    plain: "A published moral-psychology questionnaire. These are self-report statements about the kinds of moral considerations a person finds important.",
+  },
+  ethics_phase2: {
+    label: "ETHICS",
+    plain: "A published benchmark of everyday moral judgments. The detailed form includes a small number of its longer, context-rich cases.",
+  },
+};
 
 function readJson(path) {
   return JSON.parse(readFileSync(path, "utf8"));
@@ -130,15 +157,27 @@ const models = Object.entries(labels).map(([id, label]) => ({
       judged: numeric(row.judged),
       concordant: numeric(row.concordant),
     })),
+  itemScores: {},
 }));
 
 const exactResponses = [];
+const itemValueSamples = new Map(Object.keys(labels).map((modelId) => [modelId, new Map()]));
 for (const filename of readdirSync(join(projectRoot, "data", "raw", phase2Run)).filter((name) => name.endsWith(".jsonl.gz"))) {
   const raw = gunzipSync(readFileSync(join(projectRoot, "data", "raw", phase2Run, filename))).toString("utf8");
   for (const line of raw.trim().split("\n")) {
     const record = JSON.parse(line);
-    if (record.condition !== "bare" || record.framing !== "first_person" || record.permutation !== 0) continue;
     if (!itemById.has(record.item_id) || !Object.hasOwn(labels, record.model_id)) continue;
+    const item = itemById.get(record.item_id);
+    if (record.condition === "bare" && record.framing === "first_person" && record.parsed?.choice) {
+      const selected = item.options.find((option) => option.id === record.parsed.choice);
+      if (selected) {
+        const modelValues = itemValueSamples.get(record.model_id);
+        const samples = modelValues.get(record.item_id) ?? [];
+        samples.push(selected.value);
+        modelValues.set(record.item_id, samples);
+      }
+    }
+    if (record.condition !== "bare" || record.framing !== "first_person" || record.permutation !== 0) continue;
     exactResponses.push({
       modelId: record.model_id,
       itemId: record.item_id,
@@ -150,6 +189,22 @@ for (const filename of readdirSync(join(projectRoot, "data", "raw", phase2Run)).
   }
 }
 
+for (const model of models) {
+  const scores = itemValueSamples.get(model.id);
+  model.itemScores = Object.fromEntries(
+    [...scores.entries()].map(([itemId, values]) => [
+      itemId,
+      values.reduce((total, value) => total + value, 0) / values.length,
+    ]),
+  );
+}
+
+function questionForForm(id) {
+  const item = itemById.get(id);
+  if (!item) throw new Error(`Unknown human-form item: ${id}`);
+  return { ...item, source: sourceInfo[item.instrument] };
+}
+
 const output = {
   phase2Run,
   phase3Run,
@@ -157,7 +212,20 @@ const output = {
   scaleInfo,
   models,
   items,
-  humanQuestions: humanQuestionIds.map((id) => itemById.get(id)),
+  questionSets: {
+    quick: {
+      label: "Quick reflection",
+      duration: "about 3 minutes",
+      plain: "Ten concise statements across helping, fairness, community, and tradition.",
+      questions: quickQuestionIds.map(questionForForm),
+    },
+    detailed: {
+      label: "Deeper reflection",
+      duration: "about 12 minutes",
+      plain: "Thirty-three sourced prompts, including longer everyday cases with competing considerations.",
+      questions: detailedQuestionIds.map(questionForForm),
+    },
+  },
   exactResponses,
 };
 
