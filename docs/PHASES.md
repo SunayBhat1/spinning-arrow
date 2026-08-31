@@ -92,8 +92,11 @@ agreement from directional concordance because reference accuracy is not an acti
 **Gate 4 deliverable:** deployed preview URL + `reports/04_site.md`. Domain decided here.
 **Status:** in progress — local preview ready for review
 **Shipped:** The first mobile-first Astro preview is in `site/`. It reads committed Phase 2 and 3
-evidence at build time, offers model and scale drill-downs, and exposes one fixed, documented raw
-answer per model/question/condition rather than loading the entire raw archive on a phone. The
+evidence at build time, offers separate model-first and metric-first routes, and exposes one fixed,
+documented raw answer per model/question/condition rather than loading the entire raw archive on a
+phone. A new Patterns page adds an interactive metric-to-metric plot, item-level model-profile
+similarity heatmap, and an explicit readiness table for future lab, size, architecture, and dated
+release comparisons; it does not claim causal effects from the nine-model panel. The
 browser-only human profile form now offers a ten-question quick route and a 33-question detailed
 route; both compare only with each model's average answer to the same prompts, identify each
 source, store and transmit no answers, and make no diagnostic or moral-quality claim. The visual

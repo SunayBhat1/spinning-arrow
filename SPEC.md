@@ -425,8 +425,14 @@ design requires a new forecast and Sunay approval.
 ### Phase 4 — Site
 
 - Astro static site reading committed Parquet/CSV at build time.
-- Views: panel leaderboard, per-model page, per-scale comparison, timeline, methodology page,
-  and a "see the raw responses" link on **every** number.
+- Two primary evidence routes: a model-first dossier (scores, practical choices, then exact
+  recorded answers) and a metric-first comparison (all models on one defined axis, then source
+  question and answer). Every summary view must link to its underlying evidence.
+- A pattern explorer may show metric-to-metric plots and item-level model-profile similarity. It
+  must label correlations as exploratory and descriptive. Lab, model-size, architecture,
+  release-date, or training-cutoff comparisons remain readiness views until there are multiple
+  comparable models per group and consistently disclosed metadata across both open and closed
+  providers.
 - Plots as themed SVG from matplotlib (D12). Error bars are visually prominent — they are the
   argument, not decoration.
 - `METHODOLOGY.md` written in plain language, including a frank limitations section that states

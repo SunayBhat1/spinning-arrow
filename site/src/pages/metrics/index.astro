@@ -1,0 +1,41 @@
+---
+import Base from "../../layouts/Base.astro";
+import data from "../../data/generated.json";
+
+const base = import.meta.env.BASE_URL;
+const metrics = Object.entries(data.scaleInfo).map(([id, info]) => {
+  const scores = data.models
+    .map((model) => ({ model, score: model.scores.find((entry) => entry.scale === id)?.score }))
+    .filter((entry) => Number.isFinite(Number(entry.score)))
+    .sort((left, right) => Number(right.score) - Number(left.score));
+  return { id, info, highest: scores[0], lowest: scores.at(-1) };
+});
+---
+
+<Base title="Metrics — Spinning Arrow">
+  <section>
+    <p class="eyebrow">Metric explorer</p>
+    <h1>Start with the question you care about.</h1>
+    <p class="lede">Choose one lens to compare every model side by side. From there, open any model, then the source question and its recorded response.</p>
+    <p class="quiet-box">A metric is a summary of related questionnaire answers. It is a useful map of this study’s prompts—not a judgement of a model’s character, safety, or “true values.”</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><div><p class="eyebrow">Eight lenses</p><h2>One axis at a time.</h2></div><a class="note" href={`${base}patterns`}>See relationships between metrics →</a></div>
+    <div class="scale-list metric-library">
+      {metrics.map(({ id, info, highest, lowest }) => <a class="scale-link" href={`${base}metrics/${id.replaceAll(".", "-")}`}>
+        <p class="eyebrow">Questionnaire lens</p>
+        <h3>{info.label}</h3>
+        <p>{info.plain}</p>
+        <span class="metric-range"><strong>Highest:</strong> {highest.model.label} · {Number(highest.score).toFixed(1)}<br /><strong>Lowest:</strong> {lowest.model.label} · {Number(lowest.score).toFixed(1)}</span>
+        <span class="arrow">Compare all 9 →</span>
+      </a>)}
+    </div>
+  </section>
+
+  <section class="section card-grid">
+    <article class="card"><p class="eyebrow">Other route</p><h3>Browse by model</h3><p>Open one model’s whole response profile, then compare it scale by scale.</p><a href={`${base}models`}>Browse models →</a></article>
+    <article class="card"><p class="eyebrow">Relationships</p><h3>Explore patterns</h3><p>See which measured scores and response sensitivities move together across the panel.</p><a href={`${base}patterns`}>Open patterns →</a></article>
+    <article class="card"><p class="eyebrow">Evidence standard</p><h3>Follow an answer</h3><p>Every lens leads to its source questions and exact stored model output.</p><a href={`${base}method#scores`}>How the scores work →</a></article>
+  </section>
+</Base>

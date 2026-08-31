@@ -15,7 +15,7 @@ const base = import.meta.env.BASE_URL;
       {data.models.map((model) => {
         const overview = model.overview;
         return <a class="card" href={`${base}models/${model.slug}`}>
-          <p class="eyebrow">Phase 2 + 3</p>
+          <p class="eyebrow">{model.lab} · Phase 2 + 3</p>
           <h3>{model.label}</h3>
           <p>{Number(overview.parse_rate * 100).toFixed(1)}% of its main-battery outputs parsed cleanly. Open its response profile and raw-answer explorer.</p>
           <span class="arrow">View profile →</span>

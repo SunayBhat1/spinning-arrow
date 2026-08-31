@@ -19,9 +19,10 @@ const base = import.meta.env.BASE_URL;
     <h1>How a model answers can shift with the question.</h1>
     <p class="lede">Spinning Arrow compares models’ direct survey answers with the choices they make in practical situations—then leaves the evidence open for inspection.</p>
     <div class="action-row">
-      <a class="button" href={`${base}profile`}>Find your closest response profile</a>
-      <a class="button ghost" href={`${base}method`}>How to read this</a>
+      <a class="button" href={`${base}metrics`}>Browse by metric</a>
+      <a class="button ghost" href={`${base}models`}>Browse by model</a>
     </div>
+    <p class="small">Or <a href={`${base}profile`}>take the private 10-question comparison</a> · <a href={`${base}method`}>read the method</a></p>
   </section>
 
   <section class="section">
@@ -52,9 +53,9 @@ const base = import.meta.env.BASE_URL;
 
   <section class="section">
     <div class="card-grid">
-      <article class="card"><p class="eyebrow">Start here</p><h3>Plain-language results</h3><p>Read what the Phase 2 and 3 findings do—and do not—show.</p><a href={`${base}method#results`}>Read the results →</a></article>
-      <article class="card"><p class="eyebrow">Explore</p><h3>Open the evidence</h3><p>Move from a chart to a scale, question, and exact model response.</p><a href={`${base}models`}>Explore models →</a></article>
-      <article class="card"><p class="eyebrow">Try it</p><h3>Your response profile</h3><p>Answer ten questions privately in this browser and compare the pattern.</p><a href={`${base}profile`}>Take the short form →</a></article>
+      <article class="card"><p class="eyebrow">Metric-first</p><h3>Compare one question</h3><p>Choose a lens, see all nine models, then open its source questions and recorded answers.</p><a href={`${base}metrics`}>Browse metrics →</a></article>
+      <article class="card"><p class="eyebrow">Model-first</p><h3>Open a full dossier</h3><p>See one model’s scores, practical choices, and exact responses in one place.</p><a href={`${base}models`}>Browse models →</a></article>
+      <article class="card"><p class="eyebrow">Relationships</p><h3>Explore patterns</h3><p>Compare metrics and model-response profiles, with the study’s small-sample limits made explicit.</p><a href={`${base}patterns`}>Open patterns →</a></article>
     </div>
   </section>
 </Base>

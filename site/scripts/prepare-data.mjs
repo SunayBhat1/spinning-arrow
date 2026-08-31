@@ -20,6 +20,20 @@ const labels = {
   "z-ai/glm-5.2": "GLM 5.2",
 };
 
+// The completed panel intentionally has one model from each lab. That makes provider
+// identification useful for browsing, but insufficient for a lab-effect estimate.
+const modelMetadata = {
+  "anthropic/claude-sonnet-5": { lab: "Anthropic" },
+  "deepseek/deepseek-v4-pro-0813": { lab: "DeepSeek" },
+  "google/gemini-2.5-flash-lite": { lab: "Google" },
+  "meta-llama/llama-3.3-70b-instruct": { lab: "Meta" },
+  "mistralai/mistral-medium-3.1": { lab: "Mistral" },
+  "openai/gpt-5.4-mini": { lab: "OpenAI" },
+  "qwen/qwen3.8-27b": { lab: "Qwen / Alibaba" },
+  "x-ai/grok-4.20": { lab: "xAI" },
+  "z-ai/glm-5.2": { lab: "Z.ai" },
+};
+
 const scaleInfo = {
   "ggb.impartial_beneficence": {
     label: "Helping beyond one’s circle",
@@ -134,6 +148,7 @@ const items = loadItems();
 const itemById = new Map(items.map((item) => [item.id, item]));
 const scaleRows = readCsv(join(projectRoot, "data", "derived", phase2Run, "scale_scores.csv"));
 const modelRows = readCsv(join(projectRoot, "data", "derived", phase2Run, "model_overview.csv"));
+const effectRows = readCsv(join(projectRoot, "data", "derived", phase2Run, "effects.csv"));
 const phase3Rows = readCsv(join(projectRoot, "data", "derived", phase3Run, "domain_summary.csv"));
 const selectedScaleRows = scaleRows
   .filter((row) => row.condition === "bare" && row.framing === "first_person" && row.score_type === "value")
@@ -144,6 +159,7 @@ const models = Object.entries(labels).map(([id, label]) => ({
   id,
   slug: id.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, ""),
   label,
+  lab: modelMetadata[id].lab,
   overview: modelRows.find((row) => row.model_id === id),
   scores: selectedScaleRows.filter((row) => row.model_id === id),
   phase3: phase3Rows
@@ -199,6 +215,137 @@ for (const model of models) {
   );
 }
 
+function mean(values) {
+  return values.length ? values.reduce((total, value) => total + value, 0) / values.length : null;
+}
+
+function pearson(left, right) {
+  if (left.length !== right.length || left.length < 3) return null;
+  const leftMean = mean(left);
+  const rightMean = mean(right);
+  const numerator = left.reduce((total, value, index) => total + (value - leftMean) * (right[index] - rightMean), 0);
+  const leftScale = Math.sqrt(left.reduce((total, value) => total + (value - leftMean) ** 2, 0));
+  const rightScale = Math.sqrt(right.reduce((total, value) => total + (value - rightMean) ** 2, 0));
+  return leftScale && rightScale ? numerator / (leftScale * rightScale) : null;
+}
+
+function selectedScore(model, scale) {
+  return Number(model.scores.find((score) => score.scale === scale)?.score);
+}
+
+function effectMagnitude(modelId, effect) {
+  const values = effectRows
+    .filter((row) => row.model_id === modelId && row.effect === effect && Object.hasOwn(scaleInfo, row.scale))
+    .map((row) => Math.abs(Number(row.difference)))
+    .filter(Number.isFinite);
+  return mean(values);
+}
+
+for (const model of models) {
+  model.perturbations = {
+    wording: effectMagnitude(model.id, "first_minus_third"),
+    evaluator: effectMagnitude(model.id, "evaluator_minus_bare"),
+  };
+}
+
+const correlationAxes = [
+  ...Object.entries(scaleInfo).map(([id, info]) => ({
+    id,
+    label: info.label,
+    plain: info.plain,
+    group: "Questionnaire lens",
+    values: Object.fromEntries(models.map((model) => [model.id, selectedScore(model, id)])),
+  })),
+  {
+    id: "quality.answer_order_sensitivity",
+    label: "Answer-order sensitivity",
+    plain: "How much this model’s answer changes when the same options appear in a different order. Lower is steadier.",
+    group: "Measured sensitivity",
+    values: Object.fromEntries(models.map((model) => [model.id, Number(model.overview.mean_fragility)])),
+  },
+  {
+    id: "quality.wording_sensitivity",
+    label: "Wording sensitivity",
+    plain: "Average shift when direct questions are reframed from first person to third person. Lower is steadier.",
+    group: "Measured sensitivity",
+    values: Object.fromEntries(models.map((model) => [model.id, model.perturbations.wording])),
+  },
+  {
+    id: "quality.evaluator_sensitivity",
+    label: "Evaluator-context sensitivity",
+    plain: "Average shift when an explicit evaluator context is added. Lower is steadier.",
+    group: "Measured sensitivity",
+    values: Object.fromEntries(models.map((model) => [model.id, model.perturbations.evaluator])),
+  },
+  {
+    id: "quality.parse_rate",
+    label: "Clean response rate",
+    plain: "Share of calls that produced a usable multiple-choice answer in the main battery. Higher is cleaner formatting, not stronger ethics.",
+    group: "Run quality",
+    values: Object.fromEntries(models.map((model) => [model.id, Number(model.overview.parse_rate)])),
+  },
+];
+
+const metricCorrelations = correlationAxes.flatMap((left, leftIndex) => correlationAxes.slice(leftIndex + 1).map((right) => {
+  const pairs = models
+    .map((model) => [left.values[model.id], right.values[model.id]])
+    .filter(([leftValue, rightValue]) => Number.isFinite(leftValue) && Number.isFinite(rightValue));
+  return { left: left.id, right: right.id, r: pearson(pairs.map(([value]) => value), pairs.map(([, value]) => value)), n: pairs.length };
+}));
+
+function normalizedItemScore(item, value) {
+  const values = item.options.map((option) => Number(option.value));
+  const minimum = Math.min(...values);
+  const maximum = Math.max(...values);
+  return maximum === minimum ? 0 : (Number(value) - minimum) / (maximum - minimum);
+}
+
+const modelSimilarity = models.map((left) => models.map((right) => {
+  const paired = items
+    .map((item) => [left.itemScores[item.id], right.itemScores[item.id], item])
+    .filter(([leftValue, rightValue]) => Number.isFinite(leftValue) && Number.isFinite(rightValue));
+  const leftValues = paired.map(([value, , item]) => normalizedItemScore(item, value));
+  const rightValues = paired.map(([, value, item]) => normalizedItemScore(item, value));
+  return { r: left.id === right.id ? 1 : pearson(leftValues, rightValues), n: paired.length };
+}));
+
+const varianceReadiness = [
+  {
+    factor: "Lab / provider",
+    current: "9 labs; 1 model from each",
+    verdict: "Not estimable yet",
+    why: "A lab effect is inseparable from that lab’s single model and its release family.",
+  },
+  {
+    factor: "Model size",
+    current: "Uniform public parameter counts are unavailable",
+    verdict: "Do not compare yet",
+    why: "Using only open-weight parameter counts would systematically exclude or misstate closed models.",
+  },
+  {
+    factor: "Architecture",
+    current: "One sampled model per family",
+    verdict: "Not estimable yet",
+    why: "A dense-versus-MoE result needs multiple models in each architecture group.",
+  },
+  {
+    factor: "Release date / training cutoff",
+    current: "Cutoffs are not consistently disclosed",
+    verdict: "Record first, compare later",
+    why: "Release date is a weak proxy; training cutoff should be used only when documented consistently across the panel.",
+  },
+];
+
+const futureVarianceFactors = [
+  "Same-model drift across dated releases",
+  "Prompt surface: first-person, third-person, and evaluator context",
+  "Answer-order sensitivity and response-format reliability",
+  "Model family and post-training method, where vendors document it",
+  "Inference provider, system settings, and routing changes",
+  "Language and cultural framing once multilingual items are added",
+  "Capability tier, only with a pre-specified independent capability measure",
+];
+
 function questionForForm(id) {
   const item = itemById.get(id);
   if (!item) throw new Error(`Unknown human-form item: ${id}`);
@@ -212,6 +359,13 @@ const output = {
   scaleInfo,
   models,
   items,
+  correlations: {
+    axes: correlationAxes,
+    metricPairs: metricCorrelations,
+    modelSimilarity,
+    varianceReadiness,
+    futureVarianceFactors,
+  },
   questionSets: {
     quick: {
       label: "Quick reflection",

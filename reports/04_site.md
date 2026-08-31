@@ -8,6 +8,11 @@
 - Mobile-first, quiet wabi-sabi visual system: warm paper, moss, clay, generous spacing, and no
   noisy dashboard chrome.
 - Plain-language study introduction and score explanations before detailed statistics.
+- Two deliberate browse paths: model-first dossiers and metric-first nine-model comparisons.
+  The latter show item-resampled intervals and lead to the source prompt and exact response.
+- A Patterns page with an interactive metric-to-metric scatter plot, model-to-model item-response
+  similarity heatmap, and small-sample-safe readiness views for future provider/lab, size,
+  architecture, release-date, and training-cutoff analyses.
 - Model pages, scale pages, and method pages with progressive disclosure.
 - Question-level links to fixed-condition exact model prompts, raw outputs, displayed letters, and
   canonical answer mapping.
@@ -27,6 +32,11 @@ archive on a phone. The full durable raw archive remains committed and linked th
 repository. The form uses benchmark subsets, so its output is an educational proximity comparison—
 not a full instrument score. The currently completed nine-model bank has no technology privacy or
 security dilemmas; those must be sourced and run before they can be represented in a comparison.
+
+The present panel has one model per provider and lacks uniformly public, comparable size,
+architecture, release-date, and training-cutoff metadata. The new pattern views therefore help
+read the measured response data, but they do not estimate factor effects or imply that a provider
+caused a result.
 
 ## Before public deployment
 

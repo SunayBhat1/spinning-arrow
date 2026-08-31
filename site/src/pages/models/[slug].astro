@@ -18,6 +18,7 @@ const phase3 = model.phase3.filter((row) => row.domain !== "ethics reference ite
     <a class="back" href={`${base}models`}>← All models</a>
     <p class="eyebrow" style="margin-top:30px">Response profile</p>
     <h1>{model.label}</h1>
+    <p class="small">Provider / lab: {model.lab}</p>
     <p class="lede">This page shows what this model answered under one precise survey condition: direct, first-person wording, with no evaluator context. It is a record of outputs, not a personality assessment.</p>
   </section>
 
@@ -27,7 +28,7 @@ const phase3 = model.phase3.filter((row) => row.domain !== "ethics reference ite
       {model.scores.map((score) => {
         const info = data.scaleInfo[score.scale];
         const slug = score.scale.replaceAll(".", "-");
-        return <a class="scale-link" href={`${base}scales/${slug}`}>
+        return <a class="scale-link" href={`${base}metrics/${slug}`}>
           <p class="eyebrow">{info.label}</p><span class="scale-score">{Number(score.score).toFixed(1)} <small>/ 5</small></span><p>{info.plain}</p>
         </a>;
       })}
