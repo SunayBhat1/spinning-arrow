@@ -79,7 +79,7 @@ const sourceInfo = {
   },
   ethics_phase2: {
     label: "ETHICS",
-    plain: "A published benchmark of everyday moral judgments. The detailed form includes a small number of its longer, context-rich cases.",
+    plain: "A published benchmark of everyday moral judgments. Its longer cases use the familiar AITA (\"Am I the A**hole?\") style: a concrete conflict with no supplied moral answer key.",
   },
 };
 
