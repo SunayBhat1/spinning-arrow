@@ -24,6 +24,11 @@ button, input { font: inherit; }
 nav { display: flex; gap: 20px; flex-wrap: wrap; font-size: .88rem; }
 nav a { text-decoration: none; color: var(--quiet); }
 nav a:hover { color: var(--ink); }
+nav .survey-link { display: inline-flex; align-items: center; gap: 7px; margin: -8px 0; padding: 7px 10px; border: 1px solid var(--moss); border-radius: 999px; background: #e5ebdf; color: var(--ink); font-weight: 650; box-shadow: 2px 2px 0 rgba(102, 116, 95, .16); }
+nav .survey-link span { color: var(--clay); font-size: 1rem; line-height: 1; transition: transform .18s ease; }
+nav .survey-link:hover { background: var(--ink); border-color: var(--ink); color: white; }
+nav .survey-link:hover span { color: #f3c0a8; transform: translateX(2px); }
+nav .survey-link:focus-visible { outline: 2px solid var(--clay); outline-offset: 3px; }
 main { padding: 56px 0 80px; }
 footer { display: flex; justify-content: space-between; gap: 20px; padding: 22px 0 36px; border-top: 1px solid var(--line); color: var(--quiet); font-size: .78rem; }
 
