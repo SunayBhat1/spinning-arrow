@@ -57,7 +57,7 @@ const base = import.meta.env.BASE_URL.endsWith("/")
       <p class="eyebrow">What is included</p><h2>Question sources stay visible.</h2>
       <p>The fast route uses concise published statements. The detailed route adds five longer everyday cases from ETHICS, in the familiar AITA (“Am I the A**hole?”) style, where reasonable people can weigh autonomy, fairness, safety, authority, and care differently.</p>
     </div>
-    <aside class="panel"><p class="eyebrow">Applied technology is next</p><p class="small">The completed nine-model dataset does not contain privacy-versus-security or other technology dilemmas. They are intentionally not faked into this comparison. A future applied set needs a public source, review, and a fresh run across every displayed model.</p></aside>
+    <aside class="panel"><p class="eyebrow">Applied technology is next</p><p class="small">The completed dataset does not contain privacy-versus-security or other technology dilemmas. They are intentionally not faked into this comparison. A future applied set needs a public source, review, and a fresh run across every displayed model.</p></aside>
   </section>
 </Base>
 
@@ -108,7 +108,7 @@ const base = import.meta.env.BASE_URL.endsWith("/")
       event.preventDefault();
       const submitted = new FormData(form);
       const answers = Object.fromEntries(set.questions.map((question) => [question.id, Number(submitted.get(question.id))]));
-      const ranked = models.map((model) => {
+      const compared = models.map((model) => {
         const matched = set.questions.filter((question) => Number.isFinite(Number(model.itemScores[question.id])));
         const squaredDifferences = matched.map((question) => {
           const visitor = normalizedValue(question, answers[question.id]);
@@ -123,10 +123,16 @@ const base = import.meta.env.BASE_URL.endsWith("/")
           similarity: Math.max(0, 1 - distance),
           matched: matched.length,
         };
-      }).filter((entry) => entry.matched === set.questions.length).sort((left, right) => left.distance - right.distance);
+      });
+      const minimumMatched = Math.ceil(set.questions.length * 0.7);
+      const ranked = compared
+        .filter((entry) => entry.matched >= minimumMatched)
+        .sort((left, right) => left.distance - right.distance);
+      const unavailable = compared.filter((entry) => entry.matched < minimumMatched);
       const top = ranked.slice(0, 5);
       result.classList.add("show");
-      result.innerHTML = `<p class="eyebrow">Your local comparison</p><h2>Five closest response patterns</h2><p>This comparison uses the same ${set.questions.length} questions. A higher similarity means your mapped answers were closer on this selected question set. It is not a personality match, diagnosis, or identity label.</p><div class="top-model-grid">${top.map((entry, index) => `<button type="button" class="top-model-choice" data-profile-model="${escapeHtml(entry.slug)}" aria-controls="response-panel-${escapeHtml(setKey)}"><span class="eyebrow">#${index + 1}</span><strong>${escapeHtml(entry.label)}</strong><span>${Math.round(entry.similarity * 100)}% response similarity</span><i aria-hidden="true"></i></button>`).join("")}</div><div class="similarity-plot"><div class="similarity-plot-head"><div><p class="eyebrow">Full tested panel</p><h3>Similarity to all nine models</h3></div><p class="small">100 = identical mapped answers on these ${set.questions.length} prompts.</p></div><div class="similarity-rows">${ranked.map((entry, index) => `<button type="button" class="similarity-row${index < 5 ? " is-top-five" : ""}" data-profile-model="${escapeHtml(entry.slug)}" aria-controls="response-panel-${escapeHtml(setKey)}"><span class="similarity-rank">${index + 1}</span><span class="similarity-name">${escapeHtml(entry.label)}<span class="similarity-bar"><i style="width:${(entry.similarity * 100).toFixed(1)}%"></i></span></span><strong>${Math.round(entry.similarity * 100)}<small>%</small></strong></button>`).join("")}</div></div><div id="response-panel-${escapeHtml(setKey)}" class="selected-response-panel" aria-live="polite"><p class="quiet-box">Select any model above to see its answer pattern across all ${set.questions.length} questions, alongside your own.</p></div><p class="small">Nothing was saved or sent. The model value below is its average mapped answer across five shuffled answer-order versions of each question; every row also links to one fixed recorded output.</p>`;
+      const unavailableNote = unavailable.length ? `<p class="note">Not ranked for this route because they answered fewer than ${minimumMatched} of ${set.questions.length} prompts: ${unavailable.map((entry) => `${escapeHtml(entry.label)} (${entry.matched}/${set.questions.length})`).join(", ")}.</p>` : "";
+      result.innerHTML = `<p class="eyebrow">Your local comparison</p><h2>Five closest response patterns</h2><p>This comparison uses the same questions. A higher similarity means your mapped answers were closer on this selected question set. It is not a personality match, diagnosis, or identity label.</p><div class="top-model-grid">${top.map((entry, index) => `<button type="button" class="top-model-choice" data-profile-model="${escapeHtml(entry.slug)}" aria-controls="response-panel-${escapeHtml(setKey)}"><span class="eyebrow">#${index + 1}</span><strong>${escapeHtml(entry.label)}</strong><span>${Math.round(entry.similarity * 100)}% response similarity</span><i aria-hidden="true"></i></button>`).join("")}</div><div class="similarity-plot"><div class="similarity-plot-head"><div><p class="eyebrow">Full tested panel</p><h3>Similarity to all ${models.length} tested models</h3></div><p class="small">100 = identical mapped answers on the available source prompts.</p></div><div class="similarity-rows">${ranked.map((entry, index) => `<button type="button" class="similarity-row${index < 5 ? " is-top-five" : ""}" data-profile-model="${escapeHtml(entry.slug)}" aria-controls="response-panel-${escapeHtml(setKey)}"><span class="similarity-rank">${index + 1}</span><span class="similarity-name">${escapeHtml(entry.label)}<small>${entry.matched}/${set.questions.length} prompts</small><span class="similarity-bar"><i style="width:${(entry.similarity * 100).toFixed(1)}%"></i></span></span><strong>${Math.round(entry.similarity * 100)}<small>%</small></strong></button>`).join("")}</div></div>${unavailableNote}<div id="response-panel-${escapeHtml(setKey)}" class="selected-response-panel" aria-live="polite"><p class="quiet-box">Select any model above to see its answer pattern across the available prompts, alongside your own.</p></div><p class="small">Nothing was saved or sent. The model value below is its average mapped answer across five shuffled answer-order versions of each question; every row also links to one fixed recorded output.</p>`;
 
       const responsePanel = result.querySelector(".selected-response-panel");
       const modelChoices = result.querySelectorAll("[data-profile-model]");
@@ -142,6 +148,9 @@ const base = import.meta.env.BASE_URL.endsWith("/")
         for (const choice of modelChoices) choice.classList.toggle("selected", choice.dataset.profileModel === slug);
         const rows = set.questions.map((question, index) => {
           const visitor = responseSummary(question, answers[question.id]);
+          if (!Number.isFinite(Number(selectedModel.itemScores[question.id]))) {
+            return `<article class="response-comparison-row"><p class="eyebrow">Question ${index + 1} · ${escapeHtml(question.source.label)}</p><h4>${escapeHtml(question.text)}</h4><p class="note">${escapeHtml(selectedModel.label)} did not produce enough valid answers for this prompt, so it is not used in this similarity score.</p></article>`;
+          }
           const model = responseSummary(question, selectedModel.itemScores[question.id]);
           const evidenceUrl = `${base}models/${encodeURIComponent(selectedModel.slug)}?item=${encodeURIComponent(question.id)}#evidence`;
           return `<article class="response-comparison-row"><p class="eyebrow">Question ${index + 1} · ${escapeHtml(question.source.label)}</p><h4>${escapeHtml(question.text)}</h4><div class="response-comparison-values"><div><span>Your answer</span><strong>${escapeHtml(visitor.nearest)}</strong><small>${visitor.numeric} / ${visitor.maximum}</small></div><div><span>${escapeHtml(selectedModel.label)} average</span><strong>${escapeHtml(model.nearest)}</strong><small>${model.numeric} / ${model.maximum} across 5 runs</small></div></div><a class="response-evidence-link" href="${evidenceUrl}">Open this model’s fixed recorded output →</a></article>`;

@@ -5,32 +5,56 @@ import { fileURLToPath } from "node:url";
 
 const siteRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const projectRoot = resolve(siteRoot, "..");
-const phase2Run = "20260830T155412Z__phase2__8fbf10";
+const phase2Run = "20260831T055938Z__phase2__0dade8";
 const phase3Run = "20260830T230045Z__phase3__74142b";
 
 const labels = {
   "anthropic/claude-sonnet-5": "Claude Sonnet 5",
+  "amazon/nova-lite-v1": "Amazon Nova Lite 1.0",
+  "deepseek/deepseek-v4-flash-0731": "DeepSeek V4 Flash",
   "deepseek/deepseek-v4-pro-0813": "DeepSeek V4 Pro",
+  "google/gemma-3-27b-it": "Gemma 3 27B",
+  "google/gemini-2.5-flash": "Gemini 2.5 Flash",
   "google/gemini-2.5-flash-lite": "Gemini 2.5 Flash Lite",
-  "meta-llama/llama-3.3-70b-instruct": "Llama 3.3 70B",
+  "meta-llama/llama-3.1-70b-instruct": "Llama 3.1 70B",
+  "meta-llama/llama-3.1-8b-instruct": "Llama 3.1 8B",
+  "microsoft/phi-4": "Microsoft Phi-4",
   "mistralai/mistral-medium-3.1": "Mistral Medium 3.1",
+  "mistralai/mistral-small-3.2-24b-instruct": "Mistral Small 3.2",
+  "nvidia/nemotron-3.5-lightning": "NVIDIA Nemotron 3.5 Lightning",
+  "openai/gpt-4.1-mini": "GPT-4.1 mini",
+  "openai/gpt-4o-mini-2024-07-18": "GPT-4o mini",
   "openai/gpt-5.4-mini": "GPT-5.4 mini",
+  "openai/gpt-5.6-luna": "GPT-5.6 Luna",
   "qwen/qwen3.8-27b": "Qwen 3.8 27B",
   "x-ai/grok-4.20": "Grok 4.20",
+  "z-ai/glm-4.5-air": "GLM 4.5 Air",
   "z-ai/glm-5.2": "GLM 5.2",
 };
 
-// The completed panel intentionally has one model from each lab. That makes provider
-// identification useful for browsing, but insufficient for a lab-effect estimate.
+// The launch panel includes repeated releases from several labs. That supports useful
+// browsing within a lab, but not a causal estimate of a lab effect.
 const modelMetadata = {
   "anthropic/claude-sonnet-5": { lab: "Anthropic" },
+  "amazon/nova-lite-v1": { lab: "Amazon" },
+  "deepseek/deepseek-v4-flash-0731": { lab: "DeepSeek" },
   "deepseek/deepseek-v4-pro-0813": { lab: "DeepSeek" },
+  "google/gemma-3-27b-it": { lab: "Google" },
+  "google/gemini-2.5-flash": { lab: "Google" },
   "google/gemini-2.5-flash-lite": { lab: "Google" },
-  "meta-llama/llama-3.3-70b-instruct": { lab: "Meta" },
+  "meta-llama/llama-3.1-70b-instruct": { lab: "Meta" },
+  "meta-llama/llama-3.1-8b-instruct": { lab: "Meta" },
+  "microsoft/phi-4": { lab: "Microsoft" },
   "mistralai/mistral-medium-3.1": { lab: "Mistral" },
+  "mistralai/mistral-small-3.2-24b-instruct": { lab: "Mistral" },
+  "nvidia/nemotron-3.5-lightning": { lab: "NVIDIA" },
+  "openai/gpt-4.1-mini": { lab: "OpenAI" },
+  "openai/gpt-4o-mini-2024-07-18": { lab: "OpenAI" },
   "openai/gpt-5.4-mini": { lab: "OpenAI" },
+  "openai/gpt-5.6-luna": { lab: "OpenAI" },
   "qwen/qwen3.8-27b": { lab: "Qwen / Alibaba" },
   "x-ai/grok-4.20": { lab: "xAI" },
+  "z-ai/glm-4.5-air": { lab: "Z.ai" },
   "z-ai/glm-5.2": { lab: "Z.ai" },
 };
 
@@ -53,7 +77,7 @@ const scaleInfo = {
 
 // The fast path deliberately uses short, non-graphic statements. The deeper path adds
 // published applied cases, but stays inside the completed Phase 2 item bank so every
-// displayed comparison can use an answer from all nine models.
+// displayed comparison can use an answer from every tested model.
 const quickQuestionIds = [
   "ggb_013", "ggb_016", "ggb_017", "ggb_020", "mfq2_001",
   "mfq2_002", "mfq2_003", "mfq2_010", "mfq2_005", "mfq2_006",
@@ -312,9 +336,9 @@ const modelSimilarity = models.map((left) => models.map((right) => {
 const varianceReadiness = [
   {
     factor: "Lab / provider",
-    current: "9 labs; 1 model from each",
-    verdict: "Not estimable yet",
-    why: "A lab effect is inseparable from that lab’s single model and its release family.",
+    current: "21 models; repeated releases from OpenAI, Google, Meta, Mistral, DeepSeek, and Z.ai",
+    verdict: "Descriptive only",
+    why: "Within-lab differences are visible, but lab, family, size, and release date still change together.",
   },
   {
     factor: "Model size",
@@ -324,9 +348,9 @@ const varianceReadiness = [
   },
   {
     factor: "Architecture",
-    current: "One sampled model per family",
-    verdict: "Not estimable yet",
-    why: "A dense-versus-MoE result needs multiple models in each architecture group.",
+    current: "Some public families repeat; comparable architecture metadata remains incomplete",
+    verdict: "Record first, compare later",
+    why: "A dense-versus-MoE result needs several documented models in each architecture group.",
   },
   {
     factor: "Release date / training cutoff",

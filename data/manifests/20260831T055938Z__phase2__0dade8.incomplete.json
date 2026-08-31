@@ -1,0 +1,12 @@
+{
+  "ended_at": "2026-08-31T07:07:00Z",
+  "expected_records": 132300,
+  "git_commit": "056962289d6e356775ebd82d1964f7100e347739",
+  "persisted_records": 58187,
+  "preflight": "data/preflight/20260831T070632Z__phase2.json",
+  "recorded_cost_usd": 4.40324029,
+  "run_id": "20260831T055938Z__phase2__0dade8",
+  "started_at": "2026-08-31T07:06:32Z",
+  "status": "incomplete",
+  "stop_reason": "OpenRouter response has no usage block; cost cannot be audited"
+}

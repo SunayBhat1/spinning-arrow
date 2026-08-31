@@ -1,0 +1,921 @@
+{
+  "approved_forecast_limit_usd": "20.0",
+  "calls_per_model": 6300,
+  "catalog_url": "https://openrouter.ai/api/v1/models",
+  "checked_at": "2026-08-31T05:59:03Z",
+  "forecast_input_tokens": 300,
+  "forecast_total_usd": "18.528174000",
+  "models": [
+    {
+      "forecast_usd": "1.64430000",
+      "id": "openai/gpt-5.4-mini",
+      "name": "OpenAI: GPT-5.4 Mini",
+      "pricing_per_token_usd": {
+        "completion": "0.0000045",
+        "prompt": "7.5E-7"
+      },
+      "reasoning": {
+        "default_effort": "medium",
+        "default_enabled": false,
+        "mandatory": false,
+        "supported_efforts": [
+          "xhigh",
+          "high",
+          "medium",
+          "low",
+          "none"
+        ]
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools"
+      ]
+    },
+    {
+      "forecast_usd": "0.4384800",
+      "id": "openai/gpt-5.6-luna",
+      "name": "OpenAI: GPT-5.6 Luna",
+      "pricing_per_token_usd": {
+        "completion": "0.0000012",
+        "prompt": "2E-7"
+      },
+      "reasoning": {
+        "default_effort": "medium",
+        "default_enabled": true,
+        "mandatory": false,
+        "supported_efforts": [
+          "max",
+          "xhigh",
+          "high",
+          "medium",
+          "low",
+          "none"
+        ]
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools"
+      ]
+    },
+    {
+      "forecast_usd": "0.2091600",
+      "id": "google/gemini-2.5-flash-lite",
+      "name": "Google: Gemini 2.5 Flash Lite",
+      "pricing_per_token_usd": {
+        "completion": "4E-7",
+        "prompt": "1E-7"
+      },
+      "reasoning": {
+        "mandatory": false
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "forecast_usd": "0.6930000",
+      "id": "google/gemini-2.5-flash",
+      "name": "Google: Gemini 2.5 Flash",
+      "pricing_per_token_usd": {
+        "completion": "0.0000025",
+        "prompt": "3E-7"
+      },
+      "reasoning": {
+        "mandatory": false
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "forecast_usd": "4.284000",
+      "id": "anthropic/claude-sonnet-5",
+      "name": "Anthropic: Claude Sonnet 5",
+      "pricing_per_token_usd": {
+        "completion": "0.00001",
+        "prompt": "0.000002"
+      },
+      "reasoning": {
+        "default_effort": "high",
+        "default_enabled": true,
+        "mandatory": false,
+        "supported_efforts": [
+          "max",
+          "xhigh",
+          "high",
+          "medium",
+          "low"
+        ]
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ]
+    },
+    {
+      "forecast_usd": "2.48850000",
+      "id": "x-ai/grok-4.20",
+      "name": "SpaceXAI: Grok 4.20",
+      "pricing_per_token_usd": {
+        "completion": "0.0000025",
+        "prompt": "0.00000125"
+      },
+      "reasoning": {
+        "default_enabled": false,
+        "mandatory": false
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "reasoning",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "forecast_usd": "0.7761600",
+      "id": "meta-llama/llama-3.1-70b-instruct",
+      "name": "Meta: Llama 3.1 70B Instruct",
+      "pricing_per_token_usd": {
+        "completion": "4E-7",
+        "prompt": "4E-7"
+      },
+      "reasoning": null,
+      "supported_parameters": [
+        "frequency_penalty",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "forecast_usd": "0.09853200",
+      "id": "meta-llama/llama-3.1-8b-instruct",
+      "name": "Meta: Llama 3.1 8B Instruct",
+      "pricing_per_token_usd": {
+        "completion": "8E-8",
+        "prompt": "5E-8"
+      },
+      "reasoning": null,
+      "supported_parameters": [
+        "frequency_penalty",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "forecast_usd": "0.8568000",
+      "id": "mistralai/mistral-medium-3.1",
+      "name": "Mistral: Mistral Medium 3.1",
+      "pricing_per_token_usd": {
+        "completion": "0.000002",
+        "prompt": "4E-7"
+      },
+      "reasoning": null,
+      "supported_parameters": [
+        "frequency_penalty",
+        "max_tokens",
+        "presence_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    },
+    {
+      "forecast_usd": "0.151830000",
+      "id": "mistralai/mistral-small-3.2-24b-instruct",
+      "name": "Mistral: Mistral Small 3.2 24B",
+      "pricing_per_token_usd": {
+        "completion": "2E-7",
+        "prompt": "7.5E-8"
+      },
+      "reasoning": null,
+      "supported_parameters": [
+        "frequency_penalty",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "forecast_usd": "0.931770000",
+      "id": "qwen/qwen3.8-27b",
+      "name": "Qwen: Qwen3.8 27B",
+      "pricing_per_token_usd": {
+        "completion": "0.00000255",
+        "prompt": "4.25E-7"
+      },
+      "reasoning": {
+        "default_effort": "xhigh",
+        "default_enabled": true,
+        "mandatory": false,
+        "supported_efforts": [
+          "xhigh",
+          "medium",
+          "low"
+        ]
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "forecast_usd": "0.31374000",
+      "id": "openai/gpt-4o-mini-2024-07-18",
+      "name": "OpenAI: GPT-4o-mini (2024-07-18)",
+      "pricing_per_token_usd": {
+        "completion": "6E-7",
+        "prompt": "1.5E-7"
+      },
+      "reasoning": null,
+      "supported_parameters": [
+        "frequency_penalty",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "prediction",
+        "presence_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_logprobs",
+        "top_p",
+        "web_search_options"
+      ]
+    },
+    {
+      "forecast_usd": "1.34719200",
+      "id": "deepseek/deepseek-v4-pro-0813",
+      "name": "DeepSeek: DeepSeek V4 Pro 0813",
+      "pricing_per_token_usd": {
+        "completion": "0.00000198",
+        "prompt": "6.6E-7"
+      },
+      "reasoning": {
+        "default_effort": "high",
+        "mandatory": false,
+        "supported_efforts": [
+          "max",
+          "high",
+          "low"
+        ]
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "forecast_usd": "0.131922000",
+      "id": "deepseek/deepseek-v4-flash-0731",
+      "name": "DeepSeek: DeepSeek V4 Flash 0731",
+      "pricing_per_token_usd": {
+        "completion": "1.8E-7",
+        "prompt": "6.5E-8"
+      },
+      "reasoning": {
+        "default_effort": "high",
+        "default_enabled": true,
+        "mandatory": false,
+        "supported_efforts": [
+          "max",
+          "high",
+          "low"
+        ]
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "parallel_tool_calls",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_a",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "forecast_usd": "2.43759600",
+      "id": "z-ai/glm-5.2",
+      "name": "Z.ai: GLM 5.2",
+      "pricing_per_token_usd": {
+        "completion": "0.00000374",
+        "prompt": "0.00000119"
+      },
+      "reasoning": {
+        "default_effort": "high",
+        "default_enabled": true,
+        "mandatory": false,
+        "supported_efforts": [
+          "xhigh",
+          "high"
+        ]
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "parallel_tool_calls",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "forecast_usd": "0.28854000",
+      "id": "z-ai/glm-4.5-air",
+      "name": "Z.ai: GLM 4.5 Air",
+      "pricing_per_token_usd": {
+        "completion": "8.5E-7",
+        "prompt": "1.3E-7"
+      },
+      "reasoning": {
+        "mandatory": false
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "seed",
+        "stop",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ]
+    },
+    {
+      "forecast_usd": "0.17388000",
+      "id": "google/gemma-3-27b-it",
+      "name": "Google: Gemma 3 27B",
+      "pricing_per_token_usd": {
+        "completion": "4.5E-7",
+        "prompt": "8E-8"
+      },
+      "reasoning": null,
+      "supported_parameters": [
+        "frequency_penalty",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "forecast_usd": "0.16128000",
+      "id": "nvidia/nemotron-3.5-lightning",
+      "name": "NVIDIA: Nemotron 3.5 Lightning",
+      "pricing_per_token_usd": {
+        "completion": "2E-7",
+        "prompt": "8E-8"
+      },
+      "reasoning": {
+        "mandatory": false
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "forecast_usd": "0.12549600",
+      "id": "amazon/nova-lite-v1",
+      "name": "Amazon: Nova Lite 1.0",
+      "pricing_per_token_usd": {
+        "completion": "2.4E-7",
+        "prompt": "6E-8"
+      },
+      "reasoning": null,
+      "supported_parameters": [
+        "max_tokens",
+        "stop",
+        "temperature",
+        "tools",
+        "top_k",
+        "top_p"
+      ]
+    },
+    {
+      "forecast_usd": "0.13935600",
+      "id": "microsoft/phi-4",
+      "name": "Microsoft: Phi 4",
+      "pricing_per_token_usd": {
+        "completion": "1.4E-7",
+        "prompt": "7E-8"
+      },
+      "reasoning": null,
+      "supported_parameters": [
+        "frequency_penalty",
+        "logit_bias",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "top_k",
+        "top_p"
+      ]
+    },
+    {
+      "forecast_usd": "0.8366400",
+      "id": "openai/gpt-4.1-mini",
+      "name": "OpenAI: GPT-4.1 Mini",
+      "pricing_per_token_usd": {
+        "completion": "0.0000016",
+        "prompt": "4E-7"
+      },
+      "reasoning": null,
+      "supported_parameters": [
+        "max_completion_tokens",
+        "max_tokens",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ]
+    }
+  ],
+  "probe_total_cost_usd": "0.000776035",
+  "probes": [
+    {
+      "cost_usd": "0.00006825",
+      "latency_ms": 633,
+      "model_id": "openai/gpt-5.4-mini",
+      "outcome": "answered",
+      "provider_served": "OpenAI",
+      "raw_response": "D",
+      "tokens": {
+        "in": 61,
+        "out": 5,
+        "reasoning": 0
+      }
+    },
+    {
+      "cost_usd": "0.0000182",
+      "latency_ms": 847,
+      "model_id": "openai/gpt-5.6-luna",
+      "outcome": "answered",
+      "provider_served": "OpenAI",
+      "raw_response": "D",
+      "tokens": {
+        "in": 61,
+        "out": 5,
+        "reasoning": 0
+      }
+    },
+    {
+      "cost_usd": "0.0000061",
+      "latency_ms": 1187,
+      "model_id": "google/gemini-2.5-flash-lite",
+      "outcome": "answered",
+      "provider_served": "Google",
+      "raw_response": "D",
+      "tokens": {
+        "in": 57,
+        "out": 1,
+        "reasoning": 0
+      }
+    },
+    {
+      "cost_usd": "0.0000196",
+      "latency_ms": 620,
+      "model_id": "google/gemini-2.5-flash",
+      "outcome": "answered",
+      "provider_served": "Google",
+      "raw_response": "E",
+      "tokens": {
+        "in": 57,
+        "out": 1,
+        "reasoning": 0
+      }
+    },
+    {
+      "cost_usd": "0.000234",
+      "latency_ms": 2161,
+      "model_id": "anthropic/claude-sonnet-5",
+      "outcome": "answered",
+      "provider_served": "Claude Platform on AWS",
+      "raw_response": "D",
+      "tokens": {
+        "in": 102,
+        "out": 3,
+        "reasoning": 0
+      }
+    },
+    {
+      "cost_usd": "0.00009965",
+      "latency_ms": 418,
+      "model_id": "x-ai/grok-4.20",
+      "outcome": "answered",
+      "provider_served": "xAI",
+      "raw_response": "D",
+      "tokens": {
+        "in": 239,
+        "out": 1,
+        "reasoning": 0
+      }
+    },
+    {
+      "cost_usd": "0.0000544",
+      "latency_ms": 122,
+      "model_id": "meta-llama/llama-3.1-70b-instruct",
+      "outcome": "answered",
+      "provider_served": "CoreWeave",
+      "raw_response": "E",
+      "tokens": {
+        "in": 66,
+        "out": 2,
+        "reasoning": 0
+      }
+    },
+    {
+      "cost_usd": "0.00000466",
+      "latency_ms": 308,
+      "model_id": "meta-llama/llama-3.1-8b-instruct",
+      "outcome": "answered",
+      "provider_served": "Groq",
+      "raw_response": "D",
+      "tokens": {
+        "in": 90,
+        "out": 2,
+        "reasoning": 0
+      }
+    },
+    {
+      "cost_usd": "0.0000272",
+      "latency_ms": 449,
+      "model_id": "mistralai/mistral-medium-3.1",
+      "outcome": "answered",
+      "provider_served": "Mistral",
+      "raw_response": "D",
+      "tokens": {
+        "in": 58,
+        "out": 2,
+        "reasoning": 0
+      }
+    },
+    {
+      "cost_usd": "0.00000475",
+      "latency_ms": 311,
+      "model_id": "mistralai/mistral-small-3.2-24b-instruct",
+      "outcome": "answered",
+      "provider_served": "DeepInfra",
+      "raw_response": "D",
+      "tokens": {
+        "in": 58,
+        "out": 2,
+        "reasoning": 0
+      }
+    },
+    {
+      "cost_usd": "0.00003745",
+      "latency_ms": 602,
+      "model_id": "qwen/qwen3.8-27b",
+      "outcome": "answered",
+      "provider_served": "Venice",
+      "raw_response": "E",
+      "tokens": {
+        "in": 69,
+        "out": 2,
+        "reasoning": 0
+      }
+    },
+    {
+      "cost_usd": "0.0000099",
+      "latency_ms": 478,
+      "model_id": "openai/gpt-4o-mini-2024-07-18",
+      "outcome": "answered",
+      "provider_served": "OpenAI",
+      "raw_response": "D",
+      "tokens": {
+        "in": 62,
+        "out": 1,
+        "reasoning": 0
+      }
+    },
+    {
+      "cost_usd": "0.00008521",
+      "latency_ms": 2968,
+      "model_id": "deepseek/deepseek-v4-pro-0813",
+      "outcome": "answered",
+      "provider_served": "CoreWeave",
+      "raw_response": "E",
+      "tokens": {
+        "in": 59,
+        "out": 2,
+        "reasoning": 0
+      }
+    },
+    {
+      "cost_usd": "0.00000508",
+      "latency_ms": 702,
+      "model_id": "deepseek/deepseek-v4-flash-0731",
+      "outcome": "answered",
+      "provider_served": "DeepInfra",
+      "raw_response": "E",
+      "tokens": {
+        "in": 59,
+        "out": 2,
+        "reasoning": 0
+      }
+    },
+    {
+      "cost_usd": "0.0000471",
+      "latency_ms": 907,
+      "model_id": "z-ai/glm-5.2",
+      "outcome": "answered",
+      "provider_served": "DigitalOcean",
+      "raw_response": "E",
+      "tokens": {
+        "in": 61,
+        "out": 2,
+        "reasoning": 0
+      }
+    },
+    {
+      "cost_usd": "0.000003405",
+      "latency_ms": 846,
+      "model_id": "z-ai/glm-4.5-air",
+      "outcome": "answered",
+      "provider_served": "Novita",
+      "raw_response": "E",
+      "tokens": {
+        "in": 64,
+        "out": 2,
+        "reasoning": 0
+      }
+    },
+    {
+      "cost_usd": "0.00000708",
+      "latency_ms": 397,
+      "model_id": "google/gemma-3-27b-it",
+      "outcome": "answered",
+      "provider_served": "Parasail",
+      "raw_response": "\nE\n",
+      "tokens": {
+        "in": 66,
+        "out": 4,
+        "reasoning": 0
+      }
+    },
+    {
+      "cost_usd": "0.0000076",
+      "latency_ms": 250,
+      "model_id": "nvidia/nemotron-3.5-lightning",
+      "outcome": "answered",
+      "provider_served": "CoreWeave",
+      "raw_response": "E",
+      "tokens": {
+        "in": 71,
+        "out": 2,
+        "reasoning": 0
+      }
+    },
+    {
+      "cost_usd": "0.00000378",
+      "latency_ms": 891,
+      "model_id": "amazon/nova-lite-v1",
+      "outcome": "answered",
+      "provider_served": "Amazon Bedrock",
+      "raw_response": "E",
+      "tokens": {
+        "in": 55,
+        "out": 2,
+        "reasoning": 0
+      }
+    },
+    {
+      "cost_usd": "0.00000462",
+      "latency_ms": 410,
+      "model_id": "microsoft/phi-4",
+      "outcome": "answered",
+      "provider_served": "DeepInfra",
+      "raw_response": "E",
+      "tokens": {
+        "in": 62,
+        "out": 2,
+        "reasoning": 0
+      }
+    },
+    {
+      "cost_usd": "0.000028",
+      "latency_ms": 818,
+      "model_id": "openai/gpt-4.1-mini",
+      "outcome": "answered",
+      "provider_served": "OpenAI",
+      "raw_response": "E",
+      "tokens": {
+        "in": 62,
+        "out": 2,
+        "reasoning": 0
+      }
+    }
+  ],
+  "run_cap_usd": "20.0"
+}

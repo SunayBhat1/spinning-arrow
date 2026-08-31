@@ -15,7 +15,7 @@ const base = import.meta.env.BASE_URL.endsWith("/")
   <section id="results" class="section method-grid">
     <div>
       <p class="eyebrow">The short version</p><h2>What the first two studies found.</h2>
-      <p>In Phase 2, nine models completed several established questionnaires under controlled prompt conditions. In Phase 3, three models faced everyday scenarios related to the same themes.</p>
+      <p>In the launch battery, 21 models completed several established questionnaires under controlled prompt conditions. In Phase 3, three models faced everyday scenarios related to the same themes.</p>
       <p>Llama and Mistral generally gave practical choices that matched their clear survey positions on helping beyond one’s circle. Claude’s survey answers on that lens were lower, while its practical choices repeatedly selected the directly helpful action. That mismatch is the key result—not evidence that one model is morally better than another.</p>
     </div>
     <aside class="panel"><p class="eyebrow">Evidence trail</p><p>Every headline can lead back to a scale, the source question, and an exact recorded answer.</p><a class="button ghost" href={`${base}models`}>Open the explorer</a></aside>
@@ -47,7 +47,7 @@ const base = import.meta.env.BASE_URL.endsWith("/")
 
   <section id="patterns" class="section">
     <p class="eyebrow">Reading correlations</p><h2>A pattern is a question to inspect, not an explanation.</h2>
-    <p>The pattern explorer compares either two panel-level metrics or two models’ item-by-item response profiles. Pearson correlation describes how closely two measured patterns moved together in this sample. With only nine models, it cannot tell us whether a lab, a model size, an architecture, or a release date caused the relationship.</p>
+    <p>The pattern explorer compares either two panel-level metrics or two models’ item-by-item response profiles. Pearson correlation describes how closely two measured patterns moved together in this sample. Even with 21 models, it cannot tell us whether a lab, a model size, an architecture, or a release date caused the relationship.</p>
     <p>Provider, size, architecture, and training-cutoff comparisons need repeated, comparable models in each group and consistently documented metadata. Those facts are not yet available across the current closed and open model mix, so the site shows their readiness rather than fabricating an analysis.</p>
   </section>
 

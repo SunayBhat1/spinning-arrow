@@ -462,8 +462,11 @@ unresolved. Sunay reviews design and copy. Domain decision happens here.
 
 ### Phase 5 — Launch
 
-- Expand `panels/launch.yaml` to ~12 models (not 18 — start narrow). Pinned dated IDs only (D6).
-- Full sweep, all conditions. Expected **~$10**.
+- Expand the strict-D5 panel to 21 OpenRouter model IDs spanning the major closed-model providers,
+  leading Chinese labs, and accessible open-weight baselines. Each candidate must pass a live
+  response-format, usage-accounting, and zero-reasoning preflight before it enters the sweep.
+- Full sweep, all conditions. The 2026-08-31 live preflight forecast is **$18.53**, inside the
+  user-approved **$20** run cap.
 - Automation:
   - **New-model trigger** — daily Action polls `/api/v1/models` (free, unauthenticated), diffs
     the ID list against the last run, opens an issue and queues a sweep for anything new.
@@ -500,7 +503,7 @@ Per-model sweep at 300 items × 5 permutations × 2 framings × 2 conditions = 6
 | 1 | pilot, 6 models × 400 calls | **< $1** |
 | 2 | full battery × 9 models | ~$18 provisional; reforecast before execution |
 | 3 | scenarios × 3 models | ~$3 |
-| 5 | full launch sweep, 12 models | ~$10 |
+| 5 | full launch sweep, 21 strict-D5 models | forecast-gated at ≤ $20 |
 | — | steady state: new-model sweeps + monthly drift | **~$4/month** |
 
 Ceiling $30/month (D13), enforced by the key's spend limit. Every run writes its actual cost to
@@ -562,8 +565,9 @@ Do not block on these; they come due at the gate noted.
 2. **Scenario content** for Phase 3 — how adversarial should the dilemmas be? Trolley-style
    abstractions, or mundane advice situations? Mundane probably measures deployment behavior
    better; abstractions are more legible to readers. Due at **Gate 3a**.
-3. **Panel membership** — 12 models is the recommendation. Which 12, and how are open-weight vs.
-   frontier balanced? Due at **Gate 5**.
+3. **Panel membership** — resolved for this launch as a 21-model strict-D5 panel. Future refreshes
+   should preserve broad provider coverage, add dated within-family comparisons where available,
+   and continue to exclude mandatory-reasoning models from the comparable main path.
 4. **Publication posture** — is this a personal project page, or does it get announced somewhere
    (LessWrong, HN)? Affects tone of the methodology page. Due at **Gate 4**.
 

@@ -31,7 +31,7 @@ const questions = data.items.filter((item) => item.scale === scale);
   </section>
 
   <section class="section">
-    <div class="section-head"><div><p class="eyebrow">Panel comparison</p><h2>All nine models on one axis.</h2></div><a class="note" href={`${base}patterns`}>Compare this axis with another →</a></div>
+    <div class="section-head"><div><p class="eyebrow">Panel comparison</p><h2>All {data.models.length} models on one axis.</h2></div><a class="note" href={`${base}patterns`}>Compare this axis with another →</a></div>
     <div class="panel metric-comparison-plot" aria-label={`${info.label} comparison plot`}>
       {scores.map(({ model, score }) => {
         const low = Number(score.ciLow);

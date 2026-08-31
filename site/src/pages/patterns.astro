@@ -9,7 +9,9 @@ const { axes, metricPairs, modelSimilarity, varianceReadiness, futureVarianceFac
 const axisById = Object.fromEntries(axes.map((axis) => [axis.id, axis]));
 const modelPalette = [
   "#a24f3d", "#2f7880", "#b27a1f", "#6f8651", "#765a8e",
-  "#3e6e9f", "#c16c35", "#8b493c", "#4d7e69",
+  "#3e6e9f", "#c16c35", "#8b493c", "#4d7e69", "#9a4d87",
+  "#4b7190", "#9c6b2d", "#557a5f", "#a14e50", "#5f5b91",
+  "#27756e", "#b45e2f", "#73763f", "#8d5478", "#3f697b", "#a3773b",
 ];
 const modelColorById = Object.fromEntries(
   data.models.map((model, index) => [model.id, modelPalette[index % modelPalette.length]])
@@ -36,8 +38,8 @@ function similarityStyle(value) {
   <section>
     <p class="eyebrow">Pattern explorer</p>
     <h1>What moves together—and what we cannot yet know.</h1>
-    <p class="lede">Explore relationships among the study’s measured questionnaire scores and prompt sensitivities. These are descriptive patterns across nine models, not explanations or causal findings.</p>
-    <p class="quiet-box">Nine models are enough to generate hypotheses and inspect outliers, not enough to declare that a lab, architecture, size, or release date caused a result.</p>
+    <p class="lede">Explore relationships among the study’s measured questionnaire scores and prompt sensitivities. These are descriptive patterns across {data.models.length} models, not explanations or causal findings.</p>
+    <p class="quiet-box">{data.models.length} models can surface hypotheses and outliers, but cannot by themselves show that a lab, architecture, size, or release date caused a result.</p>
   </section>
 
   <section class="section">
@@ -47,7 +49,7 @@ function similarityStyle(value) {
     <div class="card-grid terms-overview" style="margin-top:24px">
       <article class="card"><p class="eyebrow">MFQ-2</p><h3>Six everyday moral themes</h3><p>Care, Equality, Proportionality, Loyalty, Authority, and Purity come from a questionnaire about the reasons people may treat as morally important. “Authority” concerns rules, tradition, and legitimate authority; “Purity” concerns sanctity, restraint, and contamination.</p><a href={`${base}metrics`}>See the six lenses →</a></article>
       <article class="card"><p class="eyebrow">Greatest Good Benchmark</p><h3>Two difficult trade-offs</h3><p>One lens asks about helping people beyond one’s own circle. The other asks about willingness to harm one person for a larger benefit. Neither is a right-answer test or a moral grade.</p><a href={`${base}metrics/ggb-impartial_beneficence`}>Open the GGB questions →</a></article>
-      <article class="card"><p class="eyebrow">Correlation</p><h3>A shared pattern, not a cause</h3><p>Positive means the two scores tended to rise and fall together across this nine-model sample; negative means they moved in opposite directions. It does not show that one value causes the other.</p><a href={`${base}method#patterns`}>How to read correlations →</a></article>
+      <article class="card"><p class="eyebrow">Correlation</p><h3>A shared pattern, not a cause</h3><p>Positive means the two scores tended to rise and fall together across this {data.models.length}-model sample; negative means they moved in opposite directions. It does not show that one value causes the other.</p><a href={`${base}method#patterns`}>How to read correlations →</a></article>
     </div>
     <details class="terms-dictionary" open>
       <summary>Definitions used in the charts</summary>

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import gzip
 import json
 import os
 import sys
@@ -38,6 +39,7 @@ from spinning_arrow.contracts import (
 from spinning_arrow.items import Item, item_set_hash, load_items
 from spinning_arrow.parse import parse_response
 from spinning_arrow.render import render_item
+from spinning_arrow.report import _load_records
 from spinning_arrow.run import (
     _append_jsonl_gzip,
     _file_stem,
@@ -58,6 +60,7 @@ PHASE2_ITEM_FILENAMES = (
     "ethics_phase2.yaml",
     "attention_checks.yaml",
 )
+_UNACCOUNTED_USAGE_ERROR = "OpenRouter response has no usage block; cost cannot be audited"
 
 
 class Phase2PreflightError(RuntimeError):
@@ -74,6 +77,7 @@ class Phase2Model:
     max_call_cost_usd: Decimal
     max_tokens: int
     parameter_omissions: tuple[str, ...]
+    provider_preferences: Mapping[str, object]
 
 
 @dataclass(frozen=True)
@@ -108,10 +112,25 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--project-root", default=".")
     parser.add_argument("--env-file", default=".env")
     parser.add_argument("--workers", type=int, default=12)
+    parser.add_argument(
+        "--resume-run-id",
+        help="resume an interrupted Phase 2 run after revalidating durable raw records",
+    )
+    parser.add_argument(
+        "--restart-model",
+        action="append",
+        default=[],
+        help="on resume, discard and recollect one model after a documented routing change",
+    )
     args = parser.parse_args(argv)
     _load_dotenv(Path(args.env_file))
     try:
-        artifacts = run_phase2(Path(args.project_root), workers=args.workers)
+        artifacts = run_phase2(
+            Path(args.project_root),
+            workers=args.workers,
+            resume_run_id=args.resume_run_id,
+            restart_model_ids=frozenset(args.restart_model),
+        )
     except (
         OpenRouterClientError,
         Phase2PreflightError,
@@ -128,7 +147,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     return 0
 
 
-def run_phase2(project_root: Path, *, workers: int = 12) -> Phase2Artifacts:
+def run_phase2(
+    project_root: Path,
+    *,
+    workers: int = 12,
+    resume_run_id: str | None = None,
+    restart_model_ids: frozenset[str] = frozenset(),
+) -> Phase2Artifacts:
     if workers < 1:
         raise ValueError("workers must be at least one")
     root = project_root.resolve()
@@ -144,19 +169,41 @@ def run_phase2(project_root: Path, *, workers: int = 12) -> Phase2Artifacts:
         raise RuntimeError(
             f"Phase 2 requires 6,300 calls per model; calculated {expected_per_model}"
         )
+    configured_model_ids = {model.id for model in config.models}
+    if not restart_model_ids.issubset(configured_model_ids):
+        raise ValueError("restart_model_ids must belong to the active Phase 2 panel")
+    if restart_model_ids and resume_run_id is None:
+        raise ValueError("restart_model_ids may only be used with resume_run_id")
     api_key = os.environ.get("OPENROUTER_API_KEY", "")
     preflight = _run_preflight(root, api_key, config, items, expected_per_model)
     started_at = _utc_now()
-    run_id = _run_id(started_at, "phase2", item_set_hash(items))
+    run_id = resume_run_id or _run_id(started_at, "phase2", item_set_hash(items))
     raw_directory = root / "data" / "raw" / run_id
-    raw_directory.mkdir(parents=True, exist_ok=False)
+    existing_records = _load_resumable_records(
+        raw_directory, run_id, config, items, restart_model_ids=restart_model_ids
+    )
+    if resume_run_id is None:
+        raw_directory.mkdir(parents=True, exist_ok=False)
     budget = RunBudget(config.budget_usd)
+    _seed_budget_from_existing_records(budget, existing_records)
     client = OpenRouterClient(api_key, budget)
-    tasks = _iter_tasks(config.models, items, config)
+    existing_keys = {_task_key(record) for record in existing_records}
+    tasks = (
+        task
+        for task in _iter_tasks(config.models, items, config)
+        if _task_key_from_task(task) not in existing_keys
+    )
     total_tasks = expected_per_model * len(config.models)
     records, stop_reason = _execute_tasks(
-        client, run_id, config, tasks, total_tasks, raw_directory, workers
+        client,
+        run_id,
+        config,
+        tasks,
+        total_tasks - len(existing_records),
+        raw_directory,
+        workers,
     )
+    records = [*existing_records, *records]
     records.sort(key=_record_sort_key)
     ended_at = _utc_now()
     if stop_reason is not None:
@@ -169,9 +216,9 @@ def run_phase2(project_root: Path, *, workers: int = 12) -> Phase2Artifacts:
                 "started_at": started_at,
                 "ended_at": ended_at,
                 "git_commit": commit,
-                "preflight": str(preflight.relative_to(root)),
-                "expected_records": total_tasks,
-                "persisted_records": len(records),
+            "preflight": str(preflight.relative_to(root)),
+            "expected_records": total_tasks,
+            "persisted_records": len(records),
                 "recorded_cost_usd": float(budget.spent_usd),
                 "stop_reason": stop_reason,
             },
@@ -202,6 +249,11 @@ def run_phase2(project_root: Path, *, workers: int = 12) -> Phase2Artifacts:
             "max_tokens": config.max_tokens,
             "reasoning": {"enabled": False},
             "preflight": str(preflight.relative_to(root)),
+            "resumed_existing_records": len(existing_records),
+            "resumed_restarted_models": sorted(restart_model_ids),
+            "provider_preferences": {
+                model.id: dict(model.provider_preferences) for model in config.models
+            },
             "source_manifest": _hash_file(root / "instruments" / "PHASE2_SOURCES.json"),
         },
         parameter_omissions={model.id: model.parameter_omissions for model in config.models},
@@ -215,6 +267,99 @@ def run_phase2(project_root: Path, *, workers: int = 12) -> Phase2Artifacts:
     manifest_path = root / "data" / "manifests" / f"{run_id}.json"
     _write_json(manifest_path, manifest.to_dict())
     return Phase2Artifacts(run_id, raw_directory, manifest_path, budget.spent_usd)
+
+
+def _load_resumable_records(
+    raw_directory: Path,
+    run_id: str,
+    config: Phase2Config,
+    items: Sequence[Item],
+    *,
+    restart_model_ids: frozenset[str],
+) -> list[ResponseRecord]:
+    """Load a stopped run and retain only records whose provider cost is auditable."""
+
+    if not raw_directory.exists():
+        return []
+    if not raw_directory.is_dir():
+        raise ValueError(f"Phase 2 raw path is not a directory: {raw_directory}")
+    incomplete_path = raw_directory.parents[1] / "manifests" / f"{run_id}.incomplete.json"
+    try:
+        incomplete = json.loads(incomplete_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise ValueError(f"Phase 2 resume requires an incomplete manifest for {run_id}") from error
+    if not isinstance(incomplete, Mapping) or incomplete.get("status") != "incomplete":
+        raise ValueError(f"Phase 2 resume requires an incomplete manifest for {run_id}")
+    records = _load_records(raw_directory, run_id)
+    valid_keys = {
+        (model.id, item.id, condition, framing, permutation)
+        for model in config.models
+        for item in items
+        for condition in config.conditions
+        for framing in config.framings
+        for permutation in range(config.permutations)
+    }
+    keys = [_task_key(record) for record in records]
+    if len(keys) != len(set(keys)):
+        raise ValueError("interrupted Phase 2 raw data contains duplicate task records")
+    if not set(keys).issubset(valid_keys):
+        raise ValueError("interrupted Phase 2 raw data does not match the active panel")
+    if any(record.tokens.reasoning_tokens for record in records):
+        raise ValueError("interrupted Phase 2 raw data contains billed reasoning tokens")
+    retained = [
+        record
+        for record in records
+        if record.error != _UNACCOUNTED_USAGE_ERROR and record.model_id not in restart_model_ids
+    ]
+    if len(retained) != len(records):
+        _rewrite_raw_records(raw_directory, retained)
+    return retained
+
+
+def _rewrite_raw_records(raw_directory: Path, records: Sequence[ResponseRecord]) -> None:
+    """Atomically replace a stopped run's files after dropping un-auditable responses."""
+
+    by_model: dict[str, list[ResponseRecord]] = defaultdict(list)
+    for record in records:
+        by_model[record.model_id].append(record)
+    existing_paths = {path.stem.removesuffix(".jsonl") for path in raw_directory.glob("*.jsonl.gz")}
+    expected_stems = existing_paths | {_file_stem(model_id) for model_id in by_model}
+    for stem in expected_stems:
+        path = raw_directory / f"{stem}.jsonl.gz"
+        model_records = by_model.get(stem.replace("__", "/"), [])
+        if not model_records:
+            # All records for this model were unaccounted; an empty file remains resumable.
+            with gzip.open(path, "wt", encoding="utf-8"):
+                pass
+            continue
+        temporary = path.with_suffix(".tmp")
+        with gzip.open(temporary, "wt", encoding="utf-8") as handle:
+            for record in model_records:
+                handle.write(json.dumps(record.to_dict(), sort_keys=True))
+                handle.write("\n")
+        temporary.replace(path)
+
+
+def _task_key(record: ResponseRecord) -> tuple[str, str, str, str, int]:
+    return record.model_id, record.item_id, record.condition, record.framing, record.permutation
+
+
+def _task_key_from_task(
+    task: tuple[Phase2Model, Item, str, str, int],
+) -> tuple[str, str, str, str, int]:
+    model, item, condition, framing, permutation = task
+    return model.id, item.id, condition, framing, permutation
+
+
+def _seed_budget_from_existing_records(
+    budget: RunBudget, records: Sequence[ResponseRecord]
+) -> None:
+    """Carry prior durable spend into a resumed run's original hard-cap accounting."""
+
+    prior_spend = sum((Decimal(str(record.cost_usd)) for record in records), start=Decimal("0"))
+    if prior_spend:
+        reservation = budget.reserve(prior_spend)
+        budget.settle(reservation, prior_spend)
 
 
 def _phase2_items(root: Path) -> tuple[Item, ...]:
@@ -299,11 +444,7 @@ def _run_one(
     config: Phase2Config,
 ) -> _TaskResult:
     rendered = render_item(item, framing=framing, condition=condition, permutation=permutation)
-    parameters: dict[str, Any] = {}
-    if "temperature" not in model.parameter_omissions:
-        parameters["temperature"] = config.temperature
-    if "reasoning" not in model.parameter_omissions:
-        parameters["reasoning"] = {"enabled": False}
+    parameters = _request_parameters(model, config)
     try:
         completion = client.chat_completion(
             model_id=model.id,
@@ -408,6 +549,17 @@ def _error_record(
     )
 
 
+def _request_parameters(model: Phase2Model, config: Phase2Config) -> dict[str, Any]:
+    parameters: dict[str, Any] = {}
+    if "temperature" not in model.parameter_omissions:
+        parameters["temperature"] = config.temperature
+    if "reasoning" not in model.parameter_omissions:
+        parameters["reasoning"] = {"enabled": False}
+    if model.provider_preferences:
+        parameters["provider"] = dict(model.provider_preferences)
+    return parameters
+
+
 def _completion_error_record(
     run_id: str,
     model: Phase2Model,
@@ -452,10 +604,15 @@ def _load_config(path: Path) -> Phase2Config:
         if not isinstance(raw, Mapping):
             raise ValueError("each Phase 2 model entry must be an object")
         omissions = raw.get("parameter_omissions", [])
+        provider_preferences = raw.get("provider", {})
         if not isinstance(omissions, list) or not all(
             isinstance(value, str) for value in omissions
         ):
             raise ValueError("parameter_omissions must be a list of strings")
+        if not isinstance(provider_preferences, Mapping) or not all(
+            isinstance(key, str) for key in provider_preferences
+        ):
+            raise ValueError("provider must be an object with string keys")
         max_tokens = raw.get("max_tokens", sampling.get("max_tokens"))
         if isinstance(max_tokens, bool) or not isinstance(max_tokens, int) or max_tokens < 1:
             raise ValueError("model max_tokens must be a positive integer")
@@ -468,6 +625,7 @@ def _load_config(path: Path) -> Phase2Config:
                 max_call_cost_usd=Decimal(str(raw.get("max_call_cost_usd"))),
                 max_tokens=max_tokens,
                 parameter_omissions=tuple(omissions),
+                provider_preferences=dict(provider_preferences),
             )
         )
     conditions = tuple(document.get("conditions", []))
@@ -545,11 +703,7 @@ def _run_preflight(
     rendered = render_item(probe_item, framing="third_person", condition="bare", permutation=0)
     probes: list[dict[str, object]] = []
     for model in config.models:
-        parameters: dict[str, Any] = {}
-        if "temperature" not in model.parameter_omissions:
-            parameters["temperature"] = config.temperature
-        if "reasoning" not in model.parameter_omissions:
-            parameters["reasoning"] = {"enabled": False}
+        parameters = _request_parameters(model, config)
         result: CompletionResult | None = None
         for attempt in range(1, 4):
             try:

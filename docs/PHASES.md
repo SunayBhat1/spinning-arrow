@@ -90,32 +90,43 @@ agreement from directional concordance because reference accuracy is not an acti
 
 **Planned:** Astro static site, themed SVG plots, methodology page, GitHub Pages deploy.
 **Gate 4 deliverable:** deployed preview URL + `reports/04_site.md`. Domain decided here.
-**Status:** in progress — local preview ready for review
+**Status:** complete — publicly deployed 2026-08-30
 **Shipped:** The first mobile-first Astro preview is in `site/`. It reads committed Phase 2 and 3
 evidence at build time, offers separate model-first and metric-first routes, and exposes one fixed,
 documented raw answer per model/question/condition rather than loading the entire raw archive on a
 phone. A new Patterns page adds an interactive metric-to-metric plot, item-level model-profile
 similarity heatmap, and an explicit readiness table for future lab, size, architecture, and dated
-release comparisons; it does not claim causal effects from the nine-model panel. The
+release comparisons; it does not claim causal effects from the panel. The
 browser-only human profile form now offers a ten-question quick route and a 33-question detailed
 route; both compare only with each model's average answer to the same prompts, identify each
 source, store and transmit no answers, and make no diagnostic or moral-quality claim. Each result
-now ranks the closest five response patterns, plots all nine, and can open a full same-question
+now ranks the closest five response patterns, plots every tested model, and can open a full same-question
 comparison with any selected model (including a per-row evidence link). The visual
 direction is deliberately minimal: warm paper, moss, clay, restrained metrics, and progressively
-disclosed methodology. `.github/workflows/deploy-site.yml` is ready for a public GitHub Pages
-project site after review; it is not yet deployed or connected to DNS.
-**Open:** Sunay’s questionnaire/content and visual review; then enable GitHub Actions Pages,
-deploy the preview, and add the `spinning-arrow.sunaybhat.me` domain and verification records in
-Squarespace/GitHub. Privacy/security/technology scenarios remain a separately sourced and
-evaluated follow-on, not an unsupported claim in the current form.
+disclosed methodology. The GitHub Pages deployment is live at
+`https://spinning-arrow.sunaybhat.me/` with the Squarespace-managed subdomain connected and HTTPS
+enabled. Privacy/security/technology scenarios remain a separately sourced and evaluated follow-on,
+not an unsupported claim in the current form.
+**Open:** expand the completed evidence panel and rebuild the public static data bundle.
 
 ## Phase 5 — Launch
 
-**Planned:** 12-model panel, full sweep, new-model trigger + drift automation, reasoning-on
+**Planned:** 21-model panel, full sweep, new-model trigger + drift automation, reasoning-on
 side-study.
 **Gate 5:** the pre-public checklist in SPEC §8.
-**Status:** not started
+**Status:** complete — 2026-08-31
+**Shipped:** Run `20260831T055938Z__phase2__0dade8` completed all 132,300 calls (6,300 per
+model) across the strict-D5 21-model launch panel. Its first all-model preflight forecast was
+`$18.528174`; the recorded raw-response cost was `$6.60498886889`, and all final records report
+zero reasoning tokens. An OpenRouter response without a usage block stopped the first Mistral Small
+collection checkpoint at 57,471 calls. That un-auditable model slice was discarded, Mistral Small
+was pinned to DeepInfra with fallback disabled, all 21 models cleared a fresh preflight, and the
+complete run resumed under the original `$20` cap. The final manifest records the provider setting,
+the 56,700 retained records, and the recollected model. The public site now builds from the full
+panel, including model-level raw-evidence links and an explicit insufficient-coverage notice in the
+human form. The evidence bundle includes [the scoring report](../reports/02_scoring.md),
+[visual dashboard](../reports/02_scoring.html), [launch preflight](../reports/05_launch_preflight.md),
+raw JSONL, manifest, and derived tables.
 
 ---
 
@@ -190,3 +201,11 @@ repo. ETHICS confirmed MIT. OEJTS excluded from the item bank on license grounds
   10-question quick path and a 33-question detailed path, with exact item-level comparison to all
   nine models. The completed bank contains no evaluated technology privacy/security dilemmas, so
   those are deferred until a public source and a corresponding full-panel run are approved.
+
+- **2026-08-31 — Phase 5 launch collection and recovery.** The 21-model strict-D5 preflight
+  forecast was `$18.528174` under Sunay's `$20` cap. A default-routed Mistral Small response omitted
+  OpenRouter usage during collection, so the audit guard stopped at 57,471 persisted records.
+  Un-auditable records were not used. Mistral Small was recollected through the cost-reporting
+  DeepInfra route with fallback disabled after a fresh all-model preflight; the final run completed
+  132,300 records at `$6.60498886889` and zero billed reasoning tokens. The updated static site is
+  built from this completed evidence bundle.

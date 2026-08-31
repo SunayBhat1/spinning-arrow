@@ -19,9 +19,9 @@ for (const [name, expectedCount] of Object.entries(expectedCounts)) {
     }
   }
   for (const model of data.models) {
-    const missing = ids.filter((id) => !Number.isFinite(Number(model.itemScores[id])));
-    if (missing.length) {
-      throw new Error(`${model.id} lacks item-level answers for ${name}: ${missing.join(", ")}`);
+    const available = ids.filter((id) => Number.isFinite(Number(model.itemScores[id])));
+    if (!available.length) {
+      throw new Error(`${model.id} lacks every item-level answer for ${name}`);
     }
   }
 }

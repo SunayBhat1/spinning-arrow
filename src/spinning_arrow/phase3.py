@@ -287,6 +287,7 @@ def _load_config(path: Path) -> Phase3Config:
                 max_call_cost_usd=Decimal(str(raw.get("max_call_cost_usd"))),
                 max_tokens=int(raw.get("max_tokens", sampling.get("max_tokens"))),
                 parameter_omissions=tuple(omissions),
+                provider_preferences={},
             )
         )
     conditions = tuple(document.get("conditions", []))

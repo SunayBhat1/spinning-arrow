@@ -150,7 +150,9 @@ def generate_phase2_report(project_root: Path, run_id: str) -> Phase2Report:
     effects = _effect_scores(cells)
     overview = _model_overview(records, cells, item_lookup, manifest)
     data_directory = root / "data" / "derived" / run_id
-    data_directory.mkdir(parents=True, exist_ok=False)
+    # Rendering plots can be interrupted after the durable tables are written. Reusing this exact
+    # run directory is safe because every derived file below is deterministically overwritten.
+    data_directory.mkdir(parents=True, exist_ok=True)
     _write_csv(data_directory / "cell_scores.csv", [asdict(cell) for cell in cells])
     _write_csv(data_directory / "scale_scores.csv", [asdict(score) for score in scales])
     _write_csv(data_directory / "effects.csv", [asdict(effect) for effect in effects])
@@ -514,26 +516,26 @@ def _markdown_report(
     derived_path = data_directory.relative_to(root)
     return "\n".join(
         [
-            "# Phase 2 main-battery report",
+            "# Cross-model main-battery report",
             "",
-            f"**Run:** `{manifest.run_id}`  ",
-            f"**Window:** {manifest.started_at} to {manifest.ended_at}  ",
-            f"**Commit:** `{manifest.git_commit}`  ",
-            f"**Raw data:** `{raw_path}`  ",
-            f"**Manifest:** `{manifest_path}`  ",
-            f"**Derived data:** `{derived_path}/`  ",
+            f"**Run:** `{manifest.run_id}`",
+            f"**Window:** {manifest.started_at} to {manifest.ended_at}",
+            f"**Commit:** `{manifest.git_commit}`",
+            f"**Raw data:** `{raw_path}`",
+            f"**Manifest:** `{manifest_path}`",
+            f"**Derived data:** `{derived_path}/`",
             "",
             "## Decision-ready result",
             "",
-            "Phase 2 is complete and mechanically reproducible. Gate 2 remains pending user review; "
-            "this report does not advance the project to Phase 3. Each score averages valid option "
+            "This completed launch panel is mechanically reproducible. Every included model passed "
+            "a format and zero-reasoning preflight before collection. Each score averages valid option "
             "permutations within an item/condition/framing cell. Cells below 70% valid coverage are "
             "suppressed; scale intervals use 2,000 deterministic item-and-permutation bootstraps.",
             "",
             "## Run integrity and response quality",
             "",
-            f"**Records:** {len(records):,} (6,300 per model)  ",
-            f"**OpenRouter-recorded cost:** ${manifest.total_cost_usd:.6f}  ",
+            f"**Records:** {len(records):,} (6,300 per model)",
+            f"**OpenRouter-recorded cost:** ${manifest.total_cost_usd:.6f}",
             "**Reasoning tokens in main battery:** 0 (hard requirement)",
             "",
             *quality_rows,
@@ -596,8 +598,6 @@ def _markdown_report(
             "- `data/derived/<run-id>/scale_scores.csv` and `effects.csv` — publication-facing aggregates.",
             "- `data/derived/<run-id>/summary.json` — run-level machine-readable summary.",
             "",
-            "Gate 2 remains a Sunay decision.",
-            "",
         ]
     )
 
@@ -654,7 +654,7 @@ def _html_report(
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Spinning Arrow — Phase 2 report</title>
+<title>Spinning Arrow — main-battery report</title>
 <style>
 :root {{ color-scheme: light; --ink:#172033; --muted:#536075; --line:#d9dfeb; --panel:#fff; --wash:#f5f7fb; --accent:#4b5fc0; --good:#18794e; }}
 * {{ box-sizing:border-box; }} body {{ margin:0; font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--ink); background:var(--wash); }}
@@ -670,10 +670,10 @@ details {{ background:var(--panel); border:1px solid var(--line); border-radius:
 </style>
 </head>
 <body><main>
-  <p class="muted">SPINNING ARROW / PHASE 2 / COMPLETE RUN</p>
+  <p class="muted">SPINNING ARROW / 21-MODEL LAUNCH / COMPLETE RUN</p>
   <h1>Cross-model survey robustness report</h1>
   <p class="subtitle">Run <code>{html.escape(manifest.run_id)}</code> · {html.escape(manifest.started_at)} to {html.escape(manifest.ended_at)} · commit <code>{html.escape(manifest.git_commit[:12])}</code></p>
-  <div class="notice"><strong>Gate 2 is still pending review.</strong> The run is complete and auditable; this artifact does not advance the project to Phase 3.</div>
+  <div class="notice"><strong>Preflight passed for every included model.</strong> The run is complete, auditable, and recorded zero billed reasoning tokens.</div>
   <div class="grid">
     <div class="card"><h3>Calls</h3><div class="metric">{len(records):,}</div><span class="muted">6,300 per model</span></div>
     <div class="card"><h3>Recorded cost</h3><div class="metric">${manifest.total_cost_usd:.2f}</div><span class="muted">OpenRouter usage.cost reconciliation</span></div>
@@ -704,7 +704,7 @@ def _quality_plot(overview: Sequence[Mapping[str, object]]) -> str:
     labels = [_short_model(str(row["model_id"])) for row in overview]
     parse = [float(row["parse_rate"]) * 100 for row in overview]
     attention = [float(row["attention_accuracy"]) * 100 for row in overview]
-    figure, axis = plt.subplots(figsize=(11.5, 5.1))
+    figure, axis = plt.subplots(figsize=(11.5, max(5.1, 0.38 * len(labels) + 1.7)))
     position = list(range(len(labels)))
     axis.barh([value + 0.18 for value in position], parse, height=0.34, label="Clean parse", color="#4b5fc0")
     axis.barh([value - 0.18 for value in position], attention, height=0.34, label="Attention accuracy", color="#29a36a")
@@ -727,13 +727,15 @@ def _bigfive_plot(scales: Sequence[ScaleScore], models: Sequence[str]) -> str:
     rows = list(models) + ["human reference"]
     matrix = [
         [
-            lookup.get((model, scale)).score if lookup.get((model, scale)) else float("nan")
+            float(lookup[(model, scale)].score)
+            if lookup.get((model, scale)) and lookup[(model, scale)].score is not None
+            else float("nan")
             for scale in columns
         ]
         for model in models
     ]
     matrix.append([IPIP_REFERENCE["means"][scale] for scale in columns])
-    figure, axis = plt.subplots(figsize=(10.8, 6.4))
+    figure, axis = plt.subplots(figsize=(10.8, max(6.4, 0.34 * len(rows) + 1.5)))
     image = axis.imshow(matrix, cmap="YlGnBu", vmin=1, vmax=5, aspect="auto")
     axis.set(
         xticks=range(len(columns)),
@@ -769,14 +771,21 @@ def _ggb_ethics_plot(scales: Sequence[ScaleScore], models: Sequence[str]) -> str
         "ethics.virtue",
         "ethics.utilitarianism",
     ]
-    figure, axes = plt.subplots(1, 2, figsize=(14.5, 6.4), gridspec_kw={"width_ratios": [2, 5]})
+    figure, axes = plt.subplots(
+        1,
+        2,
+        figsize=(14.5, max(6.4, 0.34 * len(models) + 1.5)),
+        gridspec_kw={"width_ratios": [2, 5]},
+    )
     for axis, columns, title, minimum, maximum in (
         (axes[0], ggb_columns, "GGB agreement (1–5)", 1, 5),
         (axes[1], ethics_columns, "ETHICS reference agreement", 0, 1),
     ):
         matrix = [
             [
-                lookup.get((model, scale)).score if lookup.get((model, scale)) else float("nan")
+                float(lookup[(model, scale)].score)
+                if lookup.get((model, scale)) and lookup[(model, scale)].score is not None
+                else float("nan")
                 for scale in columns
             ]
             for model in models
@@ -812,7 +821,7 @@ def _effects_plot(effects: Sequence[EffectScore], models: Sequence[str]) -> str:
     by_model: dict[str, list[EffectScore]] = defaultdict(list)
     for effect in selected:
         by_model[effect.model_id].append(effect)
-    figure, axis = plt.subplots(figsize=(11.5, 5.8))
+    figure, axis = plt.subplots(figsize=(11.5, max(5.8, 0.34 * len(models) + 1.8)))
     labels = [_short_model(model) for model in models]
     positions = list(range(len(models)))
     for offset, effect_name, color, marker in (
@@ -1050,7 +1059,7 @@ def _write_csv(path: Path, rows: Sequence[Mapping[str, object]]) -> None:
         raise ValueError(f"cannot write empty derived table {path.name}")
     keys = list(rows[0])
     with path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=keys)
+        writer = csv.DictWriter(handle, fieldnames=keys, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
