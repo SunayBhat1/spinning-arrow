@@ -11,7 +11,9 @@ export function getStaticPaths() {
 
 const { scale } = Astro.props;
 const info = data.scaleInfo[scale];
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.endsWith("/")
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
 const scores = data.models.map((model) => ({ model, score: model.scores.find((entry) => entry.scale === scale) })).filter((entry) => entry.score);
 const questions = data.items.filter((item) => item.scale === scale);
 ---

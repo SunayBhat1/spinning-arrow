@@ -2,7 +2,9 @@
 import Base from "../layouts/Base.astro";
 import data from "../data/generated.json";
 
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.endsWith("/")
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
 const { axes, metricPairs, modelSimilarity, varianceReadiness, futureVarianceFactors } = data.correlations;
 const axisById = Object.fromEntries(axes.map((axis) => [axis.id, axis]));
 const strongestPairs = metricPairs
