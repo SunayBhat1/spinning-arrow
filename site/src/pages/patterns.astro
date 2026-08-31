@@ -7,17 +7,27 @@ const base = import.meta.env.BASE_URL.endsWith("/")
   : `${import.meta.env.BASE_URL}/`;
 const { axes, metricPairs, modelSimilarity, varianceReadiness, futureVarianceFactors } = data.correlations;
 const axisById = Object.fromEntries(axes.map((axis) => [axis.id, axis]));
+const modelPalette = [
+  "#a24f3d", "#2f7880", "#b27a1f", "#6f8651", "#765a8e",
+  "#3e6e9f", "#c16c35", "#8b493c", "#4d7e69",
+];
+const modelColorById = Object.fromEntries(
+  data.models.map((model, index) => [model.id, modelPalette[index % modelPalette.length]])
+);
 const strongestPairs = metricPairs
   .filter((pair) => Number.isFinite(pair.r))
   .sort((left, right) => Math.abs(right.r) - Math.abs(left.r))
   .slice(0, 5);
 
-function similarityColor(value) {
+function similarityStyle(value) {
   if (!Number.isFinite(value)) return "#efede6";
-  const amount = Math.min(1, Math.abs(value));
-  return value >= 0
-    ? `rgba(102, 116, 95, ${0.12 + amount * 0.58})`
-    : `rgba(173, 96, 69, ${0.12 + amount * 0.58})`;
+  const scaled = Math.max(0, Math.min(1, (Math.abs(value) - 0.35) / 0.65));
+  const emphasis = scaled ** 0.7;
+  const hue = value >= 0 ? 104 : 15;
+  const saturation = 24 + emphasis * 24;
+  const lightness = 93 - emphasis * 51;
+  const text = emphasis > 0.72 ? "#fbfaf6" : "#1d2822";
+  return `background:hsl(${hue} ${saturation}% ${lightness}%);color:${text}`;
 }
 ---
 
@@ -38,20 +48,24 @@ function similarityColor(value) {
       </div>
       <p id="scatter-summary" class="quiet-box"></p>
       <svg id="scatter-plot" class="scatter-plot" viewBox="0 0 680 400" role="img" aria-live="polite" aria-label="Selected metric relationship plot"></svg>
-      <div class="plot-legend">{data.models.map((model) => <a href={`${base}models/${model.slug}`}><span class="dot-mark"></span>{model.label}</a>)}</div>
+      <div class="plot-legend">{data.models.map((model) => <a href={`${base}models/${model.slug}`}><span class="dot-mark" style={`--model-color:${modelColorById[model.id]}`} aria-hidden="true"></span>{model.label}</a>)}</div>
     </div>
   </section>
 
   <section class="section">
     <div class="section-head"><div><p class="eyebrow">Model-to-model profile similarity</p><h2>Which response patterns resemble one another?</h2></div><a class="note" href={`${base}models`}>Open a model profile →</a></div>
     <p class="quiet-box">Each cell is the Pearson correlation between two models’ normalized, item-level Phase 2 response patterns under the same bare, first-person condition. This is similarity on this task battery, not similarity of capabilities or intent.</p>
+    <div class="heatmap-key" aria-label="Correlation color key: pale green is lower similarity and deep green is higher similarity.">
+      <span>Lower (.35)</span><i style={similarityStyle(0.4)}></i><i style={similarityStyle(0.6)}></i><i style={similarityStyle(0.8)}></i><i style={similarityStyle(1)}></i><span>Higher (1.00)</span>
+      <small>Color is deliberately stretched across this panel’s observed range; each cell keeps its exact value.</small>
+    </div>
     <div class="panel table-scroll" style="margin-top:24px">
       <table class="similarity-table">
         <thead><tr><th scope="col">Model</th>{data.models.map((model) => <th scope="col" title={model.label}>{model.label}</th>)}</tr></thead>
         <tbody>{data.models.map((rowModel, rowIndex) => <tr><th scope="row"><a href={`${base}models/${rowModel.slug}`}>{rowModel.label}</a></th>{data.models.map((columnModel, columnIndex) => {
           const cell = modelSimilarity[rowIndex][columnIndex];
           const value = Number(cell.r);
-          return <td style={`background:${similarityColor(value)}`}><a href={`${base}models/${rowModel.slug}#evidence`} aria-label={`${rowModel.label} and ${columnModel.label}: response-profile correlation ${Number.isFinite(value) ? value.toFixed(2) : "unavailable"} across ${cell.n} shared questions. Open ${rowModel.label}'s evidence.`}>{Number.isFinite(value) ? value.toFixed(2) : "—"}</a></td>;
+          return <td style={similarityStyle(value)}><a href={`${base}models/${rowModel.slug}#evidence`} aria-label={`${rowModel.label} and ${columnModel.label}: response-profile correlation ${Number.isFinite(value) ? value.toFixed(2) : "unavailable"} across ${cell.n} shared questions. Open ${rowModel.label}'s evidence.`}>{Number.isFinite(value) ? value.toFixed(2) : "—"}</a></td>;
         })}</tr>)}</tbody>
       </table>
     </div>
@@ -77,7 +91,7 @@ function similarityColor(value) {
   </section>
 </Base>
 
-<script define:vars={{ axes, models: data.models, base }}>
+<script define:vars={{ axes, models: data.models, base, modelColorById }}>
   const xSelect = document.querySelector("#x-axis");
   const ySelect = document.querySelector("#y-axis");
   const summary = document.querySelector("#scatter-summary");
@@ -112,7 +126,7 @@ function similarityColor(value) {
     const xPixel = (value) => project(value, xBounds, left, width);
     const yPixel = (value) => project(value, yBounds, top, height, true);
     summary.textContent = `${xAxis.label} and ${yAxis.label}: exploratory Pearson r = ${r?.toFixed(2) ?? "—"} across ${points.length} models. Each dot opens that model’s evidence.`;
-    plot.innerHTML = `<line class="plot-axis" x1="${left}" y1="${top + height}" x2="${left + width}" y2="${top + height}"/><line class="plot-axis" x1="${left}" y1="${top}" x2="${left}" y2="${top + height}"/><line class="trend-line" x1="${xPixel(lineStart.x)}" y1="${yPixel(lineStart.y)}" x2="${xPixel(lineEnd.x)}" y2="${yPixel(lineEnd.y)}"/><text class="plot-label" x="${left + width / 2}" y="${top + height + 52}" text-anchor="middle">${escapeHtml(xAxis.label)}</text><text class="plot-label" x="18" y="${top + height / 2}" text-anchor="middle" transform="rotate(-90 18 ${top + height / 2})">${escapeHtml(yAxis.label)}</text>${points.map((point) => `<a href="${base}models/${encodeURIComponent(point.model.slug)}"><circle class="plot-dot" cx="${xPixel(point.x)}" cy="${yPixel(point.y)}" r="7"><title>${escapeHtml(point.model.label)} — ${escapeHtml(xAxis.label)} ${point.x.toFixed(2)}, ${escapeHtml(yAxis.label)} ${point.y.toFixed(2)}</title></circle></a>`).join("")}`;
+    plot.innerHTML = `<line class="plot-axis" x1="${left}" y1="${top + height}" x2="${left + width}" y2="${top + height}"/><line class="plot-axis" x1="${left}" y1="${top}" x2="${left}" y2="${top + height}"/><line class="trend-line" x1="${xPixel(lineStart.x)}" y1="${yPixel(lineStart.y)}" x2="${xPixel(lineEnd.x)}" y2="${yPixel(lineEnd.y)}"/><text class="plot-label" x="${left + width / 2}" y="${top + height + 52}" text-anchor="middle">${escapeHtml(xAxis.label)}</text><text class="plot-label" x="18" y="${top + height / 2}" text-anchor="middle" transform="rotate(-90 18 ${top + height / 2})">${escapeHtml(yAxis.label)}</text>${points.map((point) => `<a href="${base}models/${encodeURIComponent(point.model.slug)}"><circle class="plot-dot" style="--model-color:${modelColorById[point.model.id] || "#ad6045"}" cx="${xPixel(point.x)}" cy="${yPixel(point.y)}" r="7"><title>${escapeHtml(point.model.label)} — ${escapeHtml(xAxis.label)} ${point.x.toFixed(2)}, ${escapeHtml(yAxis.label)} ${point.y.toFixed(2)}</title></circle></a>`).join("")}`;
   }
   xSelect.addEventListener("change", renderScatter); ySelect.addEventListener("change", renderScatter); renderScatter();
 </script>
