@@ -1140,7 +1140,7 @@ def _short_model(model: str) -> str:
         "mistralai/mistral-medium-3.1": "Mistral Medium 3.1",
         "mistralai/mistral-small-3.2-24b-instruct": "Mistral Small 3.2",
         "qwen/qwen3.8-27b": "Qwen 3.8 27B",
-        "qwen/qwen3.8-flash": "Qwen 3.8 Flash",
+        "openai/gpt-4o-mini-2024-07-18": "GPT-4o mini",
         "deepseek/deepseek-v4-pro-0813": "DeepSeek V4 Pro",
         "deepseek/deepseek-v4-flash-0731": "DeepSeek V4 Flash",
         "z-ai/glm-5.2": "GLM-5.2",

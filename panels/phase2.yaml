@@ -19,7 +19,7 @@
     {"id": "mistralai/mistral-medium-3.1", "max_call_cost_usd": 0.005, "parameter_omissions": ["reasoning"]},
     {"id": "mistralai/mistral-small-3.2-24b-instruct", "max_call_cost_usd": 0.005, "parameter_omissions": ["reasoning"]},
     {"id": "qwen/qwen3.8-27b", "max_call_cost_usd": 0.005},
-    {"id": "qwen/qwen3.8-flash", "max_call_cost_usd": 0.005},
+    {"id": "openai/gpt-4o-mini-2024-07-18", "max_call_cost_usd": 0.005, "parameter_omissions": ["reasoning"]},
     {"id": "deepseek/deepseek-v4-pro-0813", "max_call_cost_usd": 0.005},
     {"id": "deepseek/deepseek-v4-flash-0731", "max_call_cost_usd": 0.005},
     {"id": "z-ai/glm-5.2", "max_call_cost_usd": 0.005}
