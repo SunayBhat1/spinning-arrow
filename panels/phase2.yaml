@@ -24,10 +24,10 @@
     {"id": "deepseek/deepseek-v4-flash-0731", "max_call_cost_usd": 0.005},
     {"id": "z-ai/glm-5.2", "max_call_cost_usd": 0.005}
     ,{"id": "z-ai/glm-4.5-air", "max_call_cost_usd": 0.005}
-    ,{"id": "cohere/command-r7b-12-2024", "max_call_cost_usd": 0.005, "parameter_omissions": ["reasoning"]}
+    ,{"id": "google/gemma-3-27b-it", "max_call_cost_usd": 0.005, "parameter_omissions": ["reasoning"]}
     ,{"id": "nvidia/nemotron-3.5-lightning", "max_call_cost_usd": 0.005}
     ,{"id": "amazon/nova-lite-v1", "max_call_cost_usd": 0.005, "parameter_omissions": ["reasoning"]}
     ,{"id": "microsoft/phi-4", "max_call_cost_usd": 0.005, "parameter_omissions": ["reasoning"]}
-    ,{"id": "moonshotai/kimi-k2", "max_call_cost_usd": 0.005, "parameter_omissions": ["reasoning"]}
+    ,{"id": "openai/gpt-4.1-mini", "max_call_cost_usd": 0.005, "parameter_omissions": ["reasoning"]}
   ]
 }

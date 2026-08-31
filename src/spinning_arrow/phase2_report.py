@@ -1145,11 +1145,11 @@ def _short_model(model: str) -> str:
         "deepseek/deepseek-v4-flash-0731": "DeepSeek V4 Flash",
         "z-ai/glm-5.2": "GLM-5.2",
         "z-ai/glm-4.5-air": "GLM-4.5 Air",
-        "cohere/command-r7b-12-2024": "Command R7B",
+        "google/gemma-3-27b-it": "Gemma 3 27B",
         "nvidia/nemotron-3.5-lightning": "Nemotron 3.5 Lightning",
         "amazon/nova-lite-v1": "Nova Lite 1.0",
         "microsoft/phi-4": "Phi-4",
-        "moonshotai/kimi-k2": "Kimi K2",
+        "openai/gpt-4.1-mini": "GPT-4.1 mini",
     }
     return replacements.get(model, model)
 
