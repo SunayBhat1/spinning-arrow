@@ -114,12 +114,40 @@ const base = import.meta.env.BASE_URL;
           return (visitor - modelAnswer) ** 2;
         });
         const distance = Math.sqrt(squaredDifferences.reduce((total, value) => total + value, 0) / squaredDifferences.length);
-        return { label: model.label, slug: model.slug, distance, matched: matched.length };
+        return {
+          label: model.label,
+          slug: model.slug,
+          distance,
+          similarity: Math.max(0, 1 - distance),
+          matched: matched.length,
+        };
       }).filter((entry) => entry.matched === set.questions.length).sort((left, right) => left.distance - right.distance);
-      const top = ranked.slice(0, 3);
-      const firstQuestion = set.questions[0];
+      const top = ranked.slice(0, 5);
       result.classList.add("show");
-      result.innerHTML = `<p class="eyebrow">Your local comparison</p><h2>Nearest response pattern: ${escapeHtml(top[0].label)}</h2><p>This comparison uses the same ${set.questions.length} questions. Each model value is its average answer across five shuffled answer-order versions of that question, so the comparison does not rely on a single displayed letter.</p><ol>${top.map((entry) => `<li><strong>${escapeHtml(entry.label)}</strong> <span class="small">average response difference ${entry.distance.toFixed(2)} / 1</span></li>`).join("")}</ol><p><a href="${base}models/${encodeURIComponent(top[0].slug)}?item=${encodeURIComponent(firstQuestion.id)}#evidence">Read ${escapeHtml(top[0].label)}’s recorded answer to one of these questions →</a></p><p class="small">Nothing was saved or sent. This is an item-specific educational comparison, not a measure of character, politics, or identity.</p>`;
+      result.innerHTML = `<p class="eyebrow">Your local comparison</p><h2>Five closest response patterns</h2><p>This comparison uses the same ${set.questions.length} questions. A higher similarity means your mapped answers were closer on this selected question set. It is not a personality match, diagnosis, or identity label.</p><div class="top-model-grid">${top.map((entry, index) => `<button type="button" class="top-model-choice" data-profile-model="${escapeHtml(entry.slug)}" aria-controls="response-panel-${escapeHtml(setKey)}"><span class="eyebrow">#${index + 1}</span><strong>${escapeHtml(entry.label)}</strong><span>${Math.round(entry.similarity * 100)}% response similarity</span><i aria-hidden="true"></i></button>`).join("")}</div><div class="similarity-plot"><div class="similarity-plot-head"><div><p class="eyebrow">Full tested panel</p><h3>Similarity to all nine models</h3></div><p class="small">100 = identical mapped answers on these ${set.questions.length} prompts.</p></div><div class="similarity-rows">${ranked.map((entry, index) => `<button type="button" class="similarity-row${index < 5 ? " is-top-five" : ""}" data-profile-model="${escapeHtml(entry.slug)}" aria-controls="response-panel-${escapeHtml(setKey)}"><span class="similarity-rank">${index + 1}</span><span class="similarity-name">${escapeHtml(entry.label)}<span class="similarity-bar"><i style="width:${(entry.similarity * 100).toFixed(1)}%"></i></span></span><strong>${Math.round(entry.similarity * 100)}<small>%</small></strong></button>`).join("")}</div></div><div id="response-panel-${escapeHtml(setKey)}" class="selected-response-panel" aria-live="polite"><p class="quiet-box">Select any model above to see its answer pattern across all ${set.questions.length} questions, alongside your own.</p></div><p class="small">Nothing was saved or sent. The model value below is its average mapped answer across five shuffled answer-order versions of each question; every row also links to one fixed recorded output.</p>`;
+
+      const responsePanel = result.querySelector(".selected-response-panel");
+      const modelChoices = result.querySelectorAll("[data-profile-model]");
+      const responseSummary = (question, value) => {
+        const numeric = Number(value);
+        const closest = question.options.reduce((best, option) => Math.abs(Number(option.value) - numeric) < Math.abs(Number(best.value) - numeric) ? option : best, question.options[0]);
+        const maximum = Math.max(...question.options.map((option) => Number(option.value)));
+        return { numeric: numeric.toFixed(2), maximum, nearest: closest.label };
+      };
+      function showResponsePanel(slug) {
+        const selectedModel = models.find((model) => model.slug === slug);
+        if (!selectedModel) return;
+        for (const choice of modelChoices) choice.classList.toggle("selected", choice.dataset.profileModel === slug);
+        const rows = set.questions.map((question, index) => {
+          const visitor = responseSummary(question, answers[question.id]);
+          const model = responseSummary(question, selectedModel.itemScores[question.id]);
+          const evidenceUrl = `${base}models/${encodeURIComponent(selectedModel.slug)}?item=${encodeURIComponent(question.id)}#evidence`;
+          return `<article class="response-comparison-row"><p class="eyebrow">Question ${index + 1} · ${escapeHtml(question.source.label)}</p><h4>${escapeHtml(question.text)}</h4><div class="response-comparison-values"><div><span>Your answer</span><strong>${escapeHtml(visitor.nearest)}</strong><small>${visitor.numeric} / ${visitor.maximum}</small></div><div><span>${escapeHtml(selectedModel.label)} average</span><strong>${escapeHtml(model.nearest)}</strong><small>${model.numeric} / ${model.maximum} across 5 runs</small></div></div><a class="response-evidence-link" href="${evidenceUrl}">Open this model’s fixed recorded output →</a></article>`;
+        }).join("");
+        responsePanel.innerHTML = `<div class="selected-response-head"><div><p class="eyebrow">Full ${escapeHtml(set.label)} response panel</p><h3>Your answers alongside ${escapeHtml(selectedModel.label)}</h3></div><a class="button ghost" href="${base}models/${encodeURIComponent(selectedModel.slug)}#evidence">Open full model dossier</a></div><p class="note">The form uses the same questions for both sides. “Average” preserves the model’s five answer-order runs; use the evidence link on any row to see a fixed recorded response.</p><div class="response-comparison-list">${rows}</div>`;
+        responsePanel.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      for (const choice of modelChoices) choice.addEventListener("click", () => showResponsePanel(choice.dataset.profileModel));
       result.scrollIntoView({ behavior: "smooth", block: "nearest" });
     });
   }

@@ -19,8 +19,9 @@
 - Two browser-only human response paths: a concise ten-question reflection and a 33-question
   detailed reflection with five context-rich ETHICS cases. Each prompt identifies its source, and
   each comparison uses a model's answer to the same individual questions rather than a broad
-  scale average. Nothing is sent or saved; the closest-profile result is not a diagnosis or identity
-  claim.
+  scale average. Results rank the closest five response patterns, plot all nine models, and can
+  reveal a selected model’s full same-question comparison with an evidence link for every row.
+  Nothing is sent or saved; the closest-profile result is not a diagnosis or identity claim.
 - GitHub Pages Actions workflow prepared, using the project-site path before a custom domain is
   connected.
 

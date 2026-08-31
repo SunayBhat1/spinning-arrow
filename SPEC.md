@@ -447,6 +447,9 @@ design requires a new forecast and Sunay approval.
   model answers to those same individual prompts. Version 1 must score entirely in the browser,
   collect or transmit no answers, and make no diagnostic, moral-quality, or identity claim. It must
   show each question's provenance and say that the comparison is prompt- and instrument-specific.
+  Each result must show the five closest response patterns, a visual all-model similarity panel,
+  and, on choosing any model, the complete same-question human/model comparison with a link to
+  fixed recorded model output for every row.
   Applied technology scenarios (for example, privacy versus security) may only enter the comparison
   after a sourced bank and a corresponding run across every displayed model are committed. Any later
   account, analytics, result-sharing, or server-side collection feature requires a separate consent,

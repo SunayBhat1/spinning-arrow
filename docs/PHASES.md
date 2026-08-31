@@ -99,7 +99,9 @@ similarity heatmap, and an explicit readiness table for future lab, size, archit
 release comparisons; it does not claim causal effects from the nine-model panel. The
 browser-only human profile form now offers a ten-question quick route and a 33-question detailed
 route; both compare only with each model's average answer to the same prompts, identify each
-source, store and transmit no answers, and make no diagnostic or moral-quality claim. The visual
+source, store and transmit no answers, and make no diagnostic or moral-quality claim. Each result
+now ranks the closest five response patterns, plots all nine, and can open a full same-question
+comparison with any selected model (including a per-row evidence link). The visual
 direction is deliberately minimal: warm paper, moss, clay, restrained metrics, and progressively
 disclosed methodology. `.github/workflows/deploy-site.yml` is ready for a public GitHub Pages
 project site after review; it is not yet deployed or connected to DNS.
