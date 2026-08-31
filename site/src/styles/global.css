@@ -66,6 +66,9 @@ p { max-width: 70ch; }
 .response-output pre { border-top: 1px solid var(--line); padding-top: 16px; color: #4f5951; }
 .stat-line { display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); align-items: baseline; flex-wrap: wrap; }
 .stat-line strong { font-family: var(--serif); font-size: 1.35rem; }
+.association-copy { flex: 1 1 310px; }
+.association-copy p { margin: 4px 0 0; color: var(--quiet); font-size: .78rem; line-height: 1.45; }
+.association-copy b { color: var(--ink); font-weight: 600; }
 .small { font-size: .85rem; color: var(--quiet); }
 .question { margin: 0; min-inline-size: 0; border: 0; border-top: 1px solid var(--line); padding: 32px 0; }
 .question:first-of-type { border-top: 0; }
@@ -148,6 +151,14 @@ details p { color: var(--quiet); }
 .metric-axis span:first-child { text-align: left; }
 .metric-axis span:last-child { text-align: right; }
 .scatter-panel { overflow: hidden; }
+.terms-overview .card { min-height: 270px; }
+.terms-overview .card a, .term-card a { color: var(--quiet); font-size: .84rem; }
+.terms-dictionary { margin-top: 28px; }
+.terms-dictionary > summary { padding: 14px 0; }
+.term-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; border: 1px solid var(--line); background: var(--line); margin-top: 12px; }
+.term-card { background: var(--card); padding: 20px; min-height: 184px; }
+.term-card .eyebrow { margin: 0 0 8px; }
+.term-card p:not(.eyebrow) { color: var(--quiet); font-size: .84rem; margin: 10px 0 14px; }
 .axis-controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; max-width: 760px; }
 .axis-controls label { color: var(--quiet); font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 .axis-controls select { display: block; width: 100%; margin-top: 6px; padding: 11px 12px; border: 1px solid var(--line); border-radius: 0; background: #f6f4ee; color: var(--ink); font: 500 .9rem var(--sans); letter-spacing: 0; text-transform: none; }
@@ -201,6 +212,7 @@ details p { color: var(--quiet); }
   .metric-row .small { grid-column: 1; }
   .metric-axis { margin-left: 0; margin-right: 40px; }
   .axis-controls { grid-template-columns: 1fr; }
+  .term-grid { grid-template-columns: 1fr; }
   .scatter-plot { width: calc(100% + 12px); margin-left: -6px; }
   footer { flex-direction: column; }
 }

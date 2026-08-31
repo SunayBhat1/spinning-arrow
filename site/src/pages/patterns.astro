@@ -14,6 +14,7 @@ const modelPalette = [
 const modelColorById = Object.fromEntries(
   data.models.map((model, index) => [model.id, modelPalette[index % modelPalette.length]])
 );
+const metricIds = new Set(Object.keys(data.scaleInfo));
 const strongestPairs = metricPairs
   .filter((pair) => Number.isFinite(pair.r))
   .sort((left, right) => Math.abs(right.r) - Math.abs(left.r))
@@ -37,6 +38,23 @@ function similarityStyle(value) {
     <h1>What moves together—and what we cannot yet know.</h1>
     <p class="lede">Explore relationships among the study’s measured questionnaire scores and prompt sensitivities. These are descriptive patterns across nine models, not explanations or causal findings.</p>
     <p class="quiet-box">Nine models are enough to generate hypotheses and inspect outliers, not enough to declare that a lab, architecture, size, or release date caused a result.</p>
+  </section>
+
+  <section class="section">
+    <p class="eyebrow">A short guide</p>
+    <h2>These are question themes, not traits a model “has.”</h2>
+    <p class="lede">Words such as Authority and Purity are compact names for related survey questions. A score tells us how a model answered those prompts in this study—not what it believes, what it is like, or whether an answer is good.</p>
+    <div class="card-grid terms-overview" style="margin-top:24px">
+      <article class="card"><p class="eyebrow">MFQ-2</p><h3>Six everyday moral themes</h3><p>Care, Equality, Proportionality, Loyalty, Authority, and Purity come from a questionnaire about the reasons people may treat as morally important. “Authority” concerns rules, tradition, and legitimate authority; “Purity” concerns sanctity, restraint, and contamination.</p><a href={`${base}metrics`}>See the six lenses →</a></article>
+      <article class="card"><p class="eyebrow">Greatest Good Benchmark</p><h3>Two difficult trade-offs</h3><p>One lens asks about helping people beyond one’s own circle. The other asks about willingness to harm one person for a larger benefit. Neither is a right-answer test or a moral grade.</p><a href={`${base}metrics/ggb-impartial_beneficence`}>Open the GGB questions →</a></article>
+      <article class="card"><p class="eyebrow">Correlation</p><h3>A shared pattern, not a cause</h3><p>Positive means the two scores tended to rise and fall together across this nine-model sample; negative means they moved in opposite directions. It does not show that one value causes the other.</p><a href={`${base}method#patterns`}>How to read correlations →</a></article>
+    </div>
+    <details class="terms-dictionary" open>
+      <summary>Definitions used in the charts</summary>
+      <div class="term-grid">
+        {axes.map((axis) => <article class="term-card"><p class="eyebrow">{axis.group}</p><h3>{axis.label}</h3><p>{axis.plain}</p>{metricIds.has(axis.id) && <a href={`${base}metrics/${axis.id.replaceAll(".", "-")}`}>Open the source questions →</a>}</article>)}
+      </div>
+    </details>
   </section>
 
   <section class="section">
@@ -74,7 +92,7 @@ function similarityStyle(value) {
   <section class="section method-grid">
     <div>
       <p class="eyebrow">Largest exploratory associations</p><h2>Signals to inspect, not conclusions.</h2>
-      <div class="panel" style="margin-top:24px">{strongestPairs.map((pair) => <div class="stat-line"><strong>r {Number(pair.r).toFixed(2)}</strong><span>{axisById[pair.left].label} ↔ {axisById[pair.right].label}</span><span class="small">n = {pair.n} models</span></div>)}</div>
+      <div class="panel" style="margin-top:24px">{strongestPairs.map((pair) => <div class="stat-line"><strong>r {Number(pair.r).toFixed(2)}</strong><div class="association-copy"><span><a href={`${base}metrics/${pair.left.replaceAll(".", "-")}`}>{axisById[pair.left].label}</a> ↔ <a href={`${base}metrics/${pair.right.replaceAll(".", "-")}`}>{axisById[pair.right].label}</a></span><p><b>{axisById[pair.left].label}:</b> {axisById[pair.left].plain} <b>{axisById[pair.right].label}:</b> {axisById[pair.right].plain}</p></div><span class="small">n = {pair.n} models</span></div>)}</div>
     </div>
     <aside class="panel"><p class="eyebrow">A practical rule</p><p>Use a visible relationship to decide where to read deeper. Then inspect the underlying model pages, questions, confidence intervals, and prompt sensitivity before treating it as meaningful.</p></aside>
   </section>
