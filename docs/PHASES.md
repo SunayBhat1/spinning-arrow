@@ -209,3 +209,39 @@ repo. ETHICS confirmed MIT. OEJTS excluded from the item bank on license grounds
   DeepInfra route with fallback disabled after a fresh all-model preflight; the final run completed
   132,300 records at `$6.60498886889` and zero billed reasoning tokens. The updated static site is
   built from this completed evidence bundle.
+
+---
+
+## September 2026 exploratory pilots
+
+These runs are local/unmerged exploratory collections, not owner-approved gates or v0.2 frozen
+protocol. Report artifacts and item banks remain uncommitted locally relative to `phase4-preview`.
+
+- **2026-09-14 — Trade-off ladders pilot.** Run `20260914T042611Z__tradeoff-ladders__b3fa52`
+  completed 3,600 calls across 6 models (60 scenarios × 5 option orders × bare/evaluator contexts)
+  at a recorded cost of `$2.73`. Intended report path: `reports/04_tradeoff_ladders_pilot.md`.
+  Largest between-model spread observed on Rules↔Care axis (inter-model SD 0.339); In-group↔Universal
+  concern showed minimal separation (SD 0.058). Choice agreement ranged 0.773–0.857; option-order
+  SD ranged 0.236–0.450. Exploratory only; not yet approved as v0.2 or strong public claim.
+
+- **2026-09-17 — Blind peer-review quick assay.** Run `20260917T021546Z__peer-review__7d5a9c`
+  completed 150 ranking tasks across 5 models at `$0.20` recorded cost. Intended report path:
+  `reports/05_peer_review_quick.md`. Self-first rate 22.8% vs 20% random baseline; top-ranked
+  candidate matched judge's own earlier action 75.8% of the time. Cross-judge ranking correlation
+  0.498. Exploratory diagnostic; not a primary axis.
+
+- **2026-09-17 — Frontier crossover mini assay.** Run `20260917T025832Z__frontier-crossed__61cf6e`
+  completed 180 intended task cells (10 models, 5 dilemmas + blind action/explanation crossover)
+  at `$2.03` recorded cost. Intended report path: `reports/06_frontier_crossed.md`. No observed
+  frontier-vs-lightweight split in this five-item sample. Option-order retention ~82% across models.
+  Blind peer rankings tracked action+explanation packages (intact-panel Spearman 0.73; crossed-panel
+  Spearman 0.81; same-reviewer before/after explanation swap Spearman 0.03). Treat as exploratory
+  reliability control, not a moral ranking.
+
+- **2026-09 — Agentic 48 workflows.** Designed and reviewed locally; not fielded. No empirical
+  claims. Mentioned here for awareness.
+
+- **Methodological posture recorded September 2026.** Next step is owner claim/axis approval,
+  independent item review, and frozen v0.2 protocol design before additional model collection.
+  Exploratory collection completed; owner control-reset pending. Do not treat the trade-off ladders
+  or crossover assay as approved v0.2 protocol or strong public conclusions yet.

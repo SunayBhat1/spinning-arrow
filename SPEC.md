@@ -1,6 +1,6 @@
 # Spinning Arrow — build spec & agent handoff
 
-**Status:** pre-Phase-0. Nothing is built yet.
+**Status:** Phase 5 launch complete (21-model battery live); September exploratory pilots local/unmerged.
 **Name:** Spinning Arrow — settled 2026-08-29. Repo `spinning-arrow`, package `spinning_arrow`.
 No domain bought yet (see §12).
 **Owner:** Sunay Bhat. **Executor:** a fresh agent, cold, starting from this file.
@@ -10,9 +10,15 @@ No domain bought yet (see §12).
 
 ## 0. Read this first
 
-You are building a small, free, open-source public dashboard that measures **where large
-language models sit on questions of normative ethics** — rules vs. consequences vs. character —
-and **how stable those positions are**.
+**What this project measures.** Spinning Arrow does **not** measure a model's inner morality,
+true values, safety, consciousness, or political identity. It measures how a named model responds
+to published moral trade-offs under published conditions, and how much those responses change when
+those conditions change.
+
+**The defensible claim.** Spinning Arrow is useful if it can show, under published prompts and
+perturbations, which way a named model leans on a forced moral trade-off and how much that lean
+moves when framing, option order, or explanation packaging changes — without claiming the model
+has a true moral identity.
 
 Three things make this different from the existing field, and they are the whole product. Do not
 drop them for convenience:
@@ -22,9 +28,10 @@ drop them for convenience:
    deserves a bar the width of the chart.
 2. **Everything is inspectable.** Prompts, raw model responses, scoring code, and run logs are
    committed to a public repo. Anyone who disputes a number can check it.
-3. **The claim is narrow and honest.** We do **not** claim to measure "a model's ethics." We
-   claim to measure *what a model says under precisely specified conditions, and how much that
-   depends on the conditions.* Every piece of copy on the site must respect that distinction.
+3. **The claim is narrow and honest.** We do **not** claim to measure "a model's ethics" or
+   produce a moral score. We claim to measure *what a model says under precisely specified
+   conditions, and how much that depends on the conditions.* Every piece of copy on the site must
+   respect that distinction.
 
 **About the name.** A moral compass whose needle will not settle. It is taken from Röttger et
 al., *"Political Compass or Spinning Arrow? Towards More Meaningful Evaluations for Values and
