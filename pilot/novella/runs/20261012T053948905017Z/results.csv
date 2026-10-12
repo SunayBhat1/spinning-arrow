@@ -1,0 +1,4 @@
+item,title,model,condition,n_valid,modal_choice,modal_share,flip_rate,flip_numerator,flip_denominator,tied_cells,mean_within_cell_entropy,within_cell_pair_agreement,mean_confidence,author_choice,modal_matches_author,complete
+N04,The Strange Case of Dr. Jekyll and Mr. Hyde,google/gemini-2.5-flash-lite,R0,1,A,1.0,,0,0,0,,,0.9,,,False
+N04,The Strange Case of Dr. Jekyll and Mr. Hyde,openai/gpt-4.1-mini,R0,1,A,1.0,,0,0,0,,,0.9,,,False
+N04,The Strange Case of Dr. Jekyll and Mr. Hyde,openai/gpt-4o-mini,R0,1,A,1.0,,0,0,0,,,0.9,,,False

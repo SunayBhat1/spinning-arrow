@@ -1,0 +1,17 @@
+{
+  "id": "B02",
+  "slug": "enemies",
+  "source_url": "https://www.gutenberg.org/cache/epub/13412/pg13412.txt",
+  "source_sha256": "44d7a1b4660935999da7e50c706f1ce7843ec2bb92505fafe07d07cbc80e76c1",
+  "story_start_in_stripped_collection": 16552,
+  "story_end_in_stripped_collection": 46024,
+  "measured_story_words": 5429,
+  "pre_stop_words": 2121,
+  "anchor_sentence": "Only one hour.",
+  "exact_anchor_text": "Only one hour.",
+  "anchor_start_in_story": 11183,
+  "stop_char_exclusive": 11197,
+  "offset_convention": "Unicode characters in LF-normalized, wrapper-stripped story; not UTF-8 byte offsets",
+  "cut_sha256": "ae4f0ed26fe9e03e232791fc165127cc0e966e5b0183989efd6274d4d58e3880",
+  "r2_eligible": true
+}

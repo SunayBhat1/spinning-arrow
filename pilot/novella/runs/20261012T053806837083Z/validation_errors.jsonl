@@ -1,0 +1,2 @@
+{"job": "openai/gpt-4o-mini:N04:R0:p0:0", "attempt": 0, "error": "Invalid choice schema or label", "request_id": "57867e5b0cf64e56a516a5b885070fb7"}
+{"job": "openai/gpt-4o-mini:N04:R0:p0:0", "attempt": 1, "error": "Invalid choice schema or label", "request_id": "4e27f21746a34085bf863685dbac5c09"}

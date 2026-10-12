@@ -1,1 +1,1 @@
-You are Bartleby's employer. He will neither work nor depart, and every attempt at persuasion or assistance has failed while your office is being harmed. What course do you choose?
+As the Lawyer, you must decide what to do now about Bartleby. He no longer works, occupies your office as a home, and has once more declined to leave after persuasion and an offer of money. You know of no family who could house him, and your practice is being disrupted. Which course do you choose?

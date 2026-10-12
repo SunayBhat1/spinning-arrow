@@ -1,0 +1,14 @@
+{
+  "state": "complete",
+  "finished": "2026-10-12T05:49:05.931891+00:00",
+  "failures": [],
+  "run_cost": 2.02150547,
+  "budget": {
+    "actual": 2.024279719999999,
+    "reserved": 0,
+    "outstanding": 0,
+    "cap": 5.0
+  },
+  "completed_jobs": 2048,
+  "planned_jobs": 2048
+}

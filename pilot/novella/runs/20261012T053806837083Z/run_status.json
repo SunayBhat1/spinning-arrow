@@ -1,0 +1,16 @@
+{
+  "state": "stopped",
+  "finished": "2026-10-12T05:39:10.667856+00:00",
+  "failures": [
+    "openai/gpt-4o-mini: two invalid probe responses; no bulk run"
+  ],
+  "run_cost": 0.0002367,
+  "budget": {
+    "actual": 0.0002367,
+    "reserved": 0,
+    "outstanding": 0,
+    "cap": 5.0
+  },
+  "completed_jobs": 1,
+  "planned_jobs": 2048
+}

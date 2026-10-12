@@ -1,0 +1,17 @@
+{
+  "id": "A14",
+  "slug": "build_fire",
+  "source_url": "https://www.gutenberg.org/cache/epub/2429/pg2429.txt",
+  "source_sha256": "cc10eebd57c762ce11b3c3decb02a4d9a763d30f083f1ad8e68ac300409257bf",
+  "story_start_in_stripped_collection": 55042,
+  "story_end_in_stripped_collection": 93172,
+  "measured_story_words": 7085,
+  "pre_stop_words": 5416,
+  "anchor_sentence": "He remembered the tale of the man, caught in a blizzard, who killed a steer and crawled inside the carcass, and so was saved.",
+  "exact_anchor_text": "He remembered the\ntale of the man, caught in a blizzard, who killed a steer and crawled\ninside the carcass, and so was saved.",
+  "anchor_start_in_story": 29134,
+  "stop_char_exclusive": 29259,
+  "offset_convention": "Unicode characters in LF-normalized, wrapper-stripped story; not UTF-8 byte offsets",
+  "cut_sha256": "b7b78773d2c67ebe9bf0138eafeab35d572827fe8042908c656797c2d25cce1f",
+  "r2_eligible": true
+}

@@ -1,0 +1,1 @@
+As Aksénov, answer the prison chief now. After twenty-six years imprisoned for someone else's murder, you suspect but cannot prove that Makar was responsible. You personally caught him digging this escape tunnel, and he threatened you against telling. Identifying him will expose him to severe flogging. Which response do you choose?

@@ -1,1 +1,1 @@
-You are Dr. Jekyll. Your second self, Hyde, has attacked someone publicly, and you alone know the connection. The authorities have not linked you to Hyde, and the formula remains available. Which course of action do you take now?
+As Dr. Jekyll, choose your next course. The identity your formula creates, Hyde, has just murdered a man in the street. Assume you have returned to Jekyll, are horrified, still possess the formula, and have not been publicly connected to Hyde. Which action do you take?

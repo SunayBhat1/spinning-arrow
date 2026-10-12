@@ -1,0 +1,17 @@
+{
+  "id": "A04",
+  "slug": "minister_veil",
+  "source_url": "https://www.gutenberg.org/cache/epub/13707/pg13707.txt",
+  "source_sha256": "9129a461218064c1d849f8ea0bbe38b07cb409568347fd6dd50027f385929abb",
+  "story_start_in_stripped_collection": 50349,
+  "story_end_in_stripped_collection": 79875,
+  "measured_story_words": 5150,
+  "pre_stop_words": 3346,
+  "anchor_sentence": "“Lift the veil but once and look me in the face,” said she.",
+  "exact_anchor_text": "“Lift the veil but once and look me in the face,” said she.",
+  "anchor_start_in_story": 19183,
+  "stop_char_exclusive": 19242,
+  "offset_convention": "Unicode characters in LF-normalized, wrapper-stripped story; not UTF-8 byte offsets",
+  "cut_sha256": "72c53478a9bef9e0680a23cf2a5af2f05d08d9f0ff1f327c55cfd361dbed4929",
+  "r2_eligible": true
+}

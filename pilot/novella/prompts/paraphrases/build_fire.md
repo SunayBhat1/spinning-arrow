@@ -1,0 +1,1 @@
+Put yourself in the traveler's place on the Yukon trail. The fire is out, your hands are frozen, and the dog is still near you. Remembering the story of a man sheltering inside a killed animal, you have a knife but badly impaired fingers. Which course do you choose now?

@@ -1,0 +1,1 @@
+Choose your response as the third stranger at the shepherd's party. Traveling to see your condemned brother in prison, you have instead found him escaped beside the chimney. Another guest's song identifies him as the hangman assigned to execute your brother for sheep-stealing tomorrow. Neither man has disclosed who you are. What action do you take?

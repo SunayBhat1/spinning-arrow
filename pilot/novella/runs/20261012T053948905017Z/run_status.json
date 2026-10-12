@@ -1,0 +1,16 @@
+{
+  "state": "stopped",
+  "finished": "2026-10-12T05:39:57.720087+00:00",
+  "failures": [
+    "anthropic/claude-haiku-4.5: two invalid probe responses; no bulk run"
+  ],
+  "run_cost": 0.00253755,
+  "budget": {
+    "actual": 0.00277425,
+    "reserved": 0,
+    "outstanding": 0,
+    "cap": 5.0
+  },
+  "completed_jobs": 4,
+  "planned_jobs": 2048
+}

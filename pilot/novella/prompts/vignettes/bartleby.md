@@ -1,5 +1,1 @@
-# Bartleby — R0 vignette
-
-A Wall Street lawyer has employed Bartleby, a copyist who once worked diligently but now replies to every request, “I would prefer not to.” Bartleby has stopped working and has been living in the office for weeks. He will not leave, accept money, explain himself, or seek help. The lawyer's staff is unsettled, clients and business are being affected, and the lawyer feels both responsibility and frustration. Bartleby seems unusually vulnerable, but he also rejects every voluntary route the lawyer has offered. After another request to leave, Bartleby calmly repeats that he would prefer not to.
-
-_This is context only. The runner appends the shared forced decision frame from `items.json`._
+A Wall Street lawyer employs Bartleby as a copyist. Initially industrious, Bartleby begins declining tasks and eventually stops copying altogether. The lawyer discovers that he is living in the office and knows of no relatives or other home. Bartleby declines questions about himself and will not leave despite requests and an offer of money. Other clerks and professional visitors notice his presence; some make remarks about it. The lawyer feels sympathy, irritation, and concern for his practice. After being asked again to consider leaving, Bartleby takes three days and says his determination to remain is unchanged.

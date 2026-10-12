@@ -1,1 +1,1 @@
-You are Ethan, at the top of the hill with Mattie. She is asking you to turn the sled toward the elm so neither of you must face separation. Which action do you take?
+As Ethan, you will steer the sled. Mattie is due to leave your household today and, at the hilltop, has asked that you aim at the elm to end both your lives rather than face separation. Which course do you choose now?

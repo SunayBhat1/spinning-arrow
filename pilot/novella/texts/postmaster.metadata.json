@@ -1,0 +1,17 @@
+{
+  "id": "B21",
+  "slug": "postmaster",
+  "source_url": "https://www.gutenberg.org/cache/epub/33525/pg33525.txt",
+  "source_sha256": "92d024ce489e638419c1751e8f224b231f6e902b908a728f80eb30c37e17767b",
+  "story_start_in_stripped_collection": 121276,
+  "story_end_in_stripped_collection": 133389,
+  "measured_story_words": 2195,
+  "pre_stop_words": 1551,
+  "anchor_sentence": "\"Dada, will you take me to your home?\"",
+  "exact_anchor_text": "\"Dada, will you take\nme to your home?\"",
+  "anchor_start_in_story": 8529,
+  "stop_char_exclusive": 8567,
+  "offset_convention": "Unicode characters in LF-normalized, wrapper-stripped story; not UTF-8 byte offsets",
+  "cut_sha256": "0e9cd70713d344ea3daf8f2f3200e56d382b4788b277d40a8bb876b53a5a6012",
+  "r2_eligible": true
+}

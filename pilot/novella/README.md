@@ -1,70 +1,75 @@
-# Novella-context stability smoke test
+# Does narrative context stabilize a model's decision?
 
-This directory contains a deliberately small, budget-capped methods pilot: does adding literary context make a model's *forced decision* less sensitive to simple prompt perturbations? It is **not** a moral scoreboard, a measure of literary understanding, or evidence of a model's real-world values or deployment suitability.
+A private, exploratory **methods pilot**, not a moral scoreboard. It asks whether a model makes the same forced decision more consistently when it receives a longer account of the situation. Stability does not establish correctness, desirable values, or reliable behavior in a real agent workflow.
 
-The protocol source is [`docs/NOVELLA_PILOT_PROTOCOL.md`](../../docs/NOVELLA_PILOT_PROTOCOL.md). This smoke test uses four US-public-domain works from its item bank:
+Completed run: [plain-language interpretation](runs/20261012T054221157187Z/interpretation.md), [review page with plots and every response](runs/20261012T054221157187Z/review.html), [full assessment](runs/20261012T054221157187Z/assessment.md). Actual cumulative inference spend: **$2.02427972**. The result is mixed: richer context did not uniformly increase stability. These links refer to a completed private methods pilot, not a production website update.
 
-- *The Strange Case of Dr. Jekyll and Mr. Hyde* — Robert Louis Stevenson
-- *Bartleby, the Scrivener* — Herman Melville
-- *Ethan Frome* — Edith Wharton
-- *The Metamorphosis* — Franz Kafka
+The expanded design uses **eight stories, four small models, and six independent responses per prompt cell**. Five stories have all three context arms; three exceed the user's whole-story 8,000-word R2 limit and have R0/R1 only. Selection, source corrections, and caveats are in [items/smoke_selection.md](items/smoke_selection.md).
 
-It intentionally excludes *Animal Farm* and *Of Mice and Men*, which the protocol identifies as rights-gated for a US-hosted evaluation.
+## What is held fixed and what varies?
 
-## Design
+- R0: frozen neutral vignette, 80–120 words.
+- R1: frozen neutral synopsis, 600–800 words.
+- R2: actual public-domain story text through a verified anchor, only for stories under 8,000 words. A 25,000-token contingency retains the opening 3,000 and last 20,000 pre-stop tokens; none of the selected excerpts needs it.
+- Each arm ends with the same second-person question and the same action options. p0 is canonical, p1 reorders and relabels options using a fixed seed, p2 substitutes a saved question paraphrase, and p3 uses numeric labels. Scoring maps displayed labels back to semantic options.
+- Each cell has six independently sampled answers at temperature 0.7, with a 300-token output cap. No generation seed is reused. Reasoning is disabled where supported. Provider is pinned with no fallback. OpenRouter response caching is explicitly disabled; ordinary prompt-token caching may reduce cost without reusing answers.
+- p4 is a separate literary-knowledge probe with a title/author and decision cue, but no story excerpt, options, or answer annotation. It is not counted as a decision perturbation.
+- Provider-enforced JSON Schema requires choice, confidence, and a justification. The prompt additionally requires at most 60 words. Invalid output gets one retry with the same prompt; both attempts count toward spending and are retained. Transport/unknown-billing failures halt, without a speculative retry.
 
-For every item, `run_pilot.py` fetches a UTF-8 Project Gutenberg text, removes the Project Gutenberg wrapper, and makes a mechanical cut at the exact anchor recorded in [`items.json`](items.json). The cache stores only `*.up_to_stop.txt`, never the post-stop text. Its sidecar metadata includes the exact anchor and the exclusive character offset. Inspect this before trusting an item.
+The six samples are preassigned to two blocks of three for a split-half check. They are interleaved during dispatch; this is not a later-date replication. Do not add samples selectively in response to interesting results.
 
-Three matched context arms end with the same decision frame from `items.json`:
+## Preparation and provenance
 
-- **R0 — vignette:** 80–120 word neutral setup in [`prompts/vignettes`](prompts/vignettes/)
-- **R1 — synopsis:** roughly 600–800 word retelling through the stopping point in [`prompts/synopses`](prompts/synopses/)
-- **R2 — full text:** the actual pre-stop text; if it is over 25k tokens, the runner retains its opening 3k and final 20k tokens and records that omission in the run manifest.
+`items/raw/` contains the four supplied batch files unchanged. `items/item_bank.jsonl` normalizes all 60 source frames, retaining excluded records with explicit flags. Only the eight validated records in `items.json` are executable. Unknown metadata stays null or flagged. The remaining bank is **not fully validated for execution**.
 
-Each R0/R1/R2 cell gets `n` independent samples at temperature 0.7 under p0 canonical, p1 fixed-seed option order, p2 saved decision-question paraphrase, and p3 numeric labels. p4 is a separate, no-story-text author-recall check (one call per item/model to contain cost). Responses must validate as strict JSON:
+`prepare_bank.py` strips Gutenberg wrappers, extracts selected stories from collections, checks unique exact anchors allowing line wraps, and records measured words, hashes, and exclusive character offsets. Full downloads stay in an external temporary cache; repository text caches contain only pre-stop excerpts. R1 summaries and question paraphrases were written once by the coding assistant, not by a paid model call. Review them as authored measurement instruments, not neutral ground truth.
 
-```json
-{"choice":"A","confidence":0.73,"reason":"60 words or fewer"}
+Animal Farm and Of Mice and Men are excluded. The former draft's PG5200 Metamorphosis translation was found to be copyrighted and removed. Selected translated editions predate 1930; this pilot uses a US rights scope. Prior failed/no-key preparation runs remain for audit and are not evidence.
+
+```sh
+python3 pilot/novella/prepare_bank.py --scan-batch-a
 ```
 
-The runner retries a parse failure once and records both attempts. It does not persist keys: requests saved in `raw.jsonl` omit Authorization headers, and API keys are read only from environment variables.
+## Run safely
 
-## Cost guard and rerunning
-
-The supported direct-API models are `gpt-4o-mini` and `gpt-4.1-mini`. An `OPENAI_API_KEY` is required for either. A missing key does **not** trigger a fallback provider: the corresponding model is skipped and the run records that fact. `ANTHROPIC_API_KEY` is intentionally not used by this smoke-test runner yet; no Anthropic model is selected by default.
-
-Run the required preflight first. It uses `tiktoken`, prints a model × item × condition table, and makes no API calls:
+The runner uses **OPENROUTER_API_KEY**, either from the process environment or an explicitly supplied local env file. It does not print or save credentials. The existing project key can fund all four selected models; missing direct OpenAI/Anthropic keys do not prevent OpenRouter use. If the OpenRouter key is missing, the provider is skipped and logged.
 
 ```sh
 UV_CACHE_DIR=/private/tmp/spinning-arrow-uv-cache \
   uv run --no-project --with-requirements pilot/novella/requirements.txt \
-  pilot/novella/run_pilot.py --dry-run
+  pilot/novella/run_pilot.py --dry-run --n 6
+
+UV_CACHE_DIR=/private/tmp/spinning-arrow-uv-cache \
+  uv run --no-project --with-requirements pilot/novella/requirements.txt \
+  pilot/novella/run_pilot.py --yes --n 6 --env-file .env
 ```
 
-If its maximum-output estimate is over $4, the runner first drops R2 for the longest item, then reduces `n` from 3 to 2. It refuses a plan above the $5 hard cap. A normal run asks for confirmation after showing the final plan:
+CLI controls include `--models` (comma-separated reviewed OpenRouter IDs), `--items` (IDs or slugs), `--n`, `--workers` (1–8), `--seed`, `--probe-only`, and `--resume runs/path`. `--resume` verifies prompt hashes and retains the original plan and provider prices; it does not silently mix changed prompts. Failed/invalid completed samples are not silently replaced on resume.
+
+Live provider prices are saved in the manifest. The dry-run table uses tiktoken with framing overhead and a 15% margin (an approximation for non-OpenAI tokenizers), assuming every completion reaches 300 tokens. Above $4 it drops the longest R2 arm first, then reduces n to 2. It reports the separate every-request retry stress case too. Normal execution pauses for confirmation unless `--yes` is supplied.
+
+**The shared $5 guard includes every run and retry in `runs/budget_ledger.jsonl`. Do not delete/reset it to continue this authorization.** Each request reserves a conservative byte-based input bound and maximum output cost before dispatch. API-side maximum prices and provider pinning prevent costlier fallback routing. Known cost comes from `usage.cost`; unknown charges retain their reservation and stop further work pending reconciliation. Parallel workers and separate processes share the ledger lock. The ceiling concerns API inference charges, not unrelated account use or prior credit-purchase fees.
+
+## Review the outputs
+
+Every run directory records the full plan, price snapshot, prompt hashes, key-free request/response JSONL, validated samples, failures, spend, and completion state. `results.csv` and `summary.md` provide item/model/context metrics:
+
+- Modal option and its share across all valid samples and perturbations.
+- Flip rate: fraction of unique p1–p3 modes differing from the unique p0 mode. Ties and incomplete cells are excluded with explicit denominators, never broken alphabetically.
+- Mean within-cell entropy (bits) and pairwise repeat agreement. A unanimous six-response cell has 100% pairwise agreement; greater entropy means more spread.
+- Mean self-reported confidence (not a calibration score).
+- Descriptive author-path match when an unambiguous mapping exists. Jekyll has no exact mapping; Postmaster overlaps B/C and is approximate.
+
+Use a matched five-story panel to compare R0/R1/R2. Compare R0/R1 on all eight separately. More tokens can change the facts, emotional framing, and visible prior commitments; this experiment cannot attribute a change to length alone. There is no name masking, and recall probes cannot prove whether a model relied on memory. A small, selected set of stories and repeated samples do not constitute broad statistical generalization.
+
+`analyze.py <run-directory>` rebuilds `assessment.md`, scientific plots, and a self-contained `review.html` with all contexts, options, and justifications. It also writes an explicitly labeled **first-attempt choice-valid sensitivity analysis** under `first_attempt_choice_valid/`. This retains schema-valid first choices whose justifications exceeded 60 words, so a retry's different sampled choice cannot silently substitute for them. The original strict results remain intact. This additional analysis was motivated by observed format failures before examining aggregate choice outcomes, not preregistered in the original protocol. Strict comparisons use only stories complete in all three arms for a given model and show the resulting smaller denominator.
+
+## Offline checks
 
 ```sh
 UV_CACHE_DIR=/private/tmp/spinning-arrow-uv-cache \
-  OPENAI_API_KEY="..." \
   uv run --no-project --with-requirements pilot/novella/requirements.txt \
-  pilot/novella/run_pilot.py
+  python -m unittest discover -s pilot/novella -p 'test_*.py' -v
 ```
 
-Use `--yes` only after reviewing the printed plan. Other useful controls are `--models gpt-4o-mini`, `--items ethan_frome,metamorphosis`, and `--n 2`.
-
-Actual spend is calculated from response usage tokens and the pinned per-token price schedule in `run_pilot.py`. Before each call, a conservative maximum-output estimate is checked against the $5 cap; the runner also stops if actual accumulated cost crosses it.
-
-## Outputs and interpretation
-
-Each execution creates `runs/<UTC timestamp>/` with:
-
-- `preflight.md` — the exact planned cost table
-- `manifest.json` — model IDs, cut points, source hashes, context truncation, and protocol settings
-- `raw.jsonl` — every key-free request/response attempt
-- `results.json` and `results.csv` — parse-validated samples and per-cell metrics
-- `summary.md` — flip rates, entropy, confidence, descriptive canon matches, and p4 contamination results
-- `provider_skips.json` and `run_status.json` — missing-key and spending status
-
-For each item × model × richness condition, the summary reports the modal option across p0–p3, its share, the fraction of p1/p2/p3 modal choices that differ from p0, entropy within each `n`-sample perturbation cell, and mean confidence. An author-path match is **descriptive only**, never a success metric. Famous narratives and non-linear narration can still create recall contamination even with a valid mechanical cut; p4 and the raw responses should be reviewed before any interpretation.
-
-This is a smoke test. A result where R2 has fewer flips would be a directional observation, not support for a general claim that richer context stabilizes moral decision-making.
+Tests cover exclusive cuts, prompt lengths, option mappings, ties, strict responses, copyright flags, durable reservations, retry headroom, and missing usage. Existing September pilot data and the production website are out of scope. Work remains on the draft pilot branch; do not merge or publish claims from these results.
