@@ -1,0 +1,17 @@
+{
+  "id": "N04",
+  "slug": "jekyll_hyde",
+  "source_url": "https://www.gutenberg.org/cache/epub/43/pg43.txt",
+  "source_sha256": "48e3f455c90f42e2aa4e9b0413672974a175121eef5262ebe9d8cdec5b74cf14",
+  "story_start_in_stripped_collection": 0,
+  "story_end_in_stripped_collection": 138814,
+  "measured_story_words": 25631,
+  "pre_stop_words": 6653,
+  "anchor_sentence": "At the horror of these sights and sounds, the maid fainted.",
+  "exact_anchor_text": "At\nthe horror of these sights and sounds, the maid fainted.",
+  "anchor_start_in_story": 35838,
+  "stop_char_exclusive": 35897,
+  "offset_convention": "Unicode characters in LF-normalized, wrapper-stripped story; not UTF-8 byte offsets",
+  "cut_sha256": "c78a41bde971ed886fc0deaaa693da281e89f726a4154c48d94af875ca30578a",
+  "r2_eligible": false
+}

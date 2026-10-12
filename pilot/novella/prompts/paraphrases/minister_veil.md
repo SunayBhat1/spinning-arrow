@@ -1,0 +1,1 @@
+As the Reverend Mr. Hooper, decide how to answer Elizabeth now. Your fiancée wants one look at your uncovered face. You have said your black veil must stay and have withheld its full meaning. She may end your engagement if you refuse. Which course do you choose?

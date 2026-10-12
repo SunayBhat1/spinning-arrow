@@ -1,0 +1,85 @@
+item,title,model,condition,n_valid,modal_choice,modal_share,flip_rate,flip_numerator,flip_denominator,tied_cells,mean_within_cell_entropy,within_cell_pair_agreement,mean_confidence,author_choice,modal_matches_author,complete
+A04,The Minister's Black Veil,anthropic/claude-haiku-4.5,R0,24,A,1.0,0.0,0,3,0,0.0,1.0,0.72125,A,True,True
+A04,The Minister's Black Veil,anthropic/claude-haiku-4.5,R1,24,A,0.75,0.3333333333333333,1,3,0,0.0,1.0,0.7200000000000001,A,True,True
+A04,The Minister's Black Veil,anthropic/claude-haiku-4.5,R2,24,A,0.9583333333333334,0.0,0,3,0,0.16250560541208853,0.9166666666666666,0.7200000000000001,A,True,True
+A04,The Minister's Black Veil,google/gemini-2.5-flash-lite,R0,24,A,0.75,0.3333333333333333,1,3,0,0.0,1.0,0.9125000000000001,A,True,True
+A04,The Minister's Black Veil,google/gemini-2.5-flash-lite,R1,24,A,0.5833333333333334,0.6666666666666666,2,3,0,0.3920795639257109,0.7833333333333333,0.9166666666666666,A,True,True
+A04,The Minister's Black Veil,google/gemini-2.5-flash-lite,R2,24,A,0.75,0.3333333333333333,1,3,0,0.0,1.0,0.9458333333333333,A,True,True
+A04,The Minister's Black Veil,openai/gpt-4.1-mini,R0,24,A,0.5,0.6666666666666666,2,3,0,0.542481250360578,0.7166666666666667,0.8583333333333334,A,True,True
+A04,The Minister's Black Veil,openai/gpt-4.1-mini,R1,24,B,0.6666666666666666,0.3333333333333333,1,3,0,0.2295739585136224,0.8666666666666667,0.8416666666666667,A,False,True
+A04,The Minister's Black Veil,openai/gpt-4.1-mini,R2,24,D,0.5416666666666666,0.5,1,2,1,0.4795739585136224,0.7166666666666667,0.8583333333333334,A,False,True
+A04,The Minister's Black Veil,openai/gpt-4o-mini,R0,24,B,0.4166666666666667,0.6666666666666666,2,3,0,0.9591479170272448,0.5,0.775,A,False,True
+A04,The Minister's Black Veil,openai/gpt-4o-mini,R1,24,D,0.75,0.3333333333333333,1,3,0,0.0,1.0,0.8000000000000002,A,False,True
+A04,The Minister's Black Veil,openai/gpt-4o-mini,R2,24,D,0.9166666666666666,0.0,0,3,0,0.2295739585136224,0.8666666666666667,0.7958333333333334,A,False,True
+A14,To Build a Fire,anthropic/claude-haiku-4.5,R0,24,C,0.875,0.0,0,2,1,0.25,0.85,0.7200000000000001,A,False,True
+A14,To Build a Fire,anthropic/claude-haiku-4.5,R1,24,C,0.9583333333333334,0.0,0,3,0,0.16250560541208853,0.9166666666666666,0.7158333333333333,A,False,True
+A14,To Build a Fire,anthropic/claude-haiku-4.5,R2,24,A,0.5,0.6666666666666666,2,3,0,0.6897981900809882,0.65,0.725,A,True,True
+A14,To Build a Fire,google/gemini-2.5-flash-lite,R0,24,C,0.5,0.6666666666666666,2,3,0,0.5545851693377994,0.7,0.8416666666666667,A,False,True
+A14,To Build a Fire,google/gemini-2.5-flash-lite,R1,24,A,1.0,0.0,0,3,0,0.0,1.0,0.8708333333333335,A,True,True
+A14,To Build a Fire,google/gemini-2.5-flash-lite,R2,24,A,1.0,0.0,0,3,0,0.0,1.0,0.9208333333333334,A,True,True
+A14,To Build a Fire,openai/gpt-4.1-mini,R0,24,B,0.7083333333333334,0.3333333333333333,1,3,0,0.16250560541208853,0.9166666666666666,0.7770833333333335,A,False,True
+A14,To Build a Fire,openai/gpt-4.1-mini,R1,24,A,0.7083333333333334,0.3333333333333333,1,3,0,0.16250560541208853,0.9166666666666666,0.7416666666666667,A,True,True
+A14,To Build a Fire,openai/gpt-4.1-mini,R2,24,A,0.5416666666666666,0.6666666666666666,2,3,0,0.6216535224393334,0.65,0.8791666666666668,A,True,True
+A14,To Build a Fire,openai/gpt-4o-mini,R0,24,A,0.5833333333333334,0.3333333333333333,1,3,0,0.4591479170272448,0.7333333333333334,0.6166666666666667,A,True,True
+A14,To Build a Fire,openai/gpt-4o-mini,R1,24,A,0.8333333333333334,0.3333333333333333,1,3,0,0.2295739585136224,0.8666666666666667,0.6124999999999999,A,True,True
+A14,To Build a Fire,openai/gpt-4o-mini,R2,24,A,0.7916666666666666,0.3333333333333333,1,3,0,0.3920795639257109,0.7833333333333333,0.65,A,True,True
+A25,The Three Strangers,anthropic/claude-haiku-4.5,R0,24,C,1.0,0.0,0,3,0,0.0,1.0,0.73,A,False,True
+A25,The Three Strangers,anthropic/claude-haiku-4.5,R1,24,C,0.9166666666666666,0.0,0,3,0,0.2295739585136224,0.8666666666666667,0.7225,A,False,True
+A25,The Three Strangers,google/gemini-2.5-flash-lite,R0,24,C,1.0,0.0,0,3,0,0.0,1.0,0.93125,A,False,True
+A25,The Three Strangers,google/gemini-2.5-flash-lite,R1,24,C,0.9583333333333334,0.0,0,3,0,0.16250560541208853,0.9166666666666666,0.9083333333333333,A,False,True
+A25,The Three Strangers,openai/gpt-4.1-mini,R0,24,C,1.0,0.0,0,3,0,0.0,1.0,0.8958333333333334,A,False,True
+A25,The Three Strangers,openai/gpt-4.1-mini,R1,24,C,1.0,0.0,0,3,0,0.0,1.0,0.8958333333333334,A,False,True
+A25,The Three Strangers,openai/gpt-4o-mini,R0,24,C,1.0,0.0,0,3,0,0.0,1.0,0.8770833333333333,A,False,True
+A25,The Three Strangers,openai/gpt-4o-mini,R1,24,C,1.0,0.0,0,3,0,0.0,1.0,0.8624999999999999,A,False,True
+B02,Enemies,anthropic/claude-haiku-4.5,R0,24,A,0.75,0.3333333333333333,1,3,0,0.0,1.0,0.7200000000000001,A,True,True
+B02,Enemies,anthropic/claude-haiku-4.5,R1,24,B,0.9583333333333334,0.0,0,3,0,0.16250560541208853,0.9166666666666666,0.7200000000000001,A,False,True
+B02,Enemies,anthropic/claude-haiku-4.5,R2,24,B,1.0,0.0,0,3,0,0.0,1.0,0.7454166666666667,A,False,True
+B02,Enemies,google/gemini-2.5-flash-lite,R0,24,B,1.0,0.0,0,3,0,0.0,1.0,0.9833333333333334,A,False,True
+B02,Enemies,google/gemini-2.5-flash-lite,R1,24,B,1.0,0.0,0,3,0,0.0,1.0,0.9791666666666666,A,False,True
+B02,Enemies,google/gemini-2.5-flash-lite,R2,24,B,0.9583333333333334,0.0,0,3,0,0.16250560541208853,0.9166666666666666,0.9583333333333334,A,False,True
+B02,Enemies,openai/gpt-4.1-mini,R0,24,A,0.9166666666666666,0.0,0,3,0,0.32501121082417705,0.8333333333333333,0.8458333333333333,A,True,True
+B02,Enemies,openai/gpt-4.1-mini,R1,24,B,0.875,0.0,0,2,1,0.25,0.85,0.8833333333333333,A,False,True
+B02,Enemies,openai/gpt-4.1-mini,R2,24,B,0.875,0.0,0,2,1,0.25,0.85,0.8916666666666666,A,False,True
+B02,Enemies,openai/gpt-4o-mini,R0,24,B,1.0,0.0,0,3,0,0.0,1.0,0.9,A,False,True
+B02,Enemies,openai/gpt-4o-mini,R1,24,B,1.0,0.0,0,3,0,0.0,1.0,0.9,A,False,True
+B02,Enemies,openai/gpt-4o-mini,R2,24,B,1.0,0.0,0,3,0,0.0,1.0,0.9,A,False,True
+B06,"God Sees the Truth, but Does Not Tell at Once",anthropic/claude-haiku-4.5,R0,24,B,1.0,0.0,0,3,0,0.0,1.0,0.72125,B,True,True
+B06,"God Sees the Truth, but Does Not Tell at Once",anthropic/claude-haiku-4.5,R1,24,B,1.0,0.0,0,3,0,0.0,1.0,0.7200000000000001,B,True,True
+B06,"God Sees the Truth, but Does Not Tell at Once",anthropic/claude-haiku-4.5,R2,24,B,1.0,0.0,0,3,0,0.0,1.0,0.7591666666666667,B,True,True
+B06,"God Sees the Truth, but Does Not Tell at Once",google/gemini-2.5-flash-lite,R0,24,B,1.0,0.0,0,3,0,0.0,1.0,0.9249999999999999,B,True,True
+B06,"God Sees the Truth, but Does Not Tell at Once",google/gemini-2.5-flash-lite,R1,24,B,1.0,0.0,0,3,0,0.0,1.0,0.9125000000000001,B,True,True
+B06,"God Sees the Truth, but Does Not Tell at Once",google/gemini-2.5-flash-lite,R2,24,B,1.0,0.0,0,3,0,0.0,1.0,0.9395833333333333,B,True,True
+B06,"God Sees the Truth, but Does Not Tell at Once",openai/gpt-4.1-mini,R0,24,B,0.8333333333333334,0.3333333333333333,1,3,0,0.2295739585136224,0.8666666666666667,0.8145833333333333,B,True,True
+B06,"God Sees the Truth, but Does Not Tell at Once",openai/gpt-4.1-mini,R1,24,B,1.0,0.0,0,3,0,0.0,1.0,0.8645833333333334,B,True,True
+B06,"God Sees the Truth, but Does Not Tell at Once",openai/gpt-4.1-mini,R2,24,B,1.0,0.0,0,3,0,0.0,1.0,0.8916666666666666,B,True,True
+B06,"God Sees the Truth, but Does Not Tell at Once",openai/gpt-4o-mini,R0,24,B,1.0,0.0,0,3,0,0.0,1.0,0.7958333333333334,B,True,True
+B06,"God Sees the Truth, but Does Not Tell at Once",openai/gpt-4o-mini,R1,24,B,1.0,0.0,0,3,0,0.0,1.0,0.8229166666666666,B,True,True
+B06,"God Sees the Truth, but Does Not Tell at Once",openai/gpt-4o-mini,R2,24,B,1.0,0.0,0,3,0,0.0,1.0,0.8083333333333335,B,True,True
+B21,The Postmaster,anthropic/claude-haiku-4.5,R0,24,C,1.0,0.0,0,3,0,0.0,1.0,0.7200000000000001,B,False,True
+B21,The Postmaster,anthropic/claude-haiku-4.5,R1,24,B,0.5416666666666666,0.6666666666666666,2,3,0,0.3920795639257109,0.7833333333333333,0.6945833333333332,B,True,True
+B21,The Postmaster,anthropic/claude-haiku-4.5,R2,24,B,0.9166666666666666,0.0,0,3,0,0.2295739585136224,0.8666666666666667,0.7200000000000001,B,True,True
+B21,The Postmaster,google/gemini-2.5-flash-lite,R0,24,A,0.9583333333333334,0.0,0,3,0,0.16250560541208853,0.9166666666666666,0.8958333333333334,B,False,True
+B21,The Postmaster,google/gemini-2.5-flash-lite,R1,24,A,0.5416666666666666,0.5,1,2,1,0.5587462305923776,0.7166666666666667,0.8875000000000001,B,False,True
+B21,The Postmaster,google/gemini-2.5-flash-lite,R2,24,A,0.875,0.0,0,3,0,0.3920795639257109,0.7833333333333333,0.9125000000000001,B,False,True
+B21,The Postmaster,openai/gpt-4.1-mini,R0,24,D,0.5416666666666666,,0,0,1,0.4795739585136224,0.7166666666666667,0.8833333333333333,B,False,True
+B21,The Postmaster,openai/gpt-4.1-mini,R1,24,D,0.5833333333333334,0.3333333333333333,1,3,0,0.4591479170272448,0.7333333333333334,0.875,B,False,True
+B21,The Postmaster,openai/gpt-4.1-mini,R2,24,D,0.6666666666666666,0.5,1,2,1,0.6420795639257109,0.6333333333333333,0.9,B,False,True
+B21,The Postmaster,openai/gpt-4o-mini,R0,24,D,0.75,0.0,0,3,0,0.7841591278514218,0.5666666666666667,0.8104166666666667,B,False,True
+B21,The Postmaster,openai/gpt-4o-mini,R1,24,D,0.7916666666666666,0.3333333333333333,1,3,0,0.3920795639257109,0.7833333333333333,0.8333333333333334,B,False,True
+B21,The Postmaster,openai/gpt-4o-mini,R2,24,D,0.875,0.0,0,3,0,0.3920795639257109,0.7833333333333333,0.8125,B,False,True
+N04,The Strange Case of Dr. Jekyll and Mr. Hyde,anthropic/claude-haiku-4.5,R0,24,A,1.0,0.0,0,3,0,0.0,1.0,0.7691666666666667,,,True
+N04,The Strange Case of Dr. Jekyll and Mr. Hyde,anthropic/claude-haiku-4.5,R1,24,A,1.0,0.0,0,3,0,0.0,1.0,0.7200000000000001,,,True
+N04,The Strange Case of Dr. Jekyll and Mr. Hyde,google/gemini-2.5-flash-lite,R0,24,A,1.0,0.0,0,3,0,0.0,1.0,0.9604166666666667,,,True
+N04,The Strange Case of Dr. Jekyll and Mr. Hyde,google/gemini-2.5-flash-lite,R1,24,A,1.0,0.0,0,3,0,0.0,1.0,0.9791666666666666,,,True
+N04,The Strange Case of Dr. Jekyll and Mr. Hyde,openai/gpt-4.1-mini,R0,24,A,0.75,0.3333333333333333,1,3,0,0.0,1.0,0.8812500000000001,,,True
+N04,The Strange Case of Dr. Jekyll and Mr. Hyde,openai/gpt-4.1-mini,R1,24,A,0.6666666666666666,0.3333333333333333,1,3,0,0.2295739585136224,0.8666666666666667,0.8958333333333334,,,True
+N04,The Strange Case of Dr. Jekyll and Mr. Hyde,openai/gpt-4o-mini,R0,24,A,0.9166666666666666,0.0,0,3,0,0.2295739585136224,0.8666666666666667,0.8916666666666667,,,True
+N04,The Strange Case of Dr. Jekyll and Mr. Hyde,openai/gpt-4o-mini,R1,24,A,0.8333333333333334,0.3333333333333333,1,3,0,0.2295739585136224,0.8666666666666667,0.8833333333333333,,,True
+N07,Bartleby the Scrivener,anthropic/claude-haiku-4.5,R0,24,B,0.75,0.3333333333333333,1,3,0,0.0,1.0,0.7200000000000001,B,True,True
+N07,Bartleby the Scrivener,anthropic/claude-haiku-4.5,R1,24,B/D,0.5,0.6666666666666666,2,3,0,0.32501121082417705,0.8333333333333333,0.7200000000000001,B,,True
+N07,Bartleby the Scrivener,google/gemini-2.5-flash-lite,R0,24,A,0.75,0.3333333333333333,1,3,0,0.4591479170272448,0.7333333333333334,0.8916666666666667,B,False,True
+N07,Bartleby the Scrivener,google/gemini-2.5-flash-lite,R1,24,A,1.0,0.0,0,3,0,0.0,1.0,0.9083333333333333,B,False,True
+N07,Bartleby the Scrivener,openai/gpt-4.1-mini,R0,24,E,1.0,0.0,0,3,0,0.0,1.0,0.8395833333333335,B,False,True
+N07,Bartleby the Scrivener,openai/gpt-4.1-mini,R1,24,D,0.5416666666666666,0.6666666666666666,2,3,0,0.3920795639257109,0.7833333333333333,0.8291666666666666,B,False,True
+N07,Bartleby the Scrivener,openai/gpt-4o-mini,R0,24,E,1.0,0.0,0,3,0,0.0,1.0,0.8000000000000002,B,False,True
+N07,Bartleby the Scrivener,openai/gpt-4o-mini,R1,24,E,1.0,0.0,0,3,0,0.0,1.0,0.7979166666666667,B,False,True

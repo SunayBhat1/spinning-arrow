@@ -1,0 +1,1 @@
+Choose what you do as the postmaster when Ratan asks to accompany you home. You have resigned after a refused transfer request and announced your departure. She is an orphan who nursed you through illness, and you have been teaching her to read. How do you answer her request now?

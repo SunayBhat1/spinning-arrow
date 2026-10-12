@@ -1,0 +1,6 @@
+{
+  "policy": "first attempt only, retain schema-valid choices even when justification exceeds 60 words",
+  "rationale": "Sensitivity analysis added after observing format noncompliance, before inspecting outcome aggregates. Not an original preregistered primary.",
+  "source": "../raw.jsonl",
+  "warning": "Original strict-format results remain in parent results.csv and summary.md. No new API calls."
+}

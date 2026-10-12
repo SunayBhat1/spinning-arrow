@@ -1,0 +1,17 @@
+{
+  "id": "N07",
+  "slug": "bartleby",
+  "source_url": "https://www.gutenberg.org/cache/epub/11231/pg11231.txt",
+  "source_sha256": "106c8bb84ad27f7552a021b1960dae942ffe8e1272e5242f74714a99faf0f6ca",
+  "story_start_in_stripped_collection": 0,
+  "story_end_in_stripped_collection": 81835,
+  "measured_story_words": 14358,
+  "pre_stop_words": 11176,
+  "anchor_sentence": "But having taken three days to meditate upon it, he apprised me that his original determination remained the same; in short, that he still preferred to abide with me.",
+  "exact_anchor_text": "But having taken three days to\nmeditate upon it, he apprised me that his original determination\nremained the same; in short, that he still preferred to abide with me.",
+  "anchor_start_in_story": 63812,
+  "stop_char_exclusive": 63978,
+  "offset_convention": "Unicode characters in LF-normalized, wrapper-stripped story; not UTF-8 byte offsets",
+  "cut_sha256": "186fc76332e7e4a8b4fe0a7d158777e5b13ed4bba9be9565024f13ae67caa830",
+  "r2_eligible": false
+}

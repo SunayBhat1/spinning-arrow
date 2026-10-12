@@ -1,0 +1,186 @@
+[
+  {
+    "id": "N04",
+    "word_count": 25631,
+    "status": "verified_selected",
+    "pre_stop_words": 6653,
+    "r2": false
+  },
+  {
+    "id": "N07",
+    "word_count": 14358,
+    "status": "verified_selected",
+    "pre_stop_words": 11176,
+    "r2": false
+  },
+  {
+    "id": "A01",
+    "status": "dropped_source_or_boundary_not_verified",
+    "reason": "HTTP Error 504: Gateway Time-out"
+  },
+  {
+    "id": "A02",
+    "status": "dropped_source_or_boundary_not_verified",
+    "reason": "HTTP Error 504: Gateway Time-out"
+  },
+  {
+    "id": "A03",
+    "status": "dropped_source_or_boundary_not_verified",
+    "reason": "HTTP Error 504: Gateway Time-out"
+  },
+  {
+    "id": "A04",
+    "word_count": 5150,
+    "status": "verified_selected",
+    "pre_stop_words": 3346,
+    "r2": true
+  },
+  {
+    "id": "A05",
+    "status": "dropped_source_or_boundary_not_verified",
+    "reason": "HTTP Error 503: Service Unavailable"
+  },
+  {
+    "id": "A06",
+    "status": "dropped_source_or_boundary_not_verified",
+    "reason": "HTTP Error 504: Gateway Time-out"
+  },
+  {
+    "id": "A07",
+    "word_count": 4044,
+    "status": "located_candidate_requires_boundary_and_stop_review",
+    "start": 15916,
+    "end": 38322,
+    "method": "title/prose heuristic; not manually verified"
+  },
+  {
+    "id": "A08",
+    "word_count": 1607,
+    "status": "located_candidate_requires_boundary_and_stop_review",
+    "start": 232238,
+    "end": 241330,
+    "method": "title/prose heuristic; not manually verified"
+  },
+  {
+    "id": "A09",
+    "word_count": 2349,
+    "status": "located_candidate_requires_boundary_and_stop_review",
+    "start": 238340,
+    "end": 251138,
+    "method": "title/prose heuristic; not manually verified"
+  },
+  {
+    "id": "A10",
+    "word_count": 14214,
+    "status": "dropped_over_12000_words",
+    "start": 39,
+    "end": 76676,
+    "method": "title/prose heuristic; not manually verified"
+  },
+  {
+    "id": "A11",
+    "status": "dropped_source_or_boundary_not_verified",
+    "reason": "HTTP Error 504: Gateway Time-out"
+  },
+  {
+    "id": "A12",
+    "status": "dropped_source_or_boundary_not_verified",
+    "reason": "HTTP Error 504: Gateway Time-out"
+  },
+  {
+    "id": "A13",
+    "status": "dropped_source_or_boundary_not_verified",
+    "reason": "HTTP Error 503: Service Unavailable"
+  },
+  {
+    "id": "A14",
+    "word_count": 7085,
+    "status": "verified_selected",
+    "pre_stop_words": 5416,
+    "r2": true
+  },
+  {
+    "id": "A15",
+    "status": "dropped_source_or_boundary_not_verified",
+    "reason": "HTTP Error 504: Gateway Time-out"
+  },
+  {
+    "id": "A16",
+    "status": "dropped_source_or_boundary_not_verified",
+    "reason": "HTTP Error 503: Service Unavailable"
+  },
+  {
+    "id": "A17",
+    "status": "dropped_source_or_boundary_not_verified",
+    "reason": "HTTP Error 504: Gateway Time-out"
+  },
+  {
+    "id": "A18",
+    "status": "dropped_source_or_boundary_not_verified",
+    "reason": "HTTP Error 503: Service Unavailable"
+  },
+  {
+    "id": "A19",
+    "word_count": 9479,
+    "status": "located_candidate_requires_boundary_and_stop_review",
+    "start": 146126,
+    "end": 200527,
+    "method": "title/prose heuristic; not manually verified"
+  },
+  {
+    "id": "A20",
+    "status": "dropped_source_or_boundary_not_verified",
+    "reason": "HTTP Error 504: Gateway Time-out"
+  },
+  {
+    "id": "A21",
+    "word_count": 6696,
+    "status": "located_candidate_requires_boundary_and_stop_review",
+    "start": 161474,
+    "end": 198272,
+    "method": "title/prose heuristic; not manually verified"
+  },
+  {
+    "id": "A22",
+    "status": "dropped_source_or_boundary_not_verified",
+    "reason": "HTTP Error 504: Gateway Time-out"
+  },
+  {
+    "id": "A23",
+    "status": "dropped_source_or_boundary_not_verified",
+    "reason": "HTTP Error 503: Service Unavailable"
+  },
+  {
+    "id": "A24",
+    "status": "dropped_source_or_boundary_not_verified",
+    "reason": "HTTP Error 503: Service Unavailable"
+  },
+  {
+    "id": "A25",
+    "word_count": 8308,
+    "status": "verified_selected",
+    "pre_stop_words": 5354,
+    "r2": false
+  },
+  {
+    "id": "B02",
+    "word_count": 5429,
+    "status": "verified_selected",
+    "pre_stop_words": 2121,
+    "r2": true
+  },
+  {
+    "id": "B06",
+    "word_count": 3147,
+    "status": "verified_selected",
+    "pre_stop_words": 2710,
+    "r2": true
+  },
+  {
+    "id": "B21",
+    "word_count": 2195,
+    "status": "verified_selected",
+    "pre_stop_words": 1551,
+    "r2": true
+  }
+]

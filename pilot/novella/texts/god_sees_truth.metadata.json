@@ -1,0 +1,17 @@
+{
+  "id": "B06",
+  "slug": "god_sees_truth",
+  "source_url": "https://www.gutenberg.org/cache/epub/38025/pg38025.txt",
+  "source_sha256": "9285dcd9d6ce728c557173c89c041b98745b4c6e8269270a98bc60d3e4c80c57",
+  "story_start_in_stripped_collection": 92597,
+  "story_end_in_stripped_collection": 109221,
+  "measured_story_words": 3147,
+  "pre_stop_words": 2710,
+  "anchor_sentence": "Who has been digging it?",
+  "exact_anchor_text": "Who has been digging it?",
+  "anchor_start_in_story": 14226,
+  "stop_char_exclusive": 14250,
+  "offset_convention": "Unicode characters in LF-normalized, wrapper-stripped story; not UTF-8 byte offsets",
+  "cut_sha256": "ecec31952bf3ecbf613b9840e19ab136b9889c0ef5786bd40c313c7f9d65d4ad",
+  "r2_eligible": true
+}

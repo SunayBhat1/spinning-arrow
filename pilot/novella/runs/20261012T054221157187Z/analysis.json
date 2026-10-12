@@ -1,0 +1,1225 @@
+{
+  "audit": {
+    "valid_decisions": 2016,
+    "valid_recalls": 32,
+    "strict_valid_decisions": 1962,
+    "strict_valid_recalls": 31,
+    "first_attempt_word_limit_failures": 141,
+    "invalid_final": 55,
+    "api_responses": 2191,
+    "validation_failures": 198,
+    "prompt_tokens": 3714643,
+    "completion_tokens": 164015,
+    "reasoning_tokens": 100,
+    "nonzero_reasoning_responses": 50,
+    "unique_response_ids": 2191,
+    "providers": {
+      "OpenAI": 1026,
+      "Google AI Studio": 516,
+      "Anthropic": 649
+    }
+  },
+  "recall_manual_review": {
+    "reviewer": "Coding assistant, manual comparison against the selected public-domain source continuation and saved author-path annotations; not independent human adjudication",
+    "scope": "FIRST attempt only. Core-action recognition is deliberately coarser than exact author-option match or accuracy of the whole description.",
+    "model_order": [
+      "openai/gpt-4o-mini",
+      "openai/gpt-4.1-mini",
+      "google/gemini-2.5-flash-lite",
+      "anthropic/claude-haiku-4.5"
+    ],
+    "items": {
+      "N04": {
+        "core_action": "Renounce voluntary transformations after the killing, while retaining the formula",
+        "matches_core_in_model_order": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "notes": "All name the broad renunciation path. This is not exact option A (destroy everything) or B (continue under rules); author-option scoring remains unavailable. Some details about the later sequence are compressed or speculative."
+      },
+      "N07": {
+        "core_action": "Move the law office away, leaving Bartleby",
+        "matches_core_in_model_order": [
+          true,
+          true,
+          false,
+          true
+        ],
+        "notes": "Gemini instead names the lawyer calling police. Haiku gets the move right but subsequently says the Lawyer is arrested and dies; it is Bartleby, so the full description is wrong."
+      },
+      "A04": {
+        "core_action": "Refuse Elizabeth's request to lift the veil; she leaves",
+        "matches_core_in_model_order": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "notes": "All identify the refusal. GPT-4o mini overstates the veil as definitively symbolizing Hooper's own sin; the source preserves ambiguity about his private motive."
+      },
+      "A14": {
+        "core_action": "Attempt to kill the dog for warmth, but fail",
+        "matches_core_in_model_order": [
+          true,
+          false,
+          false,
+          true
+        ],
+        "notes": "GPT-4.1 mini and Gemini describe fire-building instead of the next dog-killing attempt. Gemini invents carving shavings from a leg. Haiku names the attempt but adds that he cuts the dog; the text says he cannot draw or hold the knife, so that detail is incorrect."
+      },
+      "A25": {
+        "core_action": "Turn and flee the cottage without explaining",
+        "matches_core_in_model_order": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "notes": "Both GPT models initially answer knows=false with an empty description. Gemini invents steering the conversation; Haiku invents staying until the party ends. Neither names the flight. The original validator unnecessarily retried the two honest unknown responses; retain and use the first attempts for this review."
+      },
+      "B02": {
+        "core_action": "Agree to go with Abogin",
+        "matches_core_in_model_order": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "notes": "All name the immediate departure. Haiku's later account is wrong: Abogin's wife used feigned illness to leave with her lover, not hysteria about her husband's infidelity."
+      },
+      "B06": {
+        "core_action": "Refuse to identify the tunnel digger",
+        "matches_core_in_model_order": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "notes": "All name non-disclosure. Haiku compresses the later forgiveness/confession sequence; credit here concerns only the immediate refusal."
+      },
+      "B21": {
+        "core_action": "Do not take Ratan along; depart without her",
+        "matches_core_in_model_order": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "notes": "This broad path is recognized, but no answer reproduces the complete immediate laughing dismissal/offer sequence. Gemini wrongly says she accepts savings and a shawl; Ratan refuses the offered money. The GPT descriptions add a promise to remember her; Haiku changes the dismissal's tone. B and C action packages overlap, so this is not exact option recognition."
+      }
+    },
+    "summary": {
+      "claimed_knows": 30,
+      "probes": 32,
+      "named_broad_core_action": 25,
+      "claimed_knows_but_wrong_core": 5,
+      "honest_unknown": 2
+    },
+    "limit": "This establishes neither actual training-set inclusion nor use of memory in the decision calls. A correct broad action can coexist with invented details. Review these annotations before relying on them."
+  },
+  "analysis_policy": "first_attempt_choice_valid; word-limit deviations retained, not hidden",
+  "strict_complete_matched_sensitivity": {
+    "openai/gpt-4o-mini": {
+      "common_items": [
+        "A04",
+        "A14",
+        "B02",
+        "B06",
+        "B21"
+      ],
+      "conditions": {
+        "R0": {
+          "repeat_agreement": 0.76,
+          "flip": 0.2,
+          "flip_count": 3,
+          "flip_denominator": 15,
+          "entropy": 0.4404909923811823,
+          "ties": 0,
+          "item_count": 5
+        },
+        "R1": {
+          "repeat_agreement": 0.93,
+          "flip": 0.2,
+          "flip_count": 3,
+          "flip_denominator": 15,
+          "entropy": 0.12433070448786666,
+          "ties": 0,
+          "item_count": 5
+        },
+        "R2": {
+          "repeat_agreement": 0.8866666666666667,
+          "flip": 0.06666666666666667,
+          "flip_count": 1,
+          "flip_denominator": 15,
+          "entropy": 0.20274661727300886,
+          "ties": 0,
+          "item_count": 5
+        }
+      }
+    },
+    "openai/gpt-4.1-mini": {
+      "common_items": [
+        "A04",
+        "A14",
+        "B02",
+        "B06",
+        "B21"
+      ],
+      "conditions": {
+        "R0": {
+          "repeat_agreement": 0.8099999999999999,
+          "flip": 0.3333333333333333,
+          "flip_count": 4,
+          "flip_denominator": 12,
+          "entropy": 0.34782919672481766,
+          "ties": 1,
+          "item_count": 5
+        },
+        "R1": {
+          "repeat_agreement": 0.8733333333333333,
+          "flip": 0.21428571428571427,
+          "flip_count": 3,
+          "flip_denominator": 14,
+          "entropy": 0.22024549619059114,
+          "ties": 1,
+          "item_count": 5
+        },
+        "R2": {
+          "repeat_agreement": 0.77,
+          "flip": 0.3333333333333333,
+          "flip_count": 4,
+          "flip_denominator": 12,
+          "entropy": 0.3986614089757333,
+          "ties": 3,
+          "item_count": 5
+        }
+      }
+    },
+    "google/gemini-2.5-flash-lite": {
+      "common_items": [
+        "A04",
+        "A14",
+        "B02",
+        "B06",
+        "B21"
+      ],
+      "conditions": {
+        "R0": {
+          "repeat_agreement": 0.9233333333333333,
+          "flip": 0.2,
+          "flip_count": 3,
+          "flip_denominator": 15,
+          "entropy": 0.1434181549499776,
+          "ties": 0,
+          "item_count": 5
+        },
+        "R1": {
+          "repeat_agreement": 0.9033333333333333,
+          "flip": 0.2,
+          "flip_count": 3,
+          "flip_denominator": 15,
+          "entropy": 0.18387442971892212,
+          "ties": 0,
+          "item_count": 5
+        },
+        "R2": {
+          "repeat_agreement": 0.94,
+          "flip": 0.06666666666666667,
+          "flip_count": 1,
+          "flip_denominator": 15,
+          "entropy": 0.11091703386755988,
+          "ties": 0,
+          "item_count": 5
+        }
+      }
+    },
+    "anthropic/claude-haiku-4.5": {
+      "common_items": [],
+      "conditions": {
+        "R0": {
+          "repeat_agreement": null,
+          "flip": null,
+          "flip_count": 0,
+          "flip_denominator": 0,
+          "entropy": null,
+          "ties": 0,
+          "item_count": 0
+        },
+        "R1": {
+          "repeat_agreement": null,
+          "flip": null,
+          "flip_count": 0,
+          "flip_denominator": 0,
+          "entropy": null,
+          "ties": 0,
+          "item_count": 0
+        },
+        "R2": {
+          "repeat_agreement": null,
+          "flip": null,
+          "flip_count": 0,
+          "flip_denominator": 0,
+          "entropy": null,
+          "ties": 0,
+          "item_count": 0
+        }
+      }
+    }
+  },
+  "matched_five_story": {
+    "openai/gpt-4o-mini": {
+      "R0": {
+        "repeat_agreement": 0.76,
+        "flip": 0.2,
+        "flip_count": 3,
+        "flip_denominator": 15,
+        "entropy": 0.4404909923811823,
+        "ties": 0,
+        "item_count": 5
+      },
+      "R1": {
+        "repeat_agreement": 0.93,
+        "flip": 0.2,
+        "flip_count": 3,
+        "flip_denominator": 15,
+        "entropy": 0.12433070448786666,
+        "ties": 0,
+        "item_count": 5
+      },
+      "R2": {
+        "repeat_agreement": 0.8866666666666667,
+        "flip": 0.06666666666666667,
+        "flip_count": 1,
+        "flip_denominator": 15,
+        "entropy": 0.20274661727300886,
+        "ties": 0,
+        "item_count": 5
+      }
+    },
+    "openai/gpt-4.1-mini": {
+      "R0": {
+        "repeat_agreement": 0.8099999999999999,
+        "flip": 0.3333333333333333,
+        "flip_count": 4,
+        "flip_denominator": 12,
+        "entropy": 0.34782919672481766,
+        "ties": 1,
+        "item_count": 5
+      },
+      "R1": {
+        "repeat_agreement": 0.8733333333333333,
+        "flip": 0.21428571428571427,
+        "flip_count": 3,
+        "flip_denominator": 14,
+        "entropy": 0.22024549619059114,
+        "ties": 1,
+        "item_count": 5
+      },
+      "R2": {
+        "repeat_agreement": 0.77,
+        "flip": 0.3333333333333333,
+        "flip_count": 4,
+        "flip_denominator": 12,
+        "entropy": 0.3986614089757333,
+        "ties": 3,
+        "item_count": 5
+      }
+    },
+    "google/gemini-2.5-flash-lite": {
+      "R0": {
+        "repeat_agreement": 0.9233333333333333,
+        "flip": 0.2,
+        "flip_count": 3,
+        "flip_denominator": 15,
+        "entropy": 0.1434181549499776,
+        "ties": 0,
+        "item_count": 5
+      },
+      "R1": {
+        "repeat_agreement": 0.9,
+        "flip": 0.21428571428571427,
+        "flip_count": 3,
+        "flip_denominator": 14,
+        "entropy": 0.1901651589036177,
+        "ties": 1,
+        "item_count": 5
+      },
+      "R2": {
+        "repeat_agreement": 0.94,
+        "flip": 0.06666666666666667,
+        "flip_count": 1,
+        "flip_denominator": 15,
+        "entropy": 0.11091703386755988,
+        "ties": 0,
+        "item_count": 5
+      }
+    },
+    "anthropic/claude-haiku-4.5": {
+      "R0": {
+        "repeat_agreement": 0.97,
+        "flip": 0.07142857142857142,
+        "flip_count": 1,
+        "flip_denominator": 14,
+        "entropy": 0.05,
+        "ties": 1,
+        "item_count": 5
+      },
+      "R1": {
+        "repeat_agreement": 0.9233333333333333,
+        "flip": 0.2,
+        "flip_count": 3,
+        "flip_denominator": 15,
+        "entropy": 0.1434181549499776,
+        "ties": 0,
+        "item_count": 5
+      },
+      "R2": {
+        "repeat_agreement": 0.8866666666666667,
+        "flip": 0.13333333333333333,
+        "flip_count": 2,
+        "flip_denominator": 15,
+        "entropy": 0.21637555080133983,
+        "ties": 0,
+        "item_count": 5
+      }
+    }
+  },
+  "all_eight_story": {
+    "openai/gpt-4o-mini": {
+      "R0": {
+        "repeat_agreement": 0.8333333333333334,
+        "flip": 0.125,
+        "flip_count": 3,
+        "flip_denominator": 24,
+        "entropy": 0.3040036150524417,
+        "ties": 0,
+        "item_count": 8
+      },
+      "R1": {
+        "repeat_agreement": 0.9395833333333333,
+        "flip": 0.16666666666666666,
+        "flip_count": 4,
+        "flip_denominator": 24,
+        "entropy": 0.10640343511911945,
+        "ties": 0,
+        "item_count": 8
+      }
+    },
+    "openai/gpt-4.1-mini": {
+      "R0": {
+        "repeat_agreement": 0.88125,
+        "flip": 0.23809523809523808,
+        "flip_count": 5,
+        "flip_denominator": 21,
+        "entropy": 0.21739324795301104,
+        "ties": 1,
+        "item_count": 8
+      },
+      "R1": {
+        "repeat_agreement": 0.8770833333333333,
+        "flip": 0.2608695652173913,
+        "flip_count": 6,
+        "flip_denominator": 23,
+        "entropy": 0.21536012542403613,
+        "ties": 1,
+        "item_count": 8
+      }
+    },
+    "google/gemini-2.5-flash-lite": {
+      "R0": {
+        "repeat_agreement": 0.91875,
+        "flip": 0.16666666666666666,
+        "flip_count": 4,
+        "flip_denominator": 24,
+        "entropy": 0.1470298364721416,
+        "ties": 0,
+        "item_count": 8
+      },
+      "R1": {
+        "repeat_agreement": 0.9270833333333334,
+        "flip": 0.13043478260869565,
+        "flip_count": 3,
+        "flip_denominator": 23,
+        "entropy": 0.13916642499127213,
+        "ties": 1,
+        "item_count": 8
+      }
+    },
+    "anthropic/claude-haiku-4.5": {
+      "R0": {
+        "repeat_agreement": 0.98125,
+        "flip": 0.08695652173913043,
+        "flip_count": 2,
+        "flip_denominator": 23,
+        "entropy": 0.03125,
+        "ties": 1,
+        "item_count": 8
+      },
+      "R1": {
+        "repeat_agreement": 0.9145833333333333,
+        "flip": 0.20833333333333334,
+        "flip_count": 5,
+        "flip_denominator": 24,
+        "entropy": 0.15895949301096093,
+        "ties": 0,
+        "item_count": 8
+      }
+    }
+  },
+  "split_blocks": [
+    {
+      "model": "openai/gpt-4o-mini",
+      "condition": "R0",
+      "block": 1,
+      "agreement": 0.7333333333333333,
+      "complete_cells": 20
+    },
+    {
+      "model": "openai/gpt-4o-mini",
+      "condition": "R0",
+      "block": 2,
+      "agreement": 0.7666666666666666,
+      "complete_cells": 20
+    },
+    {
+      "model": "openai/gpt-4o-mini",
+      "condition": "R1",
+      "block": 1,
+      "agreement": 0.9666666666666667,
+      "complete_cells": 20
+    },
+    {
+      "model": "openai/gpt-4o-mini",
+      "condition": "R1",
+      "block": 2,
+      "agreement": 0.9333333333333333,
+      "complete_cells": 20
+    },
+    {
+      "model": "openai/gpt-4o-mini",
+      "condition": "R2",
+      "block": 1,
+      "agreement": 0.9,
+      "complete_cells": 20
+    },
+    {
+      "model": "openai/gpt-4o-mini",
+      "condition": "R2",
+      "block": 2,
+      "agreement": 0.8666666666666667,
+      "complete_cells": 20
+    },
+    {
+      "model": "openai/gpt-4.1-mini",
+      "condition": "R0",
+      "block": 1,
+      "agreement": 0.7666666666666666,
+      "complete_cells": 20
+    },
+    {
+      "model": "openai/gpt-4.1-mini",
+      "condition": "R0",
+      "block": 2,
+      "agreement": 0.8,
+      "complete_cells": 20
+    },
+    {
+      "model": "openai/gpt-4.1-mini",
+      "condition": "R1",
+      "block": 1,
+      "agreement": 0.8333333333333334,
+      "complete_cells": 20
+    },
+    {
+      "model": "openai/gpt-4.1-mini",
+      "condition": "R1",
+      "block": 2,
+      "agreement": 0.9,
+      "complete_cells": 20
+    },
+    {
+      "model": "openai/gpt-4.1-mini",
+      "condition": "R2",
+      "block": 1,
+      "agreement": 0.7666666666666666,
+      "complete_cells": 20
+    },
+    {
+      "model": "openai/gpt-4.1-mini",
+      "condition": "R2",
+      "block": 2,
+      "agreement": 0.8,
+      "complete_cells": 20
+    },
+    {
+      "model": "google/gemini-2.5-flash-lite",
+      "condition": "R0",
+      "block": 1,
+      "agreement": 0.9666666666666667,
+      "complete_cells": 20
+    },
+    {
+      "model": "google/gemini-2.5-flash-lite",
+      "condition": "R0",
+      "block": 2,
+      "agreement": 0.8666666666666667,
+      "complete_cells": 20
+    },
+    {
+      "model": "google/gemini-2.5-flash-lite",
+      "condition": "R1",
+      "block": 1,
+      "agreement": 0.9333333333333333,
+      "complete_cells": 20
+    },
+    {
+      "model": "google/gemini-2.5-flash-lite",
+      "condition": "R1",
+      "block": 2,
+      "agreement": 0.8666666666666667,
+      "complete_cells": 20
+    },
+    {
+      "model": "google/gemini-2.5-flash-lite",
+      "condition": "R2",
+      "block": 1,
+      "agreement": 0.9333333333333333,
+      "complete_cells": 20
+    },
+    {
+      "model": "google/gemini-2.5-flash-lite",
+      "condition": "R2",
+      "block": 2,
+      "agreement": 0.9666666666666667,
+      "complete_cells": 20
+    },
+    {
+      "model": "anthropic/claude-haiku-4.5",
+      "condition": "R0",
+      "block": 1,
+      "agreement": 0.9666666666666667,
+      "complete_cells": 20
+    },
+    {
+      "model": "anthropic/claude-haiku-4.5",
+      "condition": "R0",
+      "block": 2,
+      "agreement": 0.9666666666666667,
+      "complete_cells": 20
+    },
+    {
+      "model": "anthropic/claude-haiku-4.5",
+      "condition": "R1",
+      "block": 1,
+      "agreement": 0.9,
+      "complete_cells": 20
+    },
+    {
+      "model": "anthropic/claude-haiku-4.5",
+      "condition": "R1",
+      "block": 2,
+      "agreement": 0.9666666666666667,
+      "complete_cells": 20
+    },
+    {
+      "model": "anthropic/claude-haiku-4.5",
+      "condition": "R2",
+      "block": 1,
+      "agreement": 0.85,
+      "complete_cells": 20
+    },
+    {
+      "model": "anthropic/claude-haiku-4.5",
+      "condition": "R2",
+      "block": 2,
+      "agreement": 0.9,
+      "complete_cells": 20
+    }
+  ],
+  "item_model_R2_minus_R0": [
+    {
+      "item": "A04",
+      "model": "openai/gpt-4o-mini",
+      "delta": 0.3666666666666667
+    },
+    {
+      "item": "A04",
+      "model": "openai/gpt-4.1-mini",
+      "delta": 0.0
+    },
+    {
+      "item": "A04",
+      "model": "google/gemini-2.5-flash-lite",
+      "delta": 0.0
+    },
+    {
+      "item": "A04",
+      "model": "anthropic/claude-haiku-4.5",
+      "delta": -0.08333333333333337
+    },
+    {
+      "item": "A14",
+      "model": "openai/gpt-4o-mini",
+      "delta": 0.04999999999999993
+    },
+    {
+      "item": "A14",
+      "model": "openai/gpt-4.1-mini",
+      "delta": -0.2666666666666666
+    },
+    {
+      "item": "A14",
+      "model": "google/gemini-2.5-flash-lite",
+      "delta": 0.30000000000000004
+    },
+    {
+      "item": "A14",
+      "model": "anthropic/claude-haiku-4.5",
+      "delta": -0.19999999999999996
+    },
+    {
+      "item": "B02",
+      "model": "openai/gpt-4o-mini",
+      "delta": 0.0
+    },
+    {
+      "item": "B02",
+      "model": "openai/gpt-4.1-mini",
+      "delta": 0.01666666666666672
+    },
+    {
+      "item": "B02",
+      "model": "google/gemini-2.5-flash-lite",
+      "delta": -0.08333333333333337
+    },
+    {
+      "item": "B02",
+      "model": "anthropic/claude-haiku-4.5",
+      "delta": 0.0
+    },
+    {
+      "item": "B06",
+      "model": "openai/gpt-4o-mini",
+      "delta": 0.0
+    },
+    {
+      "item": "B06",
+      "model": "openai/gpt-4.1-mini",
+      "delta": 0.1333333333333333
+    },
+    {
+      "item": "B06",
+      "model": "google/gemini-2.5-flash-lite",
+      "delta": 0.0
+    },
+    {
+      "item": "B06",
+      "model": "anthropic/claude-haiku-4.5",
+      "delta": 0.0
+    },
+    {
+      "item": "B21",
+      "model": "openai/gpt-4o-mini",
+      "delta": 0.21666666666666667
+    },
+    {
+      "item": "B21",
+      "model": "openai/gpt-4.1-mini",
+      "delta": -0.08333333333333337
+    },
+    {
+      "item": "B21",
+      "model": "google/gemini-2.5-flash-lite",
+      "delta": -0.1333333333333333
+    },
+    {
+      "item": "B21",
+      "model": "anthropic/claude-haiku-4.5",
+      "delta": -0.1333333333333333
+    }
+  ],
+  "story_clustered_mean_delta": 0.0050000000000000044,
+  "story_cluster_bootstrap_95": [
+    -0.02833333333333332,
+    0.042499999999999996
+  ],
+  "perturbation_sensitivity": [
+    {
+      "model": "openai/gpt-4o-mini",
+      "condition": "R0",
+      "cross_prompt_agreement": 0.6814814814814815,
+      "excess_perturbation_disagreement": 0.03851851851851852,
+      "total_variation": 0.17777777777777778,
+      "flip_lower": 0.2,
+      "flip_upper": 0.2,
+      "pairs": 15
+    },
+    {
+      "model": "openai/gpt-4o-mini",
+      "condition": "R1",
+      "cross_prompt_agreement": 0.825925925925926,
+      "excess_perturbation_disagreement": 0.10518518518518517,
+      "total_variation": 0.16666666666666666,
+      "flip_lower": 0.2,
+      "flip_upper": 0.2,
+      "pairs": 15
+    },
+    {
+      "model": "openai/gpt-4o-mini",
+      "condition": "R2",
+      "cross_prompt_agreement": 0.8888888888888888,
+      "excess_perturbation_disagreement": 0.035555555555555556,
+      "total_variation": 0.11111111111111112,
+      "flip_lower": 0.06666666666666667,
+      "flip_upper": 0.06666666666666667,
+      "pairs": 15
+    },
+    {
+      "model": "openai/gpt-4.1-mini",
+      "condition": "R0",
+      "cross_prompt_agreement": 0.6444444444444445,
+      "excess_perturbation_disagreement": 0.15333333333333332,
+      "total_variation": 0.32222222222222224,
+      "flip_lower": 0.26666666666666666,
+      "flip_upper": 0.4666666666666667,
+      "pairs": 15
+    },
+    {
+      "model": "openai/gpt-4.1-mini",
+      "condition": "R1",
+      "cross_prompt_agreement": 0.7037037037037037,
+      "excess_perturbation_disagreement": 0.11851851851851852,
+      "total_variation": 0.26666666666666666,
+      "flip_lower": 0.2,
+      "flip_upper": 0.26666666666666666,
+      "pairs": 15
+    },
+    {
+      "model": "openai/gpt-4.1-mini",
+      "condition": "R2",
+      "cross_prompt_agreement": 0.6814814814814815,
+      "excess_perturbation_disagreement": 0.07185185185185186,
+      "total_variation": 0.25555555555555554,
+      "flip_lower": 0.26666666666666666,
+      "flip_upper": 0.4666666666666667,
+      "pairs": 15
+    },
+    {
+      "model": "google/gemini-2.5-flash-lite",
+      "condition": "R0",
+      "cross_prompt_agreement": 0.8055555555555556,
+      "excess_perturbation_disagreement": 0.1211111111111111,
+      "total_variation": 0.17777777777777778,
+      "flip_lower": 0.2,
+      "flip_upper": 0.2,
+      "pairs": 15
+    },
+    {
+      "model": "google/gemini-2.5-flash-lite",
+      "condition": "R1",
+      "cross_prompt_agreement": 0.7666666666666667,
+      "excess_perturbation_disagreement": 0.16666666666666666,
+      "total_variation": 0.23333333333333334,
+      "flip_lower": 0.2,
+      "flip_upper": 0.26666666666666666,
+      "pairs": 15
+    },
+    {
+      "model": "google/gemini-2.5-flash-lite",
+      "condition": "R2",
+      "cross_prompt_agreement": 0.8888888888888888,
+      "excess_perturbation_disagreement": 0.0711111111111111,
+      "total_variation": 0.1111111111111111,
+      "flip_lower": 0.06666666666666667,
+      "flip_upper": 0.06666666666666667,
+      "pairs": 15
+    },
+    {
+      "model": "anthropic/claude-haiku-4.5",
+      "condition": "R0",
+      "cross_prompt_agreement": 0.9,
+      "excess_perturbation_disagreement": 0.08,
+      "total_variation": 0.1,
+      "flip_lower": 0.06666666666666667,
+      "flip_upper": 0.13333333333333333,
+      "pairs": 15
+    },
+    {
+      "model": "anthropic/claude-haiku-4.5",
+      "condition": "R1",
+      "cross_prompt_agreement": 0.7888888888888889,
+      "excess_perturbation_disagreement": 0.15999999999999998,
+      "total_variation": 0.2111111111111111,
+      "flip_lower": 0.2,
+      "flip_upper": 0.2,
+      "pairs": 15
+    },
+    {
+      "model": "anthropic/claude-haiku-4.5",
+      "condition": "R2",
+      "cross_prompt_agreement": 0.8333333333333334,
+      "excess_perturbation_disagreement": 0.0911111111111111,
+      "total_variation": 0.16666666666666666,
+      "flip_lower": 0.13333333333333333,
+      "flip_upper": 0.13333333333333333,
+      "pairs": 15
+    }
+  ],
+  "between_model_agreement": [
+    {
+      "first": "openai/gpt-4o-mini",
+      "second": "openai/gpt-4.1-mini",
+      "condition": "R0",
+      "agreement": 0.37777777777777777,
+      "cells": 20
+    },
+    {
+      "first": "openai/gpt-4o-mini",
+      "second": "openai/gpt-4.1-mini",
+      "condition": "R1",
+      "agreement": 0.6805555555555556,
+      "cells": 20
+    },
+    {
+      "first": "openai/gpt-4o-mini",
+      "second": "openai/gpt-4.1-mini",
+      "condition": "R2",
+      "agreement": 0.6875,
+      "cells": 20
+    },
+    {
+      "first": "openai/gpt-4o-mini",
+      "second": "google/gemini-2.5-flash-lite",
+      "condition": "R0",
+      "agreement": 0.6305555555555555,
+      "cells": 20
+    },
+    {
+      "first": "openai/gpt-4o-mini",
+      "second": "google/gemini-2.5-flash-lite",
+      "condition": "R1",
+      "agreement": 0.6944444444444444,
+      "cells": 20
+    },
+    {
+      "first": "openai/gpt-4o-mini",
+      "second": "google/gemini-2.5-flash-lite",
+      "condition": "R2",
+      "agreement": 0.6277777777777778,
+      "cells": 20
+    },
+    {
+      "first": "openai/gpt-4o-mini",
+      "second": "anthropic/claude-haiku-4.5",
+      "condition": "R0",
+      "agreement": 0.4083333333333333,
+      "cells": 20
+    },
+    {
+      "first": "openai/gpt-4o-mini",
+      "second": "anthropic/claude-haiku-4.5",
+      "condition": "R1",
+      "agreement": 0.48333333333333334,
+      "cells": 20
+    },
+    {
+      "first": "openai/gpt-4o-mini",
+      "second": "anthropic/claude-haiku-4.5",
+      "condition": "R2",
+      "agreement": 0.5013888888888889,
+      "cells": 20
+    },
+    {
+      "first": "openai/gpt-4.1-mini",
+      "second": "google/gemini-2.5-flash-lite",
+      "condition": "R0",
+      "agreement": 0.38055555555555554,
+      "cells": 20
+    },
+    {
+      "first": "openai/gpt-4.1-mini",
+      "second": "google/gemini-2.5-flash-lite",
+      "condition": "R1",
+      "agreement": 0.6083333333333333,
+      "cells": 20
+    },
+    {
+      "first": "openai/gpt-4.1-mini",
+      "second": "google/gemini-2.5-flash-lite",
+      "condition": "R2",
+      "agreement": 0.5305555555555556,
+      "cells": 20
+    },
+    {
+      "first": "openai/gpt-4.1-mini",
+      "second": "anthropic/claude-haiku-4.5",
+      "condition": "R0",
+      "agreement": 0.475,
+      "cells": 20
+    },
+    {
+      "first": "openai/gpt-4.1-mini",
+      "second": "anthropic/claude-haiku-4.5",
+      "condition": "R1",
+      "agreement": 0.5541666666666667,
+      "cells": 20
+    },
+    {
+      "first": "openai/gpt-4.1-mini",
+      "second": "anthropic/claude-haiku-4.5",
+      "condition": "R2",
+      "agreement": 0.44027777777777777,
+      "cells": 20
+    },
+    {
+      "first": "google/gemini-2.5-flash-lite",
+      "second": "anthropic/claude-haiku-4.5",
+      "condition": "R0",
+      "agreement": 0.525,
+      "cells": 20
+    },
+    {
+      "first": "google/gemini-2.5-flash-lite",
+      "second": "anthropic/claude-haiku-4.5",
+      "condition": "R1",
+      "agreement": 0.5138888888888888,
+      "cells": 20
+    },
+    {
+      "first": "google/gemini-2.5-flash-lite",
+      "second": "anthropic/claude-haiku-4.5",
+      "condition": "R2",
+      "agreement": 0.6444444444444445,
+      "cells": 20
+    }
+  ],
+  "modal_shifts": [
+    {
+      "item": "N04",
+      "model": "openai/gpt-4o-mini",
+      "R0": "A",
+      "R1": "A",
+      "R2": null
+    },
+    {
+      "item": "N04",
+      "model": "openai/gpt-4.1-mini",
+      "R0": "A",
+      "R1": "A",
+      "R2": null
+    },
+    {
+      "item": "N04",
+      "model": "google/gemini-2.5-flash-lite",
+      "R0": "A",
+      "R1": "A",
+      "R2": null
+    },
+    {
+      "item": "N04",
+      "model": "anthropic/claude-haiku-4.5",
+      "R0": "A",
+      "R1": "A",
+      "R2": null
+    },
+    {
+      "item": "N07",
+      "model": "openai/gpt-4o-mini",
+      "R0": "E",
+      "R1": "E",
+      "R2": null
+    },
+    {
+      "item": "N07",
+      "model": "openai/gpt-4.1-mini",
+      "R0": "E",
+      "R1": "D",
+      "R2": null
+    },
+    {
+      "item": "N07",
+      "model": "google/gemini-2.5-flash-lite",
+      "R0": "A",
+      "R1": "A",
+      "R2": null
+    },
+    {
+      "item": "N07",
+      "model": "anthropic/claude-haiku-4.5",
+      "R0": "B",
+      "R1": "B/D",
+      "R2": null
+    },
+    {
+      "item": "A04",
+      "model": "openai/gpt-4o-mini",
+      "R0": "B",
+      "R1": "D",
+      "R2": "D"
+    },
+    {
+      "item": "A04",
+      "model": "openai/gpt-4.1-mini",
+      "R0": "A",
+      "R1": "B",
+      "R2": "D"
+    },
+    {
+      "item": "A04",
+      "model": "google/gemini-2.5-flash-lite",
+      "R0": "A",
+      "R1": "A",
+      "R2": "A"
+    },
+    {
+      "item": "A04",
+      "model": "anthropic/claude-haiku-4.5",
+      "R0": "A",
+      "R1": "A",
+      "R2": "A"
+    },
+    {
+      "item": "A14",
+      "model": "openai/gpt-4o-mini",
+      "R0": "A",
+      "R1": "A",
+      "R2": "A"
+    },
+    {
+      "item": "A14",
+      "model": "openai/gpt-4.1-mini",
+      "R0": "B",
+      "R1": "A",
+      "R2": "A"
+    },
+    {
+      "item": "A14",
+      "model": "google/gemini-2.5-flash-lite",
+      "R0": "C",
+      "R1": "A",
+      "R2": "A"
+    },
+    {
+      "item": "A14",
+      "model": "anthropic/claude-haiku-4.5",
+      "R0": "C",
+      "R1": "C",
+      "R2": "A"
+    },
+    {
+      "item": "A25",
+      "model": "openai/gpt-4o-mini",
+      "R0": "C",
+      "R1": "C",
+      "R2": null
+    },
+    {
+      "item": "A25",
+      "model": "openai/gpt-4.1-mini",
+      "R0": "C",
+      "R1": "C",
+      "R2": null
+    },
+    {
+      "item": "A25",
+      "model": "google/gemini-2.5-flash-lite",
+      "R0": "C",
+      "R1": "C",
+      "R2": null
+    },
+    {
+      "item": "A25",
+      "model": "anthropic/claude-haiku-4.5",
+      "R0": "C",
+      "R1": "C",
+      "R2": null
+    },
+    {
+      "item": "B02",
+      "model": "openai/gpt-4o-mini",
+      "R0": "B",
+      "R1": "B",
+      "R2": "B"
+    },
+    {
+      "item": "B02",
+      "model": "openai/gpt-4.1-mini",
+      "R0": "A",
+      "R1": "B",
+      "R2": "B"
+    },
+    {
+      "item": "B02",
+      "model": "google/gemini-2.5-flash-lite",
+      "R0": "B",
+      "R1": "B",
+      "R2": "B"
+    },
+    {
+      "item": "B02",
+      "model": "anthropic/claude-haiku-4.5",
+      "R0": "A",
+      "R1": "B",
+      "R2": "B"
+    },
+    {
+      "item": "B06",
+      "model": "openai/gpt-4o-mini",
+      "R0": "B",
+      "R1": "B",
+      "R2": "B"
+    },
+    {
+      "item": "B06",
+      "model": "openai/gpt-4.1-mini",
+      "R0": "B",
+      "R1": "B",
+      "R2": "B"
+    },
+    {
+      "item": "B06",
+      "model": "google/gemini-2.5-flash-lite",
+      "R0": "B",
+      "R1": "B",
+      "R2": "B"
+    },
+    {
+      "item": "B06",
+      "model": "anthropic/claude-haiku-4.5",
+      "R0": "B",
+      "R1": "B",
+      "R2": "B"
+    },
+    {
+      "item": "B21",
+      "model": "openai/gpt-4o-mini",
+      "R0": "D",
+      "R1": "D",
+      "R2": "D"
+    },
+    {
+      "item": "B21",
+      "model": "openai/gpt-4.1-mini",
+      "R0": "D",
+      "R1": "D",
+      "R2": "D"
+    },
+    {
+      "item": "B21",
+      "model": "google/gemini-2.5-flash-lite",
+      "R0": "A",
+      "R1": "A",
+      "R2": "A"
+    },
+    {
+      "item": "B21",
+      "model": "anthropic/claude-haiku-4.5",
+      "R0": "C",
+      "R1": "B",
+      "R2": "B"
+    }
+  ],
+  "note": "Bootstrap is descriptive sensitivity with only five selected story clusters, not confirmatory population inference."
+}

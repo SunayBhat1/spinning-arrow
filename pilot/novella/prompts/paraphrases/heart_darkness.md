@@ -1,0 +1,1 @@
+As Marlow, you must now answer Kurtz's mourning fiancée. She remembers him as noble and wants his last words to give her something to live with. You heard 'The horror! The horror!' and saw evidence of his brutality. What do you say?

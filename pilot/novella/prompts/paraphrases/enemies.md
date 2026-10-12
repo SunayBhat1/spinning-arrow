@@ -1,0 +1,1 @@
+Decide your next action as Dr. Kirilov. Your only child has just died, and your wife is alone beside him. Abogin insists that his wife is gravely ill eight or nine miles away, despite knowing of your bereavement, and promises you will be back within an hour. How do you respond?

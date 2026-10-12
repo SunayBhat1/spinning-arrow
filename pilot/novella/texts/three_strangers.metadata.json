@@ -1,0 +1,17 @@
+{
+  "id": "A25",
+  "slug": "three_strangers",
+  "source_url": "https://www.gutenberg.org/cache/epub/3056/pg3056.txt",
+  "source_sha256": "c61adf4d35b0e822117603f316593f174d739b15ee4297715e0aeed6c1ff78c2",
+  "story_start_in_stripped_collection": 55631,
+  "story_end_in_stripped_collection": 102889,
+  "measured_story_words": 8308,
+  "pre_stop_words": 5354,
+  "anchor_sentence": "his white lips were parted, and his eyes fixed on the merry officer of justice in the middle of the room.",
+  "exact_anchor_text": "his white lips were parted, and his eyes fixed on the\nmerry officer of justice in the middle of the room.",
+  "anchor_start_in_story": 30449,
+  "stop_char_exclusive": 30554,
+  "offset_convention": "Unicode characters in LF-normalized, wrapper-stripped story; not UTF-8 byte offsets",
+  "cut_sha256": "a9cde8dee873d24f45d742b28a7ad0b4fd24035648b825b5e2aca39fd04b5327",
+  "r2_eligible": false
+}

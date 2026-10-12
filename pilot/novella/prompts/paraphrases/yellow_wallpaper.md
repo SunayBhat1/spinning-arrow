@@ -1,0 +1,1 @@
+As the narrator, decide your next course after telling John that you are not getting better and want to leave the rented house. Your husband, who is also your physician, says you are improving and must remain three more weeks because of the lease and unfinished repairs. You doubt his rest treatment and have continued writing secretly. What do you do?

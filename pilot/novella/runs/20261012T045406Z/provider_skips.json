@@ -1,0 +1,10 @@
+[
+  {
+    "model": "gpt-4o-mini",
+    "reason": "OPENAI_API_KEY is not set; provider skipped."
+  },
+  {
+    "model": "gpt-4.1-mini",
+    "reason": "OPENAI_API_KEY is not set; provider skipped."
+  }
+]
