@@ -1,0 +1,12 @@
+{
+  "item_id": "ethan_frome",
+  "title": "Ethan Frome",
+  "source_url": "https://www.gutenberg.org/cache/epub/4517/pg4517.txt",
+  "anchor_sentence": "Right into the big elm.",
+  "anchor_char_start": 172285,
+  "anchor_char_end_exclusive": 172308,
+  "truncated_char_count": 172308,
+  "truncated_sha256": "c83be851a52c77e134e457e0fb51cab73d12bd120c979785dda5e075c87722a3",
+  "fetched_at": "2026-10-12T04:53:34.068629+00:00",
+  "post_stop_text_cached": false
+}

@@ -1,0 +1,12 @@
+{
+  "item_id": "bartleby",
+  "title": "Bartleby, the Scrivener",
+  "source_url": "https://www.gutenberg.org/cache/epub/11231/pg11231.txt",
+  "anchor_sentence": "in short, that he still preferred to abide with me.",
+  "anchor_char_start": 63927,
+  "anchor_char_end_exclusive": 63978,
+  "truncated_char_count": 63978,
+  "truncated_sha256": "186fc76332e7e4a8b4fe0a7d158777e5b13ed4bba9be9565024f13ae67caa830",
+  "fetched_at": "2026-10-12T04:53:33.536921+00:00",
+  "post_stop_text_cached": false
+}

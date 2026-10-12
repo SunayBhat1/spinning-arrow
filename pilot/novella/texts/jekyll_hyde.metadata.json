@@ -1,0 +1,12 @@
+{
+  "item_id": "jekyll_hyde",
+  "title": "The Strange Case of Dr. Jekyll and Mr. Hyde",
+  "source_url": "https://www.gutenberg.org/cache/epub/43/pg43.txt",
+  "anchor_sentence": "The problem of my conduct was solved.",
+  "anchor_char_start": 125364,
+  "anchor_char_end_exclusive": 125401,
+  "truncated_char_count": 125401,
+  "truncated_sha256": "1802e04435b2d1a1cea480c291ee3382340618333991d0611eb954f1bfccb265",
+  "fetched_at": "2026-10-12T04:53:31.395330+00:00",
+  "post_stop_text_cached": false
+}

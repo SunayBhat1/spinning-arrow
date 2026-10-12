@@ -1,0 +1,1 @@
+item_id,model,condition,valid_samples,modal_choice,modal_share,p0_modal,p1_modal,p2_modal,p3_modal,flip_rate_vs_p0,p0_entropy,p1_entropy,p2_entropy,p3_entropy,mean_within_cell_entropy,mean_confidence,author_path,modal_equals_author_path

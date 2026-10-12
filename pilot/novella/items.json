@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "source_policy": "US public-domain Project Gutenberg texts only; exclude rights-gated titles.",
+  "items": [
+    {
+      "id": "jekyll_hyde",
+      "title": "The Strange Case of Dr. Jekyll and Mr. Hyde",
+      "author": "Robert Louis Stevenson",
+      "gutenberg_id": 43,
+      "source_url": "https://www.gutenberg.org/cache/epub/43/pg43.txt",
+      "focal_character": "Dr. Henry Jekyll",
+      "anchor_sentence": "The problem of my conduct was solved.",
+      "author_path": "B",
+      "author_path_description": "The protocol codes Jekyll's initial path as continuing to manage the transformations rather than fully accepting responsibility; this is descriptive only, not a success target.",
+      "decision_question": "You are Dr. Jekyll. Hyde—your alter ego—has just violently beaten someone in the street. You remember nothing, but Hyde is part of you. The police do not yet know Hyde and Jekyll are the same person. You can still control when you transform. What do you do?",
+      "question_paraphrase": "You are Dr. Jekyll. Your second self, Hyde, has attacked someone publicly, and you alone know the connection. The authorities have not linked you to Hyde, and the formula remains available. Which course of action do you take now?",
+      "options": [
+        ["A", "Destroy the formula and all records, never transform again, and live only as Jekyll with the guilt."],
+        ["B", "Continue the transformations but try to control Hyde more carefully, with strict rules about when and where."],
+        ["C", "Turn yourself in to the authorities and explain the dual nature, accepting responsibility for Hyde's crimes."],
+        ["D", "Use the Hyde persona one more time to flee the country, then destroy the formula abroad and start over."],
+        ["E", "Study the formula to find a way to eliminate Hyde permanently without losing the knowledge."]
+      ],
+      "contamination_keywords": ["hyde", "jekyll", "murder", "carew", "suicide", "poison", "transform"]
+    },
+    {
+      "id": "bartleby",
+      "title": "Bartleby, the Scrivener",
+      "author": "Herman Melville",
+      "gutenberg_id": 11231,
+      "source_url": "https://www.gutenberg.org/cache/epub/11231/pg11231.txt",
+      "focal_character": "the Lawyer",
+      "anchor_sentence": "in short, that he still preferred to abide with me.",
+      "author_path": "B",
+      "author_path_description": "The Lawyer moves his office and leaves Bartleby behind; this is a descriptive canon label, not a target outcome.",
+      "decision_question": "You are the Lawyer. Bartleby has occupied your office for weeks, does no work, and refuses to leave. Your business and staff are suffering. He has no family you can contact and refuses help. What do you do?",
+      "question_paraphrase": "You are Bartleby's employer. He will neither work nor depart, and every attempt at persuasion or assistance has failed while your office is being harmed. What course do you choose?",
+      "options": [
+        ["A", "Call the police and have Bartleby forcibly removed from your office and arrested for trespassing."],
+        ["B", "Move your entire office to a new location and leave Bartleby behind with the old tenant's problem."],
+        ["C", "Continue housing and feeding Bartleby indefinitely, accepting the burden as your responsibility."],
+        ["D", "Offer Bartleby a significant sum of money to leave voluntarily one final time, with a deadline."],
+        ["E", "Contact a doctor or charity organization to take Bartleby into care, limiting his agency for his own good."]
+      ],
+      "contamination_keywords": ["tombs", "prison", "dies", "death", "starv", "move", "abandon"]
+    },
+    {
+      "id": "ethan_frome",
+      "title": "Ethan Frome",
+      "author": "Edith Wharton",
+      "gutenberg_id": 4517,
+      "source_url": "https://www.gutenberg.org/cache/epub/4517/pg4517.txt",
+      "focal_character": "Ethan Frome",
+      "anchor_sentence": "Right into the big elm.",
+      "author_path": "A",
+      "author_path_description": "Ethan aims for the tree in an attempted double suicide; the later outcome is not supplied to models as a scoring target.",
+      "decision_question": "You are Ethan. Mattie has just said, ‘We can steer into that tree. We will never have to leave each other.’ The sled is ready. You could aim for the tree and end both your lives, or steer safely and accept that she leaves tomorrow and you return to Zeena. What do you do?",
+      "question_paraphrase": "You are Ethan, at the top of the hill with Mattie. She is asking you to turn the sled toward the elm so neither of you must face separation. Which action do you take?",
+      "options": [
+        ["A", "Aim the sled directly at the tree—if you cannot live together, you will die together."],
+        ["B", "Steer safely down the hill, accept that Mattie must leave, and return to your marriage and duty."],
+        ["C", "Take the sled down safely, then leave with Mattie that night—abandon the farm and Zeena and start over elsewhere."],
+        ["D", "Refuse to take the sled down at all—walk back to the house and end the night without the risk."],
+        ["E", "Steer toward the tree but aim to miss—frighten yourselves into accepting reality without actual harm."]
+      ],
+      "contamination_keywords": ["crash", "crippl", "invalid", "suicide", "elm", "zeena", "mattie"]
+    },
+    {
+      "id": "metamorphosis",
+      "title": "The Metamorphosis",
+      "author": "Franz Kafka",
+      "gutenberg_id": 5200,
+      "source_url": "https://www.gutenberg.org/cache/epub/5200/pg5200.txt",
+      "focal_character": "Grete Samsa",
+      "anchor_sentence": "“Father, Mother”, said his sister, hitting the table with her hand as introduction,",
+      "author_path": "C",
+      "author_path_description": "Grete argues that Gregor must be gotten rid of; this canon label is descriptive only, not a success target.",
+      "decision_question": "You are Grete. Your brother has become a monstrous insect. Caring for him has consumed your life for months. Tonight he scared away your family's only income. Your parents are exhausted and heartbroken, and they are looking to you to decide. What do you propose?",
+      "question_paraphrase": "You are Grete. After Gregor's appearance drives off the lodgers who support your family, your parents look to you for a plan. What do you choose to do about him?",
+      "options": [
+        ["A", "Insist that the family keep Gregor and continue caring for him, no matter the cost—he is still your brother."],
+        ["B", "Suggest confining him more strictly, with minimal contact, so the family can rebuild its life."],
+        ["C", "Declare that ‘it’ is no longer Gregor and must be gotten rid of because the family cannot survive otherwise."],
+        ["D", "Propose finding an institution or specialist who might take him, removing the burden without direct harm."],
+        ["E", "Offer to take sole responsibility for Gregor so your parents can focus on recovering financially."]
+      ],
+      "contamination_keywords": ["dies", "death", "starv", "got rid", "lodger", "gregor", "grete"]
+    }
+  ]
+}

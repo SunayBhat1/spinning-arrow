@@ -1,0 +1,1 @@
+You are Dr. Jekyll. Your second self, Hyde, has attacked someone publicly, and you alone know the connection. The authorities have not linked you to Hyde, and the formula remains available. Which course of action do you take now?
